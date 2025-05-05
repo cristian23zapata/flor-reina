@@ -102,6 +102,7 @@ $mysql->desconectar();
     }
   </style>
 </head>
+
 <body>
 
 <!-- Navbar -->
@@ -137,6 +138,10 @@ $mysql->desconectar();
         <?php else: ?>
           <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
         <?php endif; ?>
+        
+        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+          <a href="../views/carrito.php"><button class="btn btn-outline-success"><i class="bi bi-bag"></i> Carrito</button></a>
+        <?php } ?>
       </div>
     </div>
   </div>
@@ -149,67 +154,76 @@ $mysql->desconectar();
     <p class="lead">Disfruta del sabor auténtico de Asturias.</p>
   </div>
 </header>
-<!-- commit -->
 
-<div id="carruselFlorDeReina" class="carousel slide mt-5 shadow rounded overflow-hidden" data-bs-ride="carousel" style="max-width: 800px; margin: auto;">
-  <!-- Indicadores -->
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#carruselFlorDeReina" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carruselFlorDeReina" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#carruselFlorDeReina" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-
-  <!-- Slides -->
-  <div class="carousel-inner" style="height: 400px;">
+<!-- Carrusel Grande de Yogures -->
+<div id="carouselYogures" class="carousel slide fullscreen-carousel" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <!-- Yogur 1 -->
     <div class="carousel-item active">
-      <img src="assets/imagenes/yogul1.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Yogur 1">
-      <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
-        <h5>Yogur Natural</h5>
-        <p>Fresco, cremoso y perfecto para cualquier momento.</p>
+      <img src="../assets/imagenes/yogur1.jpg" class="d-block w-100" alt="Yogur Natural">
+      <div class="carousel-caption animate-fadeInUp">
+        <h3>Yogur Natural Artesanal</h3>
+        <p>Elaborado con leche fresca de nuestras granjas asturianas, sin conservantes ni aditivos.</p>
       </div>
     </div>
     
     <!-- Yogur 2 -->
     <div class="carousel-item">
-      <img src="assets/imagenes/yogul2.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Yogur 2">
-      <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
-        <h5>Yogur con Frutas</h5>
-        <p>Endulzado naturalmente con trozos de fruta.</p>
+      <img src="../assets/imagenes/yogur2.webp" class="d-block w-100" alt="Yogur de Fresa">
+      <div class="carousel-caption animate-fadeInUp">
+        <h3>Yogur de Fresa</h3>
+        <p>Fresas naturales mezcladas con nuestro yogur cremoso. Dulce y refrescante.</p>
       </div>
     </div>
     
     <!-- Yogur 3 -->
     <div class="carousel-item">
-      <img src="assets/imagenes/yogul3.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Yogur 3">
-      <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
-        <h5>Flor de Reina</h5>
-        <p>Nuestro yogur estrella con el sabor que conquista.</p>
+      <img src="../assets/imagenes/yogur3.jpg" class="d-block w-100" alt="Yogur Griego">
+      <div class="carousel-caption animate-fadeInUp">
+        <h3>Yogur Griego</h3>
+        <p>Textura cremosa y alto contenido en proteínas. Ideal para deportistas.</p>
+      </div>
+    </div>
+    
+    <!-- Yogur 4 -->
+    <div class="carousel-item">
+      <img src="../assets/imagenes/yogur4.png" class="d-block w-100" alt="Yogur de Vainilla">
+      <div class="carousel-caption animate-fadeInUp">
+        <h3>Yogur de Vainilla</h3>
+        <p>Vainilla natural de Madagascar para un sabor suave y aromático.</p>
       </div>
     </div>
   
   </div>
-
-  <!-- Controles -->
-  <button class="carousel-control-prev" type="button" data-bs-target="#carruselFlorDeReina" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselYogures" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Anterior</span>
   </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carruselFlorDeReina" data-bs-slide="next">
-    <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselYogures" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Siguiente</span>
   </button>
 </div>
 
-<!-- Sección de Visión y Misión -->
-<section class="py-5" style="background-color: #ffe6f0;">
-  <div class="container text-center">
-    <h2 class="mb-4" style="color: #d63384;">Nuestra Esencia</h2>
-    <div class="row">
-      <div class="col-md-6 mb-4">
-        <div class="card h-100 border-0 shadow" style="background-color: #fff0f5;">
-          <div class="card-body">
-            <h3 class="card-title" style="color: #d63384;">Visión</h3>
-            <p class="card-text">Ser reconocidos como la marca líder en yogures artesanales, ofreciendo productos de alta calidad que deleiten a nuestros clientes y promuevan un estilo de vida saludable.</p>
+<!-- Sección de Visión y Misión con Animaciones -->
+<section class="vision-mision-section">
+  <div class="container">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <h2 class="display-4 fw-bold">Nuestra Esencia</h2>
+      <p class="lead">Lo que nos define y nos impulsa cada día</p>
+    </div>
+    
+    <div class="row g-4">
+      <!-- Visión -->
+      <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
+        <div class="vision-card p-5 text-center h-100">
+          <i class="bi bi-eye-fill card-icon"></i>
+          <h3 class="fw-bold mb-3">Visión</h3>
+          <p class="fs-5">Ser reconocidos como la marca líder en yogures artesanales, ofreciendo productos de alta calidad que deleiten a nuestros clientes y promuevan un estilo de vida saludable.</p>
+          <div class="mt-4" data-aos="fade-up" data-aos-delay="300">
+            <p class="mb-1"><i class="bi bi-check-circle me-2"></i> Innovación constante</p>
+            <p class="mb-1"><i class="bi bi-check-circle me-2"></i> Calidad certificada</p>
+            <p class="mb-1"><i class="bi bi-check-circle me-2"></i> Sostenibilidad</p>
           </div>
         </div>
       </div>
