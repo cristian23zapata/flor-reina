@@ -21,6 +21,7 @@ session_start();
   <title>Flor Reina</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/estilo_nav.css">
 </head>
 
 <style>
@@ -43,7 +44,7 @@ session_start();
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-light navbar-custom">
   <div class="container">
     <a class="navbar-brand" href="../views/index.php">
       <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60">
@@ -54,33 +55,31 @@ session_start();
 
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
+        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
         <li class="nav-item"><a class="nav-link active" href="../views/creacion_productos.php">CREAR</a></li>
-      <?php } ?>
+        <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Tienda</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
       </ul>
 
-      <!-- Buscador -->
       <form class="d-flex me-3" role="search">
         <input class="form-control me-2" type="search" placeholder="Buscar productos..." aria-label="Buscar">
         <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
       </form>
 
-      <!-- Iconos -->
       <div class="d-flex align-items-center gap-2">
-      <?php if (isset($_SESSION['correo'])): ?>
+        <?php if (isset($_SESSION['correo'])): ?>
           <span class="fw-bold"><i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
           <a href="../controllers/logout.php" class="btn btn-outline-danger">Cerrar sesión</a>
-      <?php else: ?>
+        <?php else: ?>
           <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
-      <?php endif; //1?>
-            
-      <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-        <a href="../views/carrito.php"><button class="btn btn-outline-success"><i class="bi bi-bag"></i> Carrito</button></a>
-      <?php } ?>
+        <?php endif; ?>
+        
+        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+          <a href="../views/carrito.php"><button class="btn btn-outline-success"><i class="bi bi-bag"></i> Carrito</button></a>
+        <?php } ?>
       </div>
     </div>
   </div>

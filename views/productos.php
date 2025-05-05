@@ -91,7 +91,7 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
             <h5 class="card-title fw-bold"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
             <p class="card-text text-muted"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
             <div class="mt-auto">
-              <p class="mb-1 text-success"><strong>Precio:</strong> €<?php echo htmlspecialchars($producto['precio']); ?></p>
+              <p class="mb-1 text-success"><strong>Precio:</strong> $<?php echo htmlspecialchars($producto['precio']); ?></p>
               <p class="mb-2 text-secondary"><strong>Stock:</strong> <?php echo htmlspecialchars($producto['stock']); ?></p>
               <div class="d-flex gap-2">
                 <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
@@ -198,7 +198,7 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
                 <textarea name="descripcion" class="form-control" required><?php echo htmlspecialchars($producto['descripcion']); ?></textarea>
               </div>
               <div class="mb-3">
-                <label class="form-label">Precio (€)</label>
+                <label class="form-label">Precio ($)</label>
                 <input type="number" step="0.01" name="precio" class="form-control" value="<?php echo $producto['precio']; ?>" required>
               </div>
               <div class="mb-3">
