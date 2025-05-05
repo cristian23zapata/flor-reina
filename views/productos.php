@@ -15,7 +15,6 @@ $mysql->conectar();
 $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
 
 ?>
-//aaa
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -99,12 +98,31 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
                   <a href="#" class="btn btn-outline-success w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalVerMas<?php echo $producto['id']; ?>">Ver Más</a>
                 <?php } ?>
                 <!-- Botón para abrir el modal -->
-                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-                  <button type="button" class="btn btn-outline-success w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditar<?php echo $producto['id']; ?>"> Editar</button>
-                  <form action="../controllers/eliminar_producto.php" method="POST" style="display:inline;">
-                    <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
-                    <button type="submit" class="btn btn-outline-danger rounded-pill">Eliminar</button>
-                  </form>
+                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?> 
+                <button type="button" class="btn btn-outline-success w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditar<?php echo $producto['id']; ?>">Editar</button>
+                <!-- Botón que abre el modal -->
+                <button type="button" class="btn btn-outline-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#confirmarEliminar<?php echo $producto['id']; ?>">Eliminar</button>
+                <!-- Modal de confirmación -->
+                <div class="modal fade" id="confirmarEliminar<?php echo $producto['id']; ?>" tabindex="-1" aria-labelledby="confirmarEliminarLabel<?php echo $producto['id']; ?>" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="confirmarEliminarLabel<?php echo $producto['id']; ?>">Confirmar eliminación</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                      </div>
+                      <div class="modal-body">
+                        ¿Estás seguro de que deseas eliminar el producto <strong><?php echo htmlspecialchars($producto['nombre']); ?></strong>?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <form action="../controllers/eliminar_producto.php" method="POST">
+                          <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
+                          <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <?php } ?>
               </div>
             </div>
