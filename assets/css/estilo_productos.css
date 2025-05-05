@@ -106,3 +106,61 @@
   .btn-secondary {
     border-radius: 20px;
   }
+
+
+  /* Estilos para el modal lateral */
+.modal-dialog-slideout {
+  min-height: 100%;
+  margin: 0 0 0 auto;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+}
+
+.modal.fade .modal-dialog-slideout {
+  transform: translateX(100%);
+}
+
+.modal.show .modal-dialog-slideout {
+  transform: translateX(0);
+}
+
+.modal-dialog-slideout .modal-content {
+  border: 0;
+  border-radius: 0;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
+/* Estilos para el carrito */
+#carrito-items img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Estilos para los botones de cantidad */
+.input-group {
+  max-width: 120px;
+}
+
+/* Estilos para el toast */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1100;
+}
+
+/* Estilos para el modal de producto */
+.modal-producto-img {
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+/* Contador del carrito en el navbar */
+#carrito-contador {
+  font-size: 0.7rem;
+  top: -5px;
+}
