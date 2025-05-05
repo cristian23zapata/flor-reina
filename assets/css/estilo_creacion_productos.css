@@ -1,0 +1,58 @@
+.form-container {
+    background: linear-gradient(to right, #fff0f5, #ffe6f0);
+    border: 1px solid #f7c4dd;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #d63384;
+  }
+
+  .form-control {
+    border-radius: 12px;
+    border: 1px solid #f7c4dd;
+  }
+
+  .btn-outline-success {
+    border-radius: 20px;
+    border-color: #38a169;
+    font-weight: 600;
+  }
+
+  .btn-outline-success:hover {
+    background-color: #d4edda;
+    color: #1b4332;
+  }
+
+  .btn-outline-primary {
+    border-radius: 20px;
+    font-weight: 500;
+    border-color: #d63384;
+    color: #d63384;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: #fce4ec;
+    color: #a61e66;
+  }
+
+  .btn-outline-danger {
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  h2 {
+    color: #a61e66;
+    font-weight: bold;
+  }
+
+  .input-group .form-control {
+    border-radius: 12px 0 0 12px;
+  }
+
+  .input-group .btn {
+    border-radius: 0 12px 12px 0;
+  }
