@@ -15,7 +15,7 @@ $mysql->conectar();
 $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
 
 ?>
-
+//aaa
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -96,7 +96,7 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
               <p class="mb-2 text-secondary"><strong>Stock:</strong> <?php echo htmlspecialchars($producto['stock']); ?></p>
               <div class="d-flex gap-2">
                 <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                  <a href="../controllers/agregar_carrito.php" class="btn btn-outline-success w-100 rounded-pill">Añadir al carrito</a>
+                  <a href="#" class="btn btn-outline-success w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalVerMas<?php echo $producto['id']; ?>">Ver Más</a>
                 <?php } ?>
                 <!-- Botón para abrir el modal -->
                 <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
@@ -111,6 +111,54 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
           </div>
         </div>
       </div>
+
+      <!-- Modal Ver Más -->
+      <div class="modal fade" id="modalVerMas<?php echo $producto['id']; ?>" tabindex="-1" aria-labelledby="modalVerMasLabel<?php echo $producto['id']; ?>" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content rounded-4 shadow">
+            <div class="modal-header border-0">
+              <h5 class="modal-title fw-bold" id="modalVerMasLabel<?php echo $producto['id']; ?>">
+                <?php echo htmlspecialchars($producto['nombre']); ?>
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row g-4">
+                <!-- Imagen del producto -->
+                <div class="col-md-5 text-center">
+                  <img src="../<?php echo $producto['imagen']; ?>" class="img-fluid rounded" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
+                </div>
+                
+                <!-- Detalles del producto -->
+                <div class="col-md-7">
+                  <p><strong>Descripción:</strong> <?php echo htmlspecialchars($producto['descripcion']); ?></p>
+                  <p class="text-success h5"><strong>Precio:</strong> €<?php echo htmlspecialchars($producto['precio']); ?></p>
+                  <p><strong>Stock disponible:</strong> <?php echo htmlspecialchars($producto['stock']); ?></p>
+
+                  <!-- Formulario para agregar al carrito -->
+                  <form action="ruta/a/agregar_carrito.php" method="POST" class="mt-4">
+                    <input type="hidden" name="id_producto" value="<?php echo $producto['id']; ?>">
+                    
+                    <div class="mb-3">
+                      <label for="cantidad<?php echo $producto['id']; ?>" class="form-label">Cantidad:</label>
+                      <input type="number" name="cantidad" id="cantidad<?php echo $producto['id']; ?>" class="form-control" min="1" max="<?php echo htmlspecialchars($producto['stock']); ?>" value="1" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 rounded-pill">
+                      Agregar al Carrito
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer border-0">
+              <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       <!-- Modal de edición -->
       <div class="modal fade" id="modalEditar<?php echo $producto['id']; ?>" tabindex="-1" aria-labelledby="modalEditarLabel<?php echo $producto['id']; ?>" aria-hidden="true">
