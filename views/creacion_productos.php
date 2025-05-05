@@ -25,6 +25,7 @@ session_start();
     <title>Flor Reina</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
 </head>
 <body>
 
@@ -85,15 +86,31 @@ session_start();
             <label for="stock" class="form-label">Stock disponible</label>
             <input type="number" class="form-control" id="stock" name="stock" required>
         </div>
+        <div class="mb-3">
+  <label for="ingredientes" class="form-label">Ingredientes</label>
+  <div id="nuevos-ingredientes">
+  <div class="input-group mb-2 w-50">
+  <input type="text" name="ingredientes[]" class="form-control" placeholder="Escribe un ingrediente">
+  <button type="button" class="btn btn-outline-danger" onclick="eliminarCampo(this)">
+    <i class="bi bi-trash"></i>
+  </button>
+</div>
+  </div>
+  <button type="button" class="btn btn-outline-primary mt-2" onclick="agregarCampo()">
+    <i class="bi bi-plus-circle"></i> Agregar otro ingrediente
+  </button>
+</div>
 
         <div class="mb-4">
             <label for="imagen" class="form-label">Imagen del producto</label>
             <input class="form-control" type="file" id="imagen" name="imagen" accept=".jpg, .jpeg, .png" required>
         </div>
 
+
         <div class="text-center">
-            <button type="submit" class="btn btn-success px-5">Crear producto</button>
+            <button type="submit" class="btn btn-outline-success px-5">Crear producto</button>
         </div>
+
     </form>
 </div>
 
@@ -103,7 +120,29 @@ session_start();
         <p class="mb-1">&copy; 2025 Flor Reina. Todos los derechos reservados.</p>
         <small>Contacto: info@florreina.es | Tel: +34 666 999 123</small>
     </div>
+
 </footer>
+<script>
+    function agregarCampo() {
+  const contenedor = document.getElementById('nuevos-ingredientes');
+  const nuevoCampo = document.createElement('div');
+  nuevoCampo.className = 'input-group mb-2 w-50';
+  nuevoCampo.innerHTML = `
+    <input type="text" name="ingredientes[]" class="form-control" placeholder="Escribe un ingrediente">
+    <button type="button" class="btn btn-outline-danger" onclick="eliminarCampo(this)">
+      <i class="bi bi-trash"></i>
+    </button>
+  `;
+  contenedor.appendChild(nuevoCampo);
+}
+
+function eliminarCampo(boton) {
+  const grupo = boton.parentNode;
+  grupo.parentNode.removeChild(grupo);
+}
+
+  </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
