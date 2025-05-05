@@ -1,0 +1,28 @@
+.text-pink {
+    color: #d54b8c;
+  }
+  
+  .btn-pink {
+    background-color: #d54b8c;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+    border-radius: 999px;
+  }
+  
+  .btn-pink:hover {
+    background-color: #c03b7a;
+  }
+  
+  .border-pink {
+    border: 1px solid #d54b8c;
+    border-radius: 0.5rem;
+  }
+  
+  .card {
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 8px 24px rgba(213, 75, 140, 0.2);
+  }

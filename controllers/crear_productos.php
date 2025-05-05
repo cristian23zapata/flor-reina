@@ -38,8 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($nombre) || !empty($descripcion) || !empty($precio) || !empty($stock)) {
         
 
-
-
         $consulta = "INSERT INTO productos (nombre, descripcion, precio, stock, imagen, ingredientes) VALUES ('$nombre', '$descripcion', $precio, $stock, '$ruta', '$ingredientes_str')";
 
         $mysql->efectuarConsulta($consulta);

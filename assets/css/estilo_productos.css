@@ -1,3 +1,10 @@
+.ingredientes-lista ul {
+  column-count: 3; /* Puedes cambiar a 3 si quieres más columnas */
+  column-gap: 1rem;
+  padding-left: 1rem;
+  margin: 0;
+}
+
 .card {
     background: linear-gradient(to bottom, #fff0f5, #ffe6f0);
     border: 1px solid #f8c3da;
