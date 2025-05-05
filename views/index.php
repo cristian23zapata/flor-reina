@@ -3,14 +3,10 @@ require_once '../models/MySQL.php';
 
 session_start();
 
-    
-    $mysql = new MySQL;
-    $mysql->conectar();
-
-    $resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios;");
-
-    $mysql->desconectar();
-
+$mysql = new MySQL;
+$mysql->conectar();
+$resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios;");
+$mysql->desconectar();
 ?>
 
 <!DOCTYPE html>
@@ -22,6 +18,89 @@ session_start();
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/estilo_nav.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    /* Carrusel a pantalla completa */
+    .fullscreen-carousel {
+      width: 100%;
+      height: 80vh;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .fullscreen-carousel .carousel-inner,
+    .fullscreen-carousel .carousel-item {
+      height: 100%;
+    }
+    
+    .fullscreen-carousel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    
+    /* Capa de texto sobre imágenes */
+    .carousel-caption {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
+      bottom: 20%;
+      left: 10%;
+      right: 10%;
+    }
+    
+    /* Sección Visión/Misión */
+    .vision-mision-section {
+      padding: 80px 0;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+    
+    .vision-card, .mision-card {
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.5s ease;
+      height: 100%;
+    }
+    
+    .vision-card:hover, .mision-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .vision-card {
+      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+      color: white;
+    }
+    
+    .mision-card {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+    }
+    
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    
+    /* Animaciones */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-fadeInUp {
+      animation: fadeInUp 1s ease-out;
+    }
+  </style>
 </head>
 <body>
 
@@ -89,6 +168,8 @@ session_start();
         <p>Fresco, cremoso y perfecto para cualquier momento.</p>
       </div>
     </div>
+    
+    <!-- Yogur 2 -->
     <div class="carousel-item">
       <img src="assets/imagenes/yogul2.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Yogur 2">
       <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
@@ -96,6 +177,8 @@ session_start();
         <p>Endulzado naturalmente con trozos de fruta.</p>
       </div>
     </div>
+    
+    <!-- Yogur 3 -->
     <div class="carousel-item">
       <img src="assets/imagenes/yogul3.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Yogur 3">
       <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
@@ -103,6 +186,7 @@ session_start();
         <p>Nuestro yogur estrella con el sabor que conquista.</p>
       </div>
     </div>
+  
   </div>
 
   <!-- Controles -->
@@ -129,18 +213,23 @@ session_start();
           </div>
         </div>
       </div>
-      <div class="col-md-6 mb-4">
-        <div class="card h-100 border-0 shadow" style="background-color: #fff0f5;">
-          <div class="card-body">
-            <h3 class="card-title" style="color: #d63384;">Misión</h3>
-            <p class="card-text">Elaborar yogures caseros con ingredientes naturales y frescos, brindando a nuestros clientes una experiencia única de sabor y bienestar en cada cucharada.</p>
+      
+      <!-- Misión -->
+      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="100">
+        <div class="mision-card p-5 text-center h-100">
+          <i class="bi bi-heart-fill card-icon"></i>
+          <h3 class="fw-bold mb-3">Misión</h3>
+          <p class="fs-5">Elaborar yogures caseros con ingredientes naturales y frescos, brindando a nuestros clientes una experiencia única de sabor y bienestar en cada cucharada.</p>
+          <div class="mt-4" data-aos="fade-up" data-aos-delay="300">
+            <p class="mb-1"><i class="bi bi-check-circle me-2"></i> Ingredientes locales</p>
+            <p class="mb-1"><i class="bi bi-check-circle me-2"></i> Procesos tradicionales</p>
+            <p class="mb-1"><i class="bi bi-check-circle me-2"></i> Satisfacción garantizada</p>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
-<!-- Fin Sección de Visión y Misión -->
 
 <!-- Footer -->
 <footer class="bg-dark text-white py-4 mt-5">
@@ -149,6 +238,27 @@ session_start();
     <small>Contacto: info@florreina.es | Tel: +34 666 999 123</small>
   </div>
 </footer>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  // Inicializar animaciones
+  AOS.init({
+    duration: 1000,
+    once: true
+  });
+  
+  // Pausar carrusel al pasar el mouse
+  const carousel = document.getElementById('carouselYogures');
+  carousel.addEventListener('mouseenter', () => {
+    const carouselInstance = bootstrap.Carousel.getInstance(carousel);
+    carouselInstance.pause();
+  });
+  
+  carousel.addEventListener('mouseleave', () => {
+    const carouselInstance = bootstrap.Carousel.getInstance(carousel);
+    carouselInstance.cycle();
+  });
+</script>
 </body>
 </html>
