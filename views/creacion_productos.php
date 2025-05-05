@@ -88,7 +88,7 @@ session_start();
       <label for="stock" class="form-label">Stock disponible</label>
       <input type="number" class="form-control" id="stock" name="stock" required>
     </div>
-
+    <!--ingredientes-->
     <div class="mb-3">
       <label for="ingredientes" class="form-label">Ingredientes</label>
       <div id="nuevos-ingredientes">
@@ -103,7 +103,7 @@ session_start();
         <i class="bi bi-plus-circle"></i> Agregar otro ingrediente
       </button>
     </div>
-
+    <!--fin ingredientes-->
     <div class="mb-4">
       <label for="imagen" class="form-label">Imagen del producto</label>
       <input class="form-control" type="file" id="imagen" name="imagen" accept=".jpg, .jpeg, .png" required>

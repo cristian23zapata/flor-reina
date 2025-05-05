@@ -205,38 +205,104 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
                 <label class="form-label">Descripción</label>
                 <textarea name="descripcion" class="form-control" required><?php echo htmlspecialchars($producto['descripcion']); ?></textarea>
               </div>
-              <div class="mb-3">
+              <!-- Ingredientes -->
+              <div>
+                <label class="form-label">Ingredientes</label>
+                <div id="contenedor-ingredientes" class="row">
+                  <div class="col-md-6" id="columna-ingredientes-1">
+                  <?php 
+                  $ingredientes = explode(',', $producto['ingredientes']);
+                  foreach ($ingredientes as $index => $ingrediente): 
+                    if ($index > 0 && $index % 5 === 0): ?>
+                    </div><div class="col-md-6" id="columna-ingredientes-<?php echo ceil(($index + 1) / 5); ?>">
+                    <?php endif; ?>
+                    <div class="input-group mb-2">
+                    <input type="text" name="ingredientes[]" class="form-control" value="<?php echo htmlspecialchars(trim($ingrediente)); ?>">
+                    <button type="button" class="btn btn-outline-danger" onclick="eliminarCampo(this)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                    </div>
+                  <?php endforeach; ?>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-outline-primary mt-2" onclick="agregarCampo()">
+                  <i class="bi bi-plus-circle"></i> Agregar otro ingrediente
+                </button>
+                </div>
+                <!-- Fin ingredientes -->
+                <div class="mb-3">
                 <label class="form-label">Precio ($)</label>
                 <input type="number" step="0.01" name="precio" class="form-control" value="<?php echo $producto['precio']; ?>" required>
-              </div>
-              <div class="mb-3">
+                </div>
+                <div class="mb-3">
                 <label class="form-label">Stock</label>
                 <input type="number" name="stock" class="form-control" value="<?php echo $producto['stock']; ?>" required>
-              </div>
-              <div class="mb-3">
+                </div>
+                <div class="mb-3">
                 <label class="form-label">Imagen (opcional)</label>
                 <input type="file" name="imagen" class="form-control">
+                </div>
               </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+              </div>
+              </form>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="submit" class="btn btn-primary">Guardar cambios</button>
             </div>
-          </form>
+          <?php endwhile; ?>
+          </div>
         </div>
-      </div>
-    <?php endwhile; ?>
-  </div>
-</div>
 
-<!-- Footer -->
-<footer class="bg-dark text-white py-4 mt-5">
-  <div class="container text-center">
-    <p class="mb-1">&copy; 2025 Flor Reina. Todos los derechos reservados.</p>
-    <small>Contacto: info@florreina.es | Tel: +34 666 999 123</small>
-  </div>
-</footer>
+        <!-- Footer -->
+        <footer class="bg-dark text-white py-4 mt-5">
+          <div class="container text-center">
+          <p class="mb-1">&copy; 2025 Flor Reina. Todos los derechos reservados.</p>
+          <small>Contacto: info@florreina.es | Tel: +34 666 999 123</small>
+          </div>
+        </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+          function agregarCampo() {
+          const contenedor = document.getElementById('contenedor-ingredientes');
+          const columnas = contenedor.getElementsByClassName('col-md-6');
+          let ultimaColumna = columnas[columnas.length - 1];
+          const totalInputs = contenedor.querySelectorAll('input[name="ingredientes[]"]').length;
+
+          if (totalInputs % 5 === 0) {
+            const nuevaColumna = document.createElement('div');
+            nuevaColumna.className = 'col-md-6';
+            nuevaColumna.id = `columna-ingredientes-${columnas.length + 1}`;
+            contenedor.appendChild(nuevaColumna);
+            ultimaColumna = nuevaColumna;
+          }
+
+          const nuevoCampo = document.createElement('div');
+          nuevoCampo.className = 'input-group mb-2';
+          nuevoCampo.innerHTML = `
+            <input type="text" name="ingredientes[]" class="form-control" placeholder="Escribe un ingrediente">
+            <button type="button" class="btn btn-outline-danger" onclick="eliminarCampo(this)">
+            <i class="bi bi-trash"></i>
+            </button>
+          `;
+          ultimaColumna.appendChild(nuevoCampo);
+          }
+
+          function eliminarCampo(boton) {
+          const campo = boton.parentElement;
+          const columna = campo.parentElement;
+          columna.removeChild(campo);
+
+          // Reorganizar columnas si están vacías
+          const contenedor = document.getElementById('contenedor-ingredientes');
+          const columnas = Array.from(contenedor.getElementsByClassName('col-md-6'));
+          columnas.forEach(col => {
+            if (col.children.length === 0) {
+            contenedor.removeChild(col);
+            }
+          });
+          }
+        </script>
 </body>
 </html>

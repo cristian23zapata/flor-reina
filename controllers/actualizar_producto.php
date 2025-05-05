@@ -11,7 +11,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stock = $_POST['stock'];
 
     $ruta = $_POST['imagenActual']; 
-    
+    //procesar ingredientes
+    $ingredientes = $_POST['ingredientes'];
+    $ingredientes_filtrados = array_filter(array_map('trim', $ingredientes));
+    $ingredientes_str = implode(',', $ingredientes_filtrados);
+
+
+
     if ($_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
         $permitidos = ['image/jpeg' => '.jpg', 'image/png' => '.png'];
         $tipo = mime_content_type($_FILES['imagen']['tmp_name']);
@@ -33,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!empty($nombre) || !empty($descripcion) || !empty($precio) || !empty($stock)) {
         
-        $consulta = "UPDATE productos SET nombre = '$nombre', descripcion = '$descripcion', precio = $precio, stock = $stock, imagen = '$ruta' WHERE id = " . $_POST['id'] . ";";
+        $consulta = "UPDATE productos SET nombre = '$nombre', descripcion = '$descripcion', precio = $precio, ingredientes = '$ingredientes_str', stock = $stock, imagen = '$ruta' WHERE id = " . $_POST['id'] . ";";
 
         $mysql->efectuarConsulta($consulta);
     
