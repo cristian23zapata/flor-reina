@@ -25,7 +25,8 @@ session_start();
     <title>Flor Reina</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    
+    <link rel="stylesheet" href="../assets/css/estilo_nav.css">
+    <link rel="stylesheet" href="../assets/css/estilo_creacion_productos.css">
 </head>
 <body>
 
@@ -65,53 +66,54 @@ session_start();
 </nav>
 
 <div class="container my-5">
-    <h2 class="mb-4 text-center">Crear nuevo producto</h2>
-    <form action="../controllers/crear_productos.php" method="POST" enctype="multipart/form-data" class="p-4 border rounded-3 shadow-sm bg-light">
-        <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre del producto</label>
-        <input type="text" class="form-control" id="nombre" name="nombre" required>
+  <h2 class="mb-4 text-center">Crear nuevo producto</h2>
+  <form action="../controllers/crear_productos.php" method="POST" enctype="multipart/form-data" class="form-container">
+    
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre del producto</label>
+      <input type="text" class="form-control" id="nombre" name="nombre" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="precio" class="form-label">Precio (€)</label>
+      <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="stock" class="form-label">Stock disponible</label>
+      <input type="number" class="form-control" id="stock" name="stock" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="ingredientes" class="form-label">Ingredientes</label>
+      <div id="nuevos-ingredientes">
+        <div class="input-group mb-2 w-50">
+        <input type="text" name="ingredientes[]" class="form-control" placeholder="Escribe un ingrediente">
+    <button type="button" class="btn btn-outline-danger" onclick="eliminarCampo(this)">
+      <i class="bi bi-trash"></i>
+    </button>
         </div>
+      </div>
+      <button type="button" class="btn btn-outline-primary mt-2" onclick="agregarCampo()">
+        <i class="bi bi-plus-circle"></i> Agregar otro ingrediente
+      </button>
+    </div>
 
-        <div class="mb-3">
-        <label for="descripcion" class="form-label">Descripción</label>
-        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
-        </div>
+    <div class="mb-4">
+      <label for="imagen" class="form-label">Imagen del producto</label>
+      <input class="form-control" type="file" id="imagen" name="imagen" accept=".jpg, .jpeg, .png" required>
+    </div>
 
-        <div class="mb-3">
-            <label for="precio" class="form-label">Precio (€)</label>
-            <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
-        </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-outline-success px-5">Crear producto</button>
+    </div>
 
-        <div class="mb-3">
-            <label for="stock" class="form-label">Stock disponible</label>
-            <input type="number" class="form-control" id="stock" name="stock" required>
-        </div>
-        <div class="mb-3">
-  <label for="ingredientes" class="form-label">Ingredientes</label>
-  <div id="nuevos-ingredientes">
-  <div class="input-group mb-2 w-50">
-  <input type="text" name="ingredientes[]" class="form-control" placeholder="Escribe un ingrediente">
-  <button type="button" class="btn btn-outline-danger" onclick="eliminarCampo(this)">
-    <i class="bi bi-trash"></i>
-  </button>
-</div>
-  </div>
-  <button type="button" class="btn btn-outline-primary mt-2" onclick="agregarCampo()">
-    <i class="bi bi-plus-circle"></i> Agregar otro ingrediente
-  </button>
-</div>
-
-        <div class="mb-4">
-            <label for="imagen" class="form-label">Imagen del producto</label>
-            <input class="form-control" type="file" id="imagen" name="imagen" accept=".jpg, .jpeg, .png" required>
-        </div>
-
-
-        <div class="text-center">
-            <button type="submit" class="btn btn-outline-success px-5">Crear producto</button>
-        </div>
-
-    </form>
+  </form>
 </div>
 
 <!-- Footer -->

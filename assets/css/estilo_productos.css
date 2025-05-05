@@ -1,0 +1,93 @@
+.card {
+    background: linear-gradient(to bottom, #fff0f5, #ffe6f0);
+    border: 1px solid #f8c3da;
+    border-radius: 20px;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .card:hover {
+    box-shadow: 0 12px 24px rgba(213, 75, 140, 0.3);
+    transition: box-shadow 0.8s ease;
+  }
+
+  .card-title {
+    color: #d63384;
+  }
+
+  .btn-outline-success,
+  .btn-outline-danger,
+  .btn-outline-secondary,
+  .btn-outline-primary {
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .btn-outline-success {
+    border-color: #38a169;
+    color: #38a169;
+  }
+
+  .btn-outline-success:hover {
+    background-color: #e6fffa;
+    color: #1b4332;
+  }
+
+  .btn-outline-danger {
+    border-color: #e63946;
+    color: #e63946;
+  }
+
+  .btn-outline-danger:hover {
+    background-color: #ffe5e9;
+    color: #a4161a;
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+    color: #6c757d;
+  }
+
+  .modal-content {
+    border-radius: 20px;
+    border: 2px solid #f8c3da;
+  }
+
+  .modal-header {
+    background-color: #fcdce7;
+    color: #a61e66;
+    border-bottom: none;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .modal-footer {
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+  }
+
+  .modal-title {
+    font-weight: bold;
+  }
+
+  .form-label {
+    color: #d63384;
+    font-weight: 600;
+  }
+
+  .form-control {
+    border-radius: 12px;
+    border: 1px solid #f7c4dd;
+  }
+
+  .btn-primary {
+    background-color: #d63384;
+    border: none;
+    border-radius: 20px;
+  }
+
+  .btn-primary:hover {
+    background-color: #c2185b;
+  }
+
+  .btn-secondary {
+    border-radius: 20px;
+  }
