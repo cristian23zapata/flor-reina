@@ -150,10 +150,11 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
             <div class="modal-body">
               <div class="row g-4">
                 <!-- Imagen del producto -->
-                <div class="col-md-5 text-center">
-                  <img src="../<?php echo $producto['imagen']; ?>" class="img-fluid rounded" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
+
+                <div class="text-center mb-3">
+                  <img src="../<?php echo $producto['imagen']; ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>" class="img-fluid producto-img">
                 </div>
-                
+
                 <!-- Detalles del producto -->
                 <div class="col-md-7">
                   <p><strong>Descripción:</strong> <?php echo htmlspecialchars($producto['descripcion']); ?></p>

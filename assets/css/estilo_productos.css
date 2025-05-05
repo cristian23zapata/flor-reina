@@ -5,6 +5,14 @@
   margin: 0;
 }
 
+.producto-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  max-height: 500px; /* opcional: para evitar que sea demasiado alta */
+  border-radius: 10px;
+}
+
 .card {
     background: linear-gradient(to bottom, #fff0f5, #ffe6f0);
     border: 1px solid #f8c3da;
