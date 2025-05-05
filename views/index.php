@@ -23,24 +23,6 @@ session_start();
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/estilo_nav.css">
 </head>
-
-<style>
-  #carouselYogures {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  #carouselYogures .carousel-inner {
-    height: 400px;
-  }
-
-  #carouselYogures .carousel-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-</style>
 <body>
 
 <!-- Navbar -->
@@ -76,10 +58,6 @@ session_start();
         <?php else: ?>
           <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
         <?php endif; ?>
-        
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-          <a href="../views/carrito.php"><button class="btn btn-outline-success"><i class="bi bi-bag"></i> Carrito</button></a>
-        <?php } ?>
       </div>
     </div>
   </div>
@@ -93,41 +71,51 @@ session_start();
   </div>
 </header>
 <!-- commit -->
-<!-- Carrusel de Yogures -->
-<div id="carouselYogures" class="carousel slide mt-5" data-bs-ride="carousel">
-  <div class="carousel-inner">
+
+<div id="carruselFlorDeReina" class="carousel slide mt-5 shadow rounded overflow-hidden" data-bs-ride="carousel" style="max-width: 800px; margin: auto;">
+  <!-- Indicadores -->
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carruselFlorDeReina" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carruselFlorDeReina" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carruselFlorDeReina" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+
+  <!-- Slides -->
+  <div class="carousel-inner" style="height: 400px;">
     <div class="carousel-item active">
-      <img src="../assets/imagenes/yogul1.jpg" class="d-block w-100" alt="Yogur 1">
+      <img src="assets/imagenes/yogul1.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Yogur 1">
+      <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+        <h5>Yogur Natural</h5>
+        <p>Fresco, cremoso y perfecto para cualquier momento.</p>
+      </div>
     </div>
     <div class="carousel-item">
-      <img src="../assets/imagenes/yogul2.jpg" class="d-block w-100" alt="Yogur 2">
+      <img src="assets/imagenes/yogul2.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Yogur 2">
+      <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+        <h5>Yogur con Frutas</h5>
+        <p>Endulzado naturalmente con trozos de fruta.</p>
+      </div>
     </div>
     <div class="carousel-item">
-      <img src="../assets/imagenes/yogul3.jpg" class="d-block w-100" alt="Yogur 3">
-    </div>
-    <div class="carousel-item">
-      <img src="../assets/imagenes/yogul4.jpg" class="d-block w-100" alt="Yogur 4">
-    </div>
-    <div class="carousel-item">
-      <img src="../assets/imagenes/yogul5.jpg" class="d-block w-100" alt="Yogur 5">
-    </div>
-    <div class="carousel-item">
-      <img src="../assets/imagenes/yogul6.jpg" class="d-block w-100" alt="Yogur 6">
-    </div>
-    <div class="carousel-item">
-      <img src="../assets/imagenes/yogul7.jpg" class="d-block w-100" alt="Yogur 7">
+      <img src="assets/imagenes/yogul3.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Yogur 3">
+      <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+        <h5>Flor de Reina</h5>
+        <p>Nuestro yogur estrella con el sabor que conquista.</p>
+      </div>
     </div>
   </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselYogures" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+  <!-- Controles -->
+  <button class="carousel-control-prev" type="button" data-bs-target="#carruselFlorDeReina" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
     <span class="visually-hidden">Anterior</span>
   </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselYogures" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+  <button class="carousel-control-next" type="button" data-bs-target="#carruselFlorDeReina" data-bs-slide="next">
+    <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
     <span class="visually-hidden">Siguiente</span>
   </button>
 </div>
-<!-- Fin Carrusel -->
+
 <!-- Sección de Visión y Misión -->
 <section class="py-5" style="background-color: #ffe6f0;">
   <div class="container text-center">
