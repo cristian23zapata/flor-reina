@@ -6,6 +6,9 @@ session_start();
 $mysql = new MySQL;
 $mysql->conectar();
 $resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios;");
+
+$articulos = $mysql->efectuarConsulta("SELECT * FROM articulos;");
+
 $mysql->desconectar();
 ?>
 
@@ -16,23 +19,8 @@ $mysql->desconectar();
   <title>Blog | Tu Página</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/estilo_nav.css">
-  <style>
-    .blog-card {
-      border-radius: 1.5rem;
-      box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
-      transition: transform 0.2s ease-in-out;
-    }
-    .blog-card:hover {
-      transform: scale(1.01);
-    }
-    .blog-img {
-      border-top-left-radius: 1.5rem;
-      border-top-right-radius: 1.5rem;
-      height: 200px;
-      object-fit: cover;
-      width: 100%;
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/css/estilo_blog.css">
+  <link rel="stylesheet" href="../assets/css/estilo_productos.css">
 </head>
 <body>
 
@@ -49,7 +37,7 @@ $mysql->desconectar();
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-        <li class="nav-item"><a class="nav-link active" href="../views/creacion_productos.php">CREAR</a></li>
+        <li class="nav-item"><a class="nav-link active" href="../views/creacion.php">CREAR</a></li>
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Tienda</a></li>
@@ -74,71 +62,87 @@ $mysql->desconectar();
   <div class="row g-4">
 
     <?php
-    // Ejemplo de artículos de blog (normalmente vienen de base de datos)
-    $articulos = [
-      [
-        'titulo' => 'Cómo elegir el mejor producto',
-        'resumen' => 'Descubre los factores más importantes a tener en cuenta antes de realizar una compra en línea.',
-        'imagen' => 'ruta/a/imagen1.jpg',
-        'link' => 'articulo1.php'
-      ],
-      [
-        'titulo' => 'Tendencias tecnológicas 2025',
-        'resumen' => 'Analizamos las tecnologías emergentes que marcarán el futuro del ecommerce y la vida diaria.',
-        'imagen' => 'ruta/a/imagen2.jpg',
-        'link' => 'articulo2.php'
-      ],
-      [
-        'titulo' => 'Cómo optimizar tu carrito de compras',
-        'resumen' => 'Consejos prácticos para mejorar tu experiencia de compra y ahorrar dinero.',
-        'imagen' => 'ruta/a/imagen3.jpg',
-        'link' => 'articulo3.php'
-      ],
-      [
-        'titulo' => 'Cómo optimizar tu carrito de compras',
-        'resumen' => 'Consejos prácticos para mejorar tu experiencia de compra y ahorrar dinero.',
-        'imagen' => 'ruta/a/imagen3.jpg',
-        'link' => 'articulo3.php'
-      ],
-      [
-        'titulo' => 'Cómo elegir el mejor producto',
-        'resumen' => 'Descubre los factores más importantes a tener en cuenta antes de realizar una compra en línea.',
-        'imagen' => 'ruta/a/imagen1.jpg',
-        'link' => 'articulo1.php'
-      ],
-      [
-        'titulo' => 'Tendencias tecnológicas 2025',
-        'resumen' => 'Analizamos las tecnologías emergentes que marcarán el futuro del ecommerce y la vida diaria.',
-        'imagen' => 'ruta/a/imagen2.jpg',
-        'link' => 'articulo2.php'
-      ],
-      [
-        'titulo' => 'Cómo optimizar tu carrito de compras',
-        'resumen' => 'Consejos prácticos para mejorar tu experiencia de compra y ahorrar dinero.',
-        'imagen' => 'ruta/a/imagen3.jpg',
-        'link' => 'articulo3.php'
-      ],
-      [
-        'titulo' => 'Cómo optimizar tu carrito de compras',
-        'resumen' => 'Consejos prácticos para mejorar tu experiencia de compra y ahorrar dinero.',
-        'imagen' => 'ruta/a/imagen3.jpg',
-        'link' => 'articulo3.php'
-      ]
-    ];
 
     foreach ($articulos as $articulo): ?>
       <div class="col-md-3">
         <div class="card blog-card h-100">
-          <img src="<?php echo $articulo['imagen']; ?>" alt="Imagen del artículo" class="blog-img">
+          <img src="../<?php echo $articulo['imagen']; ?>" alt="Imagen del artículo" class="blog-img">
           <div class="card-body d-flex flex-column">
             <h5 class="card-title fw-bold"><?php echo $articulo['titulo']; ?></h5>
-            <p class="card-text text-muted"><?php echo $articulo['resumen']; ?></p>
-            <a href="<?php echo $articulo['link']; ?>" class="btn btn-outline-success mt-auto rounded-pill">Leer más</a>
+            <p class="card-text text-muted"><?php echo $articulo['contenido']; ?></p>
+            <div class="d-flex gap-2">
+                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+                  <a href="#" class="btn btn-outline-success w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalVerMas<?php echo $articulo['id']; ?>">Ver Más</a>
+                <?php } ?>
+                <!-- Botón para abrir el modal -->
+                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?> 
+                <button type="button" class="btn btn-outline-success w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditar<?php echo $articulo['id']; ?>">Editar</button>
+                <!-- Botón que abre el modal -->
+                <button type="button" class="btn btn-outline-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#confirmarEliminar<?php echo $articulo['id']; ?>">Eliminar</button>
+                <!-- Modal de confirmación -->
+                <div class="modal fade" id="confirmarEliminar<?php echo $articulo['id']; ?>" tabindex="-1" aria-labelledby="confirmarEliminarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="confirmarEliminarLabel<?php echo $articulo['id']; ?>">Confirmar eliminación</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                      </div>
+                      <div class="modal-body">
+                        ¿Estás seguro de que deseas eliminar el articulo <strong><?php echo htmlspecialchars($articulo['titulo']); ?></strong>?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <form action="../controllers/eliminar_articulo.php" method="POST">
+                          <input type="hidden" name="id" value="<?php echo $articulo['id']; ?>">
+                          <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <?php } ?>
+              </div>
           </div>
         </div>
       </div>
     <?php endforeach; ?>
+  </div>
+</div>
 
+<!-- Modal de edición de artículo -->
+<div class="modal fade" id="modalEditar<?php echo $articulo['id']; ?>" tabindex="-1" aria-labelledby="modalEditarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <form class="modal-content form-container" action="../controllers/actualizar_articulo.php" method="POST" enctype="multipart/form-data">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEditarLabel<?php echo $articulo['id']; ?>">Editar Artículo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body">
+        <input type="hidden" name="id" value="<?php echo $articulo['id']; ?>">
+        <input type="hidden" name="imagenActual" value="<?php echo $articulo['imagen']; ?>">
+
+        <div class="mb-3">
+          <label class="form-label">Título del artículo</label>
+          <input type="text" name="titulo" class="form-control" value="<?php echo htmlspecialchars($articulo['titulo']); ?>" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Contenido</label>
+          <textarea name="contenido" rows="6" class="form-control" required><?php echo htmlspecialchars($articulo['contenido']); ?></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Imagen de portada (opcional)</label>
+          <input type="file" name="imagen" class="form-control">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-outline-success">Guardar cambios</button>
+      </div>
+    </form>
   </div>
 </div>
 

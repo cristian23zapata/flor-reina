@@ -39,6 +39,18 @@
     color: #a61e66;
   }
 
+  .btn-outline-secondary {
+    border-radius: 20px;
+    font-weight: 500;
+    border-color: #36bdf3;
+    color: #33cbd6;
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: #fce4ec;
+    color: #1e74a6;
+  }
+
   .btn-outline-danger {
     border-radius: 20px;
     font-weight: 500;

@@ -46,6 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         echo "Producto registrado con exito. <br><br>";
         
-        header("refresh:3;url=../views/creacion_Productos.php");
+        header("refresh:3;url=../views/creacion.php");
     }
 }

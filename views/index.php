@@ -37,7 +37,7 @@ $mysql->desconectar();
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-        <li class="nav-item"><a class="nav-link active" href="../views/creacion_productos.php">CREAR</a></li>
+        <li class="nav-item"><a class="nav-link active" href="../views/creacion.php">CREAR</a></li>
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Tienda</a></li>

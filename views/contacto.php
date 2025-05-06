@@ -38,7 +38,7 @@ session_start();
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-        <li class="nav-item"><a class="nav-link active" href="../views/creacion_productos.php">CREAR</a></li>
+        <li class="nav-item"><a class="nav-link active" href="../views/creacion.php">CREAR</a></li>
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Tienda</a></li>
@@ -82,9 +82,12 @@ session_start();
 </div>
 
   <!-- Footer -->
-  <footer class="bg-dark text-white text-center py-3 mt-auto">
-    © 2025 TuTienda. Todos los derechos reservados.
-  </footer>
+<footer class="bg-dark text-white py-4 mt-5">
+  <div class="container text-center">
+    <p class="mb-1">&copy; 2025 Flor Reina. Todos los derechos reservados.</p>
+    <small>Contacto: info@florreina.es | Tel: +34 666 999 123</small>
+  </div>
+</footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
