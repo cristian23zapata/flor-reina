@@ -45,7 +45,7 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Tienda</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
       </ul>
 
@@ -338,7 +338,7 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
           <button type="button" class="btn btn-outline-danger me-2" id="vaciar-carrito">
             <i class="bi bi-trash"></i> Vaciar
           </button>
-          <a href="../views/carrito.php" class="btn btn-success" id="btn-pagar">
+          <a href="../views/pagar.php" class="btn btn-success" id="btn-pagar">
             <i class="bi bi-credit-card"></i> Pagar
           </a>
         </div>

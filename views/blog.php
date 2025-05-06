@@ -1,9 +1,21 @@
+<?php
+require_once '../models/MySQL.php';
+
+session_start();
+
+$mysql = new MySQL;
+$mysql->conectar();
+$resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios;");
+$mysql->desconectar();
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Blog | Tu Página</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/estilo_nav.css">
   <style>
     .blog-card {
       border-radius: 1.5rem;
@@ -41,14 +53,9 @@
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Tienda</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
       </ul>
-
-      <form class="d-flex me-3" role="search">
-        <input class="form-control me-2" type="search" placeholder="Buscar productos..." aria-label="Buscar">
-        <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
-      </form>
 
       <div class="d-flex align-items-center gap-2">
         <?php if (isset($_SESSION['correo'])): ?>
@@ -86,11 +93,41 @@
         'resumen' => 'Consejos prácticos para mejorar tu experiencia de compra y ahorrar dinero.',
         'imagen' => 'ruta/a/imagen3.jpg',
         'link' => 'articulo3.php'
+      ],
+      [
+        'titulo' => 'Cómo optimizar tu carrito de compras',
+        'resumen' => 'Consejos prácticos para mejorar tu experiencia de compra y ahorrar dinero.',
+        'imagen' => 'ruta/a/imagen3.jpg',
+        'link' => 'articulo3.php'
+      ],
+      [
+        'titulo' => 'Cómo elegir el mejor producto',
+        'resumen' => 'Descubre los factores más importantes a tener en cuenta antes de realizar una compra en línea.',
+        'imagen' => 'ruta/a/imagen1.jpg',
+        'link' => 'articulo1.php'
+      ],
+      [
+        'titulo' => 'Tendencias tecnológicas 2025',
+        'resumen' => 'Analizamos las tecnologías emergentes que marcarán el futuro del ecommerce y la vida diaria.',
+        'imagen' => 'ruta/a/imagen2.jpg',
+        'link' => 'articulo2.php'
+      ],
+      [
+        'titulo' => 'Cómo optimizar tu carrito de compras',
+        'resumen' => 'Consejos prácticos para mejorar tu experiencia de compra y ahorrar dinero.',
+        'imagen' => 'ruta/a/imagen3.jpg',
+        'link' => 'articulo3.php'
+      ],
+      [
+        'titulo' => 'Cómo optimizar tu carrito de compras',
+        'resumen' => 'Consejos prácticos para mejorar tu experiencia de compra y ahorrar dinero.',
+        'imagen' => 'ruta/a/imagen3.jpg',
+        'link' => 'articulo3.php'
       ]
     ];
 
     foreach ($articulos as $articulo): ?>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="card blog-card h-100">
           <img src="<?php echo $articulo['imagen']; ?>" alt="Imagen del artículo" class="blog-img">
           <div class="card-body d-flex flex-column">
@@ -104,6 +141,14 @@
 
   </div>
 </div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+  <div class="container text-center">
+    <p class="mb-1">&copy; 2025 Flor Reina. Todos los derechos reservados.</p>
+    <small>Contacto: info@florreina.es | Tel: +34 666 999 123</small>
+  </div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
