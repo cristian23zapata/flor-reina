@@ -14,9 +14,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Desconectar de la base de datos
     $mysql->desconectar();
     
-    echo "Producto eliminado con éxito. <br><br>";
-    
-    header("refresh:3;url=../views/productos.php");
+    header("Location: ../views/productos.php");
+    exit();
 } else {
     echo "Método no permitido.";
 }

@@ -99,12 +99,12 @@ session_start();
 
     <div class="mb-3">
       <label for="precio" class="form-label">Precio (€)</label>
-      <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
+      <input type="number" class="form-control" id="precio" name="precio" step="0.01" min="1" required>
     </div>
 
     <div class="mb-3">
       <label for="stock" class="form-label">Stock disponible</label>
-      <input type="number" class="form-control" id="stock" name="stock" required>
+      <input type="number" class="form-control" id="stock" name="stock" min="1" required>
     </div>
     <!--ingredientes-->
     <div class="mb-3">
@@ -130,10 +130,38 @@ session_start();
     <div class="text-center">
       <button type="submit" class="btn btn-outline-success px-5">Crear producto</button>
     </div>
-
   </form>
 </div>
 </div>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<?php if (isset($_GET['estado'])): ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        <?php if ($_GET['estado'] === 'exito'): ?>
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: 'Producto registrado con éxito',
+                confirmButtonText: 'Aceptar'
+            });
+        <?php elseif ($_GET['estado'] === 'error'): ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '<?= htmlspecialchars($_GET["mensaje"] ?? "Hubo un error") ?>',
+                confirmButtonText: 'Intentar de nuevo'
+            });
+        <?php endif; ?>
+
+        // ✅ Eliminar los parámetros de la URL sin recargar
+        if (window.history.replaceState) {
+            const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.replaceState({ path: url }, "", url);
+        }
+    </script>
+<?php endif; ?>
 
 <!-- Formulario de ARTÍCULO -->
 <div id="form-articulo" style="display: none;">
@@ -163,6 +191,32 @@ session_start();
 </div>
 </div>
 
+<?php if (isset($_GET['estado'])): ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        <?php if ($_GET['estado'] === 'exito'): ?>
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: 'Articulo registrado con éxito',
+                confirmButtonText: 'Aceptar'
+            });
+        <?php elseif ($_GET['estado'] === 'error'): ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '<?= htmlspecialchars($_GET["mensaje"] ?? "Hubo un error") ?>',
+                confirmButtonText: 'Intentar de nuevo'
+            });
+        <?php endif; ?>
+
+        // ✅ Eliminar los parámetros de la URL sin recargar
+        if (window.history.replaceState) {
+            const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.replaceState({ path: url }, "", url);
+        }
+    </script>
+<?php endif; ?>
 
 <script>
   function mostrarFormulario(tipo) {
@@ -209,6 +263,5 @@ function eliminarCampo(boton) {
 
   </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

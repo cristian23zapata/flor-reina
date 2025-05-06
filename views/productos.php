@@ -143,7 +143,6 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
           </div>
         </div>
       </div>
-
       <!-- Modal Ver Más -->
 <div class="modal fade" id="modalVerMas<?php echo $producto['id']; ?>" tabindex="-1" aria-labelledby="modalVerMasLabel<?php echo $producto['id']; ?>" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -261,11 +260,11 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
                 <!-- Fin ingredientes -->
                 <div class="mb-3">
                 <label class="form-label">Precio ($)</label>
-                <input type="number" step="0.01" name="precio" class="form-control" value="<?php echo $producto['precio']; ?>" required>
+                <input type="number" step="0.01" name="precio" class="form-control" min="1" value="<?php echo $producto['precio']; ?>" required>
                 </div>
                 <div class="mb-3">
                 <label class="form-label">Stock</label>
-                <input type="number" name="stock" class="form-control" value="<?php echo $producto['stock']; ?>" required>
+                <input type="number" name="stock" class="form-control" min="1" value="<?php echo $producto['stock']; ?>" required>
                 </div>
                 <div class="mb-3">
                 <label class="form-label">Imagen (opcional)</label>
@@ -282,6 +281,36 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
           <?php endwhile; ?>
           </div>
         </div>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<?php if (isset($_GET['estado'])): ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        <?php if ($_GET['estado'] === 'exito'): ?>
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: 'Producto actualizado con éxito',
+                confirmButtonText: 'Aceptar'
+            });
+        <?php elseif ($_GET['estado'] === 'error'): ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '<?= htmlspecialchars($_GET["mensaje"] ?? "Hubo un error") ?>',
+                confirmButtonText: 'Intentar de nuevo'
+            });
+        <?php endif; ?>
+
+        // ✅ Eliminar los parámetros de la URL sin recargar
+        if (window.history.replaceState) {
+            const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.replaceState({ path: url }, "", url);
+        }
+    </script>
+<?php endif; ?>
 
         <!-- Footer -->
         <footer class="bg-dark text-white py-4 mt-5">

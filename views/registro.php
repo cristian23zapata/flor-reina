@@ -21,7 +21,7 @@
         <form action="../controllers/procesar_registro.php" method="POST">
           <div class="mb-3">
             <label for="nombre" class="form-label text-secondary fw-semibold">Nombre completo</label>
-            <input type="text" class="form-control border-pink" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
+            <input type="text" class="form-control border-pink" title="Solo letras y espacios" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
           </div>
           <div class="mb-3">
             <label for="correo" class="form-label text-secondary fw-semibold">Correo electrónico</label>
