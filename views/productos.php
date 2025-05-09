@@ -44,7 +44,6 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
         <li class="nav-item"><a class="nav-link active" href="../views/creacion.php">CREAR</a></li>
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Tienda</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
       </ul>
