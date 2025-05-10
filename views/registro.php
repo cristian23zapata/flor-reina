@@ -43,7 +43,7 @@
           </div>
         </form>
         <div class="text-center mt-4">
-          <a href="../views/index.php" class="btn btn-link text-decoration-none text-pink"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
+          <a href="../index.php" class="btn btn-link text-decoration-none text-pink"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
         </div>
       </div>
     </div>

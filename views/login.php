@@ -37,7 +37,7 @@
           <a href="../views/registro.php" class="small text-decoration-none text-pink">Registrarse</a>
         </div>
         <div class="text-center mt-4">
-          <a href="../views/index.php" class="btn btn-link text-decoration-none text-pink"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
+          <a href="../index.php" class="btn btn-link text-decoration-none text-pink"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
         </div>
       </div>
     </div>

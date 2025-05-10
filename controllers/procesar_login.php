@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         $_SESSION['password'] = $usuario['password'];
         $_SESSION['tipo'] = $usuario['tipo'];
 
-        header("refresh:3;url=../views/index.php");
+        header("refresh:3;url=../index.php");
 
         exit();
     }

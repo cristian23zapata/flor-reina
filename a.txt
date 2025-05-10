@@ -1,0 +1,5 @@
+1-dashboard
+incluye: 
+-agregar tabla a la base de datos con los repartidores y admins
+-hacer la funcionalidad en controllers
+-en el dashboard se debe poder editar y eliminar

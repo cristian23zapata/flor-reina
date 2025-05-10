@@ -28,7 +28,7 @@ session_start();
 
 <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
   <div class="container">
-    <a class="navbar-brand" href="../views/index.php">
+    <a class="navbar-brand" href="../index.php">
       <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
@@ -37,9 +37,6 @@ session_start();
 
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-        <li class="nav-item"><a class="nav-link active" href="../views/creacion.php">CREAR</a></li>
-        <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>

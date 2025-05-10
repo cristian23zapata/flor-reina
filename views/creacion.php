@@ -33,7 +33,7 @@ session_start();
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
   <div class="container">
-    <a class="navbar-brand" href="../views/index.php">
+    <a class="navbar-brand" href="../index.php">
       <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
@@ -44,16 +44,11 @@ session_start();
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
         <li class="nav-item"><a class="nav-link active" href="../views/creacion.php">CREAR</a></li>
+        <li class="nav-item"><a class="nav-link active" href="../views/registrar.php">REGISTRAR</a></li>
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
-        <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
       </ul>
-
-      <form class="d-flex me-3" role="search">
-        <input class="form-control me-2" type="search" placeholder="Buscar productos..." aria-label="Buscar">
-        <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
-      </form>
 
       <div class="d-flex align-items-center gap-2">
         <?php if (isset($_SESSION['correo'])): ?>
@@ -62,10 +57,6 @@ session_start();
         <?php else: ?>
           <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
         <?php endif; ?>
-        
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-          <a href="../views/carrito.php"><button class="btn btn-outline-success"><i class="bi bi-bag"></i> Carrito</button></a>
-        <?php } ?>
       </div>
     </div>
   </div>
