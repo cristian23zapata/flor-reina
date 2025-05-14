@@ -47,7 +47,6 @@ session_start();
         <li class="nav-item"><a class="nav-link active" href="../views/registrar.php">REGISTRAR</a></li>
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
-        <li class="nav-item"><a class="nav-link" href="../views/articulos.php">Articulos</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
       </ul>
 

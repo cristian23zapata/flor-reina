@@ -43,7 +43,6 @@ session_start();
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
-        <li class="nav-item"><a class="nav-link" href="../views/articulos.php">Articulos</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
       </ul>
