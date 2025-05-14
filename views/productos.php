@@ -13,6 +13,7 @@ $mysql = new MySQL();
 $mysql->conectar(); 
 
 $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
+$comentarios = $mysql->efectuarConsulta("SELECT * FROM comentarios");
 
 ?>
 <!DOCTYPE html>
@@ -145,7 +146,7 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
           </div>
         </div>
       </div>
-      <!-- Modal Ver Más -->
+<!-- Modal Ver Más -->
 <div class="modal fade" id="modalVerMas<?php echo $producto['id']; ?>" tabindex="-1" aria-labelledby="modalVerMasLabel<?php echo $producto['id']; ?>" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content rounded-4 shadow">
@@ -159,14 +160,13 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
         <div class="row g-4">
           <!-- Imagen del producto -->
           <div class="col-md-5 text-center">
-            <img src="../<?php echo $producto['imagen']; ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>" class="img-fluid rounded-3" style="max-height: 300px; object-fit: cover;">
+            <img src="../<?php echo $producto['imagen']; ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>" class="img-fluid rounded-3" style="height: auto; max-height: 600px; object-fit: contain;">
           </div>
 
           <!-- Detalles del producto -->
           <div class="col-md-7">
             <p class="fw-bold">Descripción:</p>
             <p class="text-muted mb-3"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
-            
             <p class="fw-bold">Ingredientes:</p>
             <div class="ingredientes-lista mb-3">
               <ul class="ps-3">
@@ -175,7 +175,6 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
                 <?php endforeach; ?>
               </ul>
             </div>
-            
             <div class="d-flex justify-content-between align-items-center mb-3">
               <div>
                 <p class="fw-bold mb-0">Precio:</p>
@@ -186,7 +185,6 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
                 <p class="text-muted"><?php echo htmlspecialchars($producto['stock']); ?></p>
               </div>
             </div>
-
             <!-- Formulario para agregar al carrito -->
             <form class="agregar-carrito-form" data-producto-id="<?php echo $producto['id']; ?>">
               <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
@@ -200,17 +198,68 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
                 <input type="number" name="cantidad" class="form-control text-center" value="1" min="1" max="<?php echo htmlspecialchars($producto['stock']); ?>">
                 <button class="btn btn-outline-secondary" type="button" id="incrementar">+</button>
               </div>
-
+              <!-- Boton Agregar al Carrito -->
               <button type="submit" class="btn btn-primary w-100 py-2">
                 <i class="bi bi-cart-plus"></i> Agregar al Carrito
               </button>
-            </form>
+            </div>
+          </form>
+          <!-- Boton Ver comentarios y dejar opinion -->
+              <button class="btn btn-outline-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#comentariosSection" aria-expanded="false" aria-controls="comentariosSection">
+                Ver comentarios y dejar opinión
+              </button>
+              <div class="collapse" id="comentariosSection">
+              <hr>
+              <!-- Reseñas -->
+              <h5 class="mt-4">Opiniones de Clientes</h5>
+              <!-- Lista de reseñas (simulado) -->
+              <?php while ($comentario = mysqli_fetch_assoc($comentarios)) : ?>
+              <div class="mb-3">
+                <div class="border rounded p-2 mb-2">
+                  <strong><?php echo $comentario['nombre']?>:</strong>
+                  <?php if ($comentario['calificacion'] == 1): ?>
+                    <span class="text-warning">★☆☆☆☆</span><br>
+                  <?php endif?>
+                  <?php if ($comentario['calificacion'] == 2): ?>
+                    <span class="text-warning">★★☆☆☆</span><br>
+                  <?php endif?>
+                  <?php if ($comentario['calificacion'] == 3): ?>
+                    <span class="text-warning">★★★☆☆</span><br>
+                  <?php endif?>
+                  <?php if ($comentario['calificacion'] == 4): ?>
+                    <span class="text-warning">★★★★☆</span><br>
+                  <?php endif?>
+                  <?php if ($comentario['calificacion'] == 5): ?>
+                    <span class="text-warning">★★★★★</span><br>
+                  <?php endif?>
+                    <small><?php echo $comentario['comentario']?></small>
+                  <br>
+                  <small><?php echo $comentario['fecha']?></small>
+                </div>
+              </div>
+              <?php endwhile; ?>
+                <!-- Formulario de nueva reseña -->
+                <form action="../controllers/guardar_comentario.php" method="POST">
+                  <input type="hidden" name="producto_id" value="<?php echo $producto['id']; ?>">
+                  <input type="hidden" name="nombre" value="<?php echo $_SESSION['nombre']; ?>">
+                  <div class="mb-2">
+                    <label for="comentario" class="form-label">Comentario</label>
+                    <textarea name="comentario" id="comentario" class="form-control" rows="2" required></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="calificacion" class="form-label">Calificación</label>
+                    <select name="calificacion" id="calificacion" class="form-select" required>
+                      <option value="5">★★★★★ - Excelente</option>
+                      <option value="4">★★★★☆ - Muy bueno</option>
+                      <option value="3">★★★☆☆ - Bueno</option>
+                      <option value="2">★★☆☆☆ - Regular</option>
+                      <option value="1">★☆☆☆☆ - Malo</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Enviar Reseña</button>
+                </form>
           </div>
         </div>
-      </div>
-
-      <div class="modal-footer border-0">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>

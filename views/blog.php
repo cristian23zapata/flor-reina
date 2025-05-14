@@ -61,51 +61,86 @@ $mysql->desconectar();
   <h1 class="mb-4 fw-bold text-center">Nuestro Blog</h1>
   <div class="row g-4">
 
-    <?php
+    <?php foreach ($articulos as $articulo): ?>
+  <div class="col-md-3">
+    <div class="card blog-card h-100">
+      <img src="../<?php echo $articulo['imagen']; ?>" alt="Imagen del artículo" class="blog-img">
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title fw-bold"><?php echo $articulo['titulo']; ?></h5>
+        <p class="card-text text-muted"><?php echo mb_strimwidth($articulo['contenido'], 0, 100, '...'); ?></p>
+        <div class="d-flex gap-2 mt-auto">
+          <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user'): ?>
+            <a href="#" class="btn btn-outline-success w-100 rounded-pill"
+               data-bs-toggle="modal" data-bs-target="#modalVerMas<?php echo $articulo['id']; ?>">
+              Ver Más
+            </a>
+          <?php endif; ?>
 
-    foreach ($articulos as $articulo): ?>
-      <div class="col-md-3">
-        <div class="card blog-card h-100">
-          <img src="../<?php echo $articulo['imagen']; ?>" alt="Imagen del artículo" class="blog-img">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title fw-bold"><?php echo $articulo['titulo']; ?></h5>
-            <p class="card-text text-muted"><?php echo $articulo['contenido']; ?></p>
-            <div class="d-flex gap-2">
-                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                  <a href="#" class="btn btn-outline-success w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalVerMas<?php echo $articulo['id']; ?>">Ver Más</a>
-                <?php } ?>
-                <!-- Botón para abrir el modal -->
-                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?> 
-                <button type="button" class="btn btn-outline-success w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditar<?php echo $articulo['id']; ?>">Editar</button>
-                <!-- Botón que abre el modal -->
-                <button type="button" class="btn btn-outline-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#confirmarEliminar<?php echo $articulo['id']; ?>">Eliminar</button>
-                <!-- Modal de confirmación -->
-                <div class="modal fade" id="confirmarEliminar<?php echo $articulo['id']; ?>" tabindex="-1" aria-labelledby="confirmarEliminarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                      <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title" id="confirmarEliminarLabel<?php echo $articulo['id']; ?>">Confirmar eliminación</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                      </div>
-                      <div class="modal-body">
-                        ¿Estás seguro de que deseas eliminar el articulo <strong><?php echo htmlspecialchars($articulo['titulo']); ?></strong>?
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <form action="../controllers/eliminar_articulo.php" method="POST">
-                          <input type="hidden" name="id" value="<?php echo $articulo['id']; ?>">
-                          <button type="submit" class="btn btn-danger">Eliminar</button>
-                        </form>
-                      </div>
-                    </div>
+          <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
+            <button type="button" class="btn btn-outline-success w-100 rounded-pill"
+                    data-bs-toggle="modal" data-bs-target="#modalEditar<?php echo $articulo['id']; ?>">
+              Editar
+            </button>
+            <button type="button" class="btn btn-outline-danger rounded-pill"
+                    data-bs-toggle="modal" data-bs-target="#confirmarEliminar<?php echo $articulo['id']; ?>">
+              Eliminar
+            </button>
+
+            <!-- Modal Confirmar Eliminación -->
+            <div class="modal fade" id="confirmarEliminar<?php echo $articulo['id']; ?>" tabindex="-1"
+                 aria-labelledby="confirmarEliminarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="confirmarEliminarLabel<?php echo $articulo['id']; ?>">
+                      Confirmar eliminación
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Cerrar"></button>
+                  </div>
+                  <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar el artículo <strong><?php echo htmlspecialchars($articulo['titulo']); ?></strong>?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form action="../controllers/eliminar_articulo.php" method="POST">
+                      <input type="hidden" name="id" value="<?php echo $articulo['id']; ?>">
+                      <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
                   </div>
                 </div>
-                <?php } ?>
               </div>
-          </div>
+            </div>
+          <?php endif; ?>
         </div>
       </div>
-    <?php endforeach; ?>
+    </div>
+  </div>
+
+  <!-- Modal Ver Más -->
+  <div class="modal fade" id="modalVerMas<?php echo $articulo['id']; ?>" tabindex="-1"
+       aria-labelledby="modalVerMasLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-4">
+        <div class="modal-header bg-primary text-white border-0">
+          <h5 class="modal-title" id="modalVerMasLabel<?php echo $articulo['id']; ?>">
+            <?php echo htmlspecialchars($articulo['titulo']); ?>
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                  aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <?php if (!empty($articulo['imagen'])): ?>
+            <img src="../<?php echo $articulo['imagen']; ?>" class="img-fluid mb-4 rounded-3"
+                 alt="Imagen del artículo">
+          <?php endif; ?>
+          <p><?php echo nl2br(htmlspecialchars($articulo['contenido'])); ?></p>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php endforeach; ?>
+
   </div>
 </div>
 
