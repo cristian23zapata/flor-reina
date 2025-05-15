@@ -46,6 +46,7 @@ session_start();
         <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">Repartidores</a></li>
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
         
       </ul>
 
