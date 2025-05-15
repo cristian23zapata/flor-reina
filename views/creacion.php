@@ -89,7 +89,7 @@ session_start();
     </div>
 
     <div class="mb-3">
-      <label for="precio" class="form-label">Precio (€)</label>
+      <label for="precio" class="form-label">Precio ($)</label>
       <input type="number" class="form-control" id="precio" name="precio" step="0.01" min="1" required>
     </div>
 

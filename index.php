@@ -42,10 +42,13 @@ $mysql->desconectar();
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
         <li class="nav-item"><a class="nav-link active" href="views/creacion.php">CREAR</a></li>
         <li class="nav-item"><a class="nav-link active" href="views/registrar.php">REGISTRAR</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">Repartidores</a></li>
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="views/blog.php">Blog</a></li>
+         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
         <li class="nav-item"><a class="nav-link" href="views/contacto.php">Contacto</a></li>
+         <?php } ?>
       </ul>
 
       <form class="d-flex me-3" role="search">
@@ -180,7 +183,7 @@ $mysql->desconectar();
 
   <!-- Modal del Carrito (se abre desde la derecha) -->
 <div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-slideougit modal-lg">
+  <div class="modal-dialog modal-dialog-slideout modal-lg">
     <div class="modal-content h-100 rounded-start-4">
       <div class="modal-header bg-primary text-white border-0">
         <h5 class="modal-title fw-bold " id="modalCarritoLabel">

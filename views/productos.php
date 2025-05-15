@@ -44,6 +44,7 @@ $comentarios = $mysql->efectuarConsulta("SELECT * FROM comentarios");
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
         <li class="nav-item"><a class="nav-link active" href="../views/creacion.php">CREAR</a></li>
         <li class="nav-item"><a class="nav-link active" href="../views/registrar.php">REGISTRAR</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">Repartidores</a></li>
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
@@ -100,8 +101,10 @@ $comentarios = $mysql->efectuarConsulta("SELECT * FROM comentarios");
             <h5 class="card-title fw-bold"><?php echo htmlspecialchars($producto['nombre']); ?></h5>
             <p class="card-text text-muted"><?php echo htmlspecialchars($producto['descripcion']); ?></p>
             <!-- Lista de ingredientes -->
+             <h10> <strong> Ingredientes: </strong></h10>
             <div class="ingredientes-lista">
               <ul class="mb-2 ps-3">
+                
                 <?php foreach (explode(',', $producto['ingredientes']) as $ingrediente): ?>
                   <li class="text-muted small"><?php echo trim($ingrediente); ?></li>
                 <?php endforeach; ?>
