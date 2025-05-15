@@ -80,12 +80,12 @@ session_start();
     
     <div class="mb-3">
       <label for="nombre" class="form-label">Nombre del producto</label>
-      <input type="text" class="form-control" id="nombre" name="nombre" required>
+      <input type="text" class="form-control" id="nombre" name="nombre" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" required>
     </div>
 
     <div class="mb-3">
       <label for="descripcion" class="form-label">Descripción</label>
-      <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+      <textarea class="form-control" id="descripcion" name="descripcion" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" rows="3" required></textarea>
     </div>
 
     <div class="mb-3">
@@ -102,7 +102,7 @@ session_start();
       <label for="ingredientes" class="form-label">Ingredientes</label>
       <div id="nuevos-ingredientes">
         <div class="input-group mb-2 w-50">
-        <input type="text" name="ingredientes[]" class="form-control" placeholder="Escribe un ingrediente">
+        <input type="text" name="ingredientes[]" class="form-control" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" placeholder="Escribe un ingrediente">
     <button type="button" class="btn btn-outline-danger" onclick="eliminarCampo(this)">
       <i class="bi bi-trash"></i>
     </button>
@@ -162,12 +162,12 @@ session_start();
     
     <div class="mb-3">
       <label for="titulo" class="form-label">Título del artículo</label>
-      <input type="text" class="form-control" id="titulo" name="titulo" required>
+      <input type="text" class="form-control" id="titulo" name="titulo" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" required>
     </div>
 
     <div class="mb-3">
       <label for="contenido" class="form-label">Contenido</label>
-      <textarea class="form-control" id="contenido" name="contenido" rows="6" required></textarea>
+      <textarea class="form-control" id="contenido" name="contenido" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" rows="6" required></textarea>
     </div>
 
     <div class="mb-4">

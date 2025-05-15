@@ -22,24 +22,6 @@ $mysql->desconectar();
   <link rel="stylesheet" href="assets/css/carrusel.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    h1 {
-  font-family: 'Playfair Display', serif;
-}
-.lead {
-  font-family: 'Montserrat', sans-serif;
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.text-gradient {
-  animation: fadeInUp 1s ease-out;
-}
-.hero-section {
-  background: url('assets/imagenes/fondo-leche.jpg') center/cover no-repeat;
-}
   </style>
 </head>
 
