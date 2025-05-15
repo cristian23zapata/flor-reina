@@ -67,7 +67,9 @@ session_start();
 <div class="form-container" style="max-width: 75%; margin: auto;">
   <h2 class="text-center">Registrar nuevo repartidor</h2>
 
-  <form>
+  <form action="../controllers/registrar_repartidor.php" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="tipo" value="repartidor">
+
     <div class="mb-3">
       <label class="form-label">Nombre completo</label>
       <input type="text" class="form-control" name="nombre" required>
@@ -84,8 +86,13 @@ session_start();
     </div>
 
     <div class="mb-3">
-      <label class="form-label">Dirección</label>
-      <input type="text" class="form-control" name="direccion" required>
+      <label for="password" class="form-label">Contraseña</label>
+      <input type="text" class="form-control border-pink" id="password" name="password" placeholder="********" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="confirmar_password" class="form-label">Confirmar contraseña</label>
+      <input type="text" class="form-control border-pink" id="confirmar_password" name="confirmar_password" placeholder="********" required>
     </div>
 
     <div class="mb-3">

@@ -42,7 +42,9 @@ $mysql->desconectar();
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
+        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
         <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
+        <?php } ?>
       </ul>
 
       <div class="d-flex align-items-center gap-2">
