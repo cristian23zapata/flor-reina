@@ -47,3 +47,58 @@
   .bi {
     margin-right: 5px;
   }
+
+  /* Estilos mejorados para el carrito */
+.modal-dialog-slideout {
+  width: 600px; /* Ancho aumentado */
+  max-width: 90vw;
+  height: 100vh;
+  margin: 0 0 0 auto;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+}
+
+.modal-dialog-slideout.show {
+  transform: translateX(0);
+}
+
+.modal-content.rounded-start-4 {
+  border-radius: 0 !important;
+  border-top-left-radius: 1rem !important;
+  border-bottom-left-radius: 1rem !important;
+}
+
+/* Ajustes para la tabla del carrito */
+#carrito-contenido .table {
+  font-size: 0.95rem;
+}
+
+#carrito-contenido .table th, 
+#carrito-contenido .table td {
+  padding: 0.75rem 0.5rem;
+  vertical-align: middle;
+}
+
+/* Ajustes para los inputs de cantidad */
+#carrito-items .input-group {
+  min-width: 120px;
+}
+
+#carrito-items .form-control {
+  width: 40px;
+  padding: 0.25rem;
+  text-align: center;
+}
+
+/* Botones de acción */
+#carrito-items .btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* Footer del modal */
+#modalCarrito .modal-footer {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}

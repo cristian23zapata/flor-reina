@@ -54,9 +54,7 @@ session_start();
         <?php else: ?>
           <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
         <?php endif; ?>
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-          <a href="../views/carrito.php"><button class="btn btn-outline-success"><i class="bi bi-bag"></i> Carrito</button></a>
-        <?php } ?>
+        
       </div>
     </div>
   </div>

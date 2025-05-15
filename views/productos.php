@@ -373,7 +373,7 @@ $comentarios = $mysql->efectuarConsulta("SELECT * FROM comentarios");
 
         <!-- Modal del Carrito (se abre desde la derecha) -->
 <div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-slideout">
+  <div class="modal-dialog modal-dialog-slideout modal-lg">
     <div class="modal-content h-100 rounded-start-4">
       <div class="modal-header bg-primary text-white border-0">
         <h5 class="modal-title fw-bold" id="modalCarritoLabel">
@@ -381,27 +381,27 @@ $comentarios = $mysql->efectuarConsulta("SELECT * FROM comentarios");
         </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
-      <div class="modal-body overflow-auto">
+      <div class="modal-body overflow-auto p-3">
         <div id="carrito-vacio" class="text-center py-5">
           <i class="bi bi-cart-x text-muted" style="font-size: 3rem;"></i>
           <p class="mt-3 text-muted">Tu carrito está vacío</p>
         </div>
         <div id="carrito-contenido" style="display: none;">
           <div class="table-responsive">
-            <table class="table">
+            <table class="table table-borderless">
               <thead>
-                <tr>
+                <tr class="border-bottom">
                   <th>Producto</th>
-                  <th class="text-center">Cantidad</th>
-                  <th class="text-end">Precio</th>
-                  <th class="text-end">Subtotal</th>
-                  <th></th>
+                  <th style="width: 140px;">Cantidad</th>
+                  <th style="width: 100px;" class="text-end">Precio</th>
+                  <th style="width: 100px;" class="text-end">Subtotal</th>
+                  <th style="width: 40px;"></th>
                 </tr>
               </thead>
               <tbody id="carrito-items">
                 <!-- Los items del carrito se generan dinámicamente aquí -->
               </tbody>
-              <tfoot>
+              <tfoot class="border-top">
                 <tr>
                   <td colspan="3" class="text-end fw-bold">Total:</td>
                   <td class="text-end fw-bold" id="carrito-total">$0.00</td>
@@ -412,8 +412,10 @@ $comentarios = $mysql->efectuarConsulta("SELECT * FROM comentarios");
           </div>
         </div>
       </div>
-      <div class="modal-footer border-0 d-flex justify-content-between">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Seguir comprando</button>
+      <div class="modal-footer border-0 d-flex justify-content-between bg-light">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-arrow-left"></i> Seguir comprando
+        </button>
         <div>
           <button type="button" class="btn btn-outline-danger me-2" id="vaciar-carrito">
             <i class="bi bi-trash"></i> Vaciar
@@ -524,28 +526,28 @@ $comentarios = $mysql->efectuarConsulta("SELECT * FROM comentarios");
           total += subtotal;
           
           const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>
-              <div class="d-flex align-items-center">
-                <img src="../${item.imagen}" alt="${item.nombre}" class="me-2" style="width: 60px; height: 60px; object-fit: cover;">
-                <span>${item.nombre}</span>
-              </div>
-            </td>
-            <td class="text-center">
-              <div class="input-group" style="max-width: 120px; margin: 0 auto;">
-                <button class="btn btn-outline-secondary decrementar-cantidad" type="button" data-index="${index}">-</button>
-                <input type="number" class="form-control text-center" value="${item.cantidad}" min="1" max="${item.stock}" data-index="${index}">
-                <button class="btn btn-outline-secondary incrementar-cantidad" type="button" data-index="${index}">+</button>
-              </div>
-            </td>
-            <td class="text-end">$${item.precio.toFixed(2)}</td>
-            <td class="text-end">$${subtotal.toFixed(2)}</td>
-            <td class="text-center">
-              <button class="btn btn-sm btn-outline-danger eliminar-item" data-index="${index}">
-                <i class="bi bi-trash"></i>
-              </button>
-            </td>
-          `;
+tr.innerHTML = `
+  <td>
+    <div class="d-flex align-items-center">
+      <img src="../${item.imagen}" alt="${item.nombre}" class="me-2" style="width: 60px; height: 60px; object-fit: cover;">
+      <span class="text-truncate" style="max-width: 150px;">${item.nombre}</span>
+    </div>
+  </td>
+  <td>
+    <div class="input-group" style="min-width: 140px;">
+      <button class="btn btn-outline-secondary decrementar-cantidad py-1" type="button" data-index="${index}">-</button>
+      <input type="number" class="form-control text-center py-1" value="${item.cantidad}" min="1" max="${item.stock}" data-index="${index}">
+      <button class="btn btn-outline-secondary incrementar-cantidad py-1" type="button" data-index="${index}">+</button>
+    </div>
+  </td>
+  <td class="text-end align-middle">$${item.precio.toFixed(2)}</td>
+  <td class="text-end align-middle">$${subtotal.toFixed(2)}</td>
+  <td class="text-center align-middle">
+    <button class="btn btn-sm btn-outline-danger p-1 eliminar-item" data-index="${index}">
+      <i class="bi bi-trash"></i>
+    </button>
+  </td>
+`;
           carritoItems.appendChild(tr);
         });
         
