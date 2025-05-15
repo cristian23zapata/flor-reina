@@ -17,9 +17,9 @@ $mysql->desconectar();
   <title>Flor Reina</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/estilo_nav.css">
+  <link rel="stylesheet" href="assets/css/estilo_nav.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/carrusel.css">
+  <link rel="stylesheet" href="assets/css/carrusel.css">
 </head>
 
 <body>
@@ -27,8 +27,8 @@ $mysql->desconectar();
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
   <div class="container">
-    <a class="navbar-brand" href="../index.php">
-      <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60">
+    <a class="navbar-brand" href="index.php">
+      <img src="assets/imagenes/logo.png" alt="Flor Reina" height="60">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
       <span class="navbar-toggler-icon"></span>
@@ -37,12 +37,12 @@ $mysql->desconectar();
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-        <li class="nav-item"><a class="nav-link active" href="../views/creacion.php">CREAR</a></li>
-        <li class="nav-item"><a class="nav-link active" href="../views/registrar.php">REGISTRAR</a></li>
+        <li class="nav-item"><a class="nav-link active" href="views/creacion.php">CREAR</a></li>
+        <li class="nav-item"><a class="nav-link active" href="views/registrar.php">REGISTRAR</a></li>
         <?php } ?>
-        <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
-        <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
-        <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
+        <li class="nav-item"><a class="nav-link" href="views/productos.php">Productos</a></li>
+        <li class="nav-item"><a class="nav-link" href="views/blog.php">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="views/contacto.php">Contacto</a></li>
       </ul>
 
       <form class="d-flex me-3" role="search">
@@ -53,13 +53,13 @@ $mysql->desconectar();
       <div class="d-flex align-items-center gap-2">
         <?php if (isset($_SESSION['correo'])): ?>
           <span class="fw-bold"><i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
-          <a href="../controllers/logout.php" class="btn btn-outline-danger">Cerrar sesión</a>
+          <a href="controllers/logout.php" class="btn btn-outline-danger">Cerrar sesión</a>
         <?php else: ?>
-          <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
+          <a href="views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
         <?php endif; ?>
         
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-          <a href="../views/carrito.php"><button class="btn btn-outline-success"><i class="bi bi-bag"></i> Carrito</button></a>
+          <a href="views/carrito.php"><button class="btn btn-outline-success"><i class="bi bi-bag"></i> Carrito</button></a>
         <?php } ?>
       </div>
     </div>
@@ -79,7 +79,7 @@ $mysql->desconectar();
   <div class="carousel-inner">
     <!-- Yogur 1 -->
     <div class="carousel-item active">
-      <img src="../assets/imagenes/yogur1.jpg" class="d-block w-100" alt="Yogur Natural">
+      <img src="assets/imagenes/yogur1.jpg" class="d-block w-100" alt="Yogur Natural">
       <div class="carousel-caption animate-fadeInUp">
         <h3>Yogur Natural Artesanal</h3>
         <p>Elaborado con leche fresca de nuestras granjas asturianas, sin conservantes ni aditivos.</p>
@@ -88,7 +88,7 @@ $mysql->desconectar();
     
     <!-- Yogur 2 -->
     <div class="carousel-item">
-      <img src="../assets/imagenes/yogur2.webp" class="d-block w-100" alt="Yogur de Fresa">
+      <img src="assets/imagenes/yogur2.webp" class="d-block w-100" alt="Yogur de Fresa">
       <div class="carousel-caption animate-fadeInUp">
         <h3>Yogur de Fresa</h3>
         <p>Fresas naturales mezcladas con nuestro yogur cremoso. Dulce y refrescante.</p>
@@ -97,7 +97,7 @@ $mysql->desconectar();
     
     <!-- Yogur 3 -->
     <div class="carousel-item">
-      <img src="../assets/imagenes/yogur3.jpg" class="d-block w-100" alt="Yogur Griego">
+      <img src="assets/imagenes/yogur3.jpg" class="d-block w-100" alt="Yogur Griego">
       <div class="carousel-caption animate-fadeInUp">
         <h3>Yogur Griego</h3>
         <p>Textura cremosa y alto contenido en proteínas. Ideal para deportistas.</p>
@@ -106,7 +106,7 @@ $mysql->desconectar();
     
     <!-- Yogur 4 -->
     <div class="carousel-item">
-      <img src="../assets/imagenes/yogur4.png" class="d-block w-100" alt="Yogur de Vainilla">
+      <img src="assets/imagenes/yogur4.png" class="d-block w-100" alt="Yogur de Vainilla">
       <div class="carousel-caption animate-fadeInUp">
         <h3>Yogur de Vainilla</h3>
         <p>Vainilla natural de Madagascar para un sabor suave y aromático.</p>

@@ -68,7 +68,6 @@ session_start();
   <h2 class="text-center">Registrar nuevo repartidor</h2>
 
   <form action="../controllers/registrar_repartidor.php" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="tipo" value="repartidor">
 
     <div class="mb-3">
       <label class="form-label">Nombre completo</label>
