@@ -72,7 +72,7 @@ session_start();
 
     <div class="mb-3">
       <label class="form-label">Nombre completo</label>
-      <input type="text" class="form-control" name="nombre" required>
+      <input type="text" class="form-control" name="nombre" title="Solo letras y espacios" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" required>
     </div>
 
     <div class="mb-3">
