@@ -13,7 +13,6 @@ $mysql = new MySQL();
 $mysql->conectar(); 
 
 $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
-$comentarios = $mysql->efectuarConsulta("SELECT * FROM comentarios");
 
 ?>
 <!DOCTYPE html>
@@ -216,38 +215,28 @@ $comentarios = $mysql->efectuarConsulta("SELECT * FROM comentarios");
               <hr>
               <!-- Reseñas -->
               <h5 class="mt-4">Opiniones de Clientes</h5>
-              <!-- Lista de reseñas (simulado) -->
-              <?php while ($comentario = mysqli_fetch_assoc($comentarios)) : ?>
-              <div class="mb-3">
-                <div class="border rounded p-2 mb-2">
-                  <strong><?php echo $comentario['nombre']?>:</strong>
-                  <?php if ($comentario['calificacion'] == 1): ?>
-                    <span class="text-warning">★☆☆☆☆</span><br>
-                  <?php endif?>
-                  <?php if ($comentario['calificacion'] == 2): ?>
-                    <span class="text-warning">★★☆☆☆</span><br>
-                  <?php endif?>
-                  <?php if ($comentario['calificacion'] == 3): ?>
-                    <span class="text-warning">★★★☆☆</span><br>
-                  <?php endif?>
-                  <?php if ($comentario['calificacion'] == 4): ?>
-                    <span class="text-warning">★★★★☆</span><br>
-                  <?php endif?>
-                  <?php if ($comentario['calificacion'] == 5): ?>
-                    <span class="text-warning">★★★★★</span><br>
-                  <?php endif?>
-                    <small><?php echo $comentario['comentario']?></small>
-                  <br>
-                  <small><?php echo $comentario['fecha']?></small>
+              <!-- Lista de reseñas -->
+              <?php $producto_id = $producto['id'];
+                $consultaComentarios = $mysql->efectuarConsulta("SELECT * FROM comentarios WHERE producto_id = $producto_id ORDER BY fecha DESC");
+                while ($comentario = mysqli_fetch_assoc($consultaComentarios)) :
+              ?>
+                <div class="mb-3">
+                  <div class="border rounded p-2 mb-2">
+                    <strong><?php echo htmlspecialchars($comentario['nombre']); ?>:</strong>
+                    <span class="text-warning">
+                      <?php echo str_repeat("★", $comentario['calificacion']) . str_repeat("☆", 5 - $comentario['calificacion']); ?>
+                    </span><br>
+                    <small><?php echo htmlspecialchars($comentario['comentario']); ?></small><br>
+                    <small class="text-muted"><?php echo htmlspecialchars($comentario['fecha']); ?></small>
+                  </div>
                 </div>
-              </div>
               <?php endwhile; ?>
                 <!-- Formulario de nueva reseña -->
                 <form action="../controllers/guardar_comentario.php" method="POST">
                   <input type="hidden" name="producto_id" value="<?php echo $producto['id']; ?>">
                   <input type="hidden" name="nombre" value="<?php echo $_SESSION['nombre']; ?>">
                   <div class="mb-2">
-                    <label for="comentario" class="form-label">Comentario</label>
+                    <label for="comentario" class="form-label" >Comentario</label>
                     <textarea name="comentario" id="comentario" class="form-control" rows="2" required></textarea>
                   </div>
                   <div class="mb-3">

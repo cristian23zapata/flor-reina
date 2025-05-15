@@ -78,7 +78,7 @@ $mysql->desconectar();
               Ver Más
             </a>
           <?php endif; ?>
-a
+
           <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
             <button type="button" class="btn btn-outline-success w-100 rounded-pill"
                     data-bs-toggle="modal" data-bs-target="#modalEditar<?php echo $articulo['id']; ?>">
