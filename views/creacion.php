@@ -45,6 +45,7 @@ session_start();
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
         <li class="nav-item"><a class="nav-link active" href="../views/creacion.php">CREAR</a></li>
         <li class="nav-item"><a class="nav-link active" href="../views/registrar.php">REGISTRAR</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">Repartidores</a></li>
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>

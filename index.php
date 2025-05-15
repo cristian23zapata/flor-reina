@@ -198,10 +198,10 @@ $mysql->desconectar();
 
   <!-- Modal del Carrito (se abre desde la derecha) -->
 <div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-slideout modal-lg">
+  <div class="modal-dialog modal-dialog-slideougit modal-lg">
     <div class="modal-content h-100 rounded-start-4">
       <div class="modal-header bg-primary text-white border-0">
-        <h5 class="modal-title fw-bold" id="modalCarritoLabel">
+        <h5 class="modal-title fw-bold " id="modalCarritoLabel">
           <i class="bi bi-cart3"></i> Tu Carrito de Compras
         </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>

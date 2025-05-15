@@ -87,6 +87,7 @@ $comentarios = $mysql->efectuarConsulta("SELECT * FROM comentarios");
 </header>
 
 <div class="container py-5">
+  <!-- Renderizar productos -->
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
     <?php while ($producto = mysqli_fetch_assoc($resultado)) : ?>
       <div class="col">
