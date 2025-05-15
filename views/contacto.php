@@ -54,10 +54,18 @@ session_start();
         <?php else: ?>
           <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
         <?php endif; ?>
-        
+        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+          <button class="btn btn-outline-success position-relative" data-bs-toggle="modal" data-bs-target="#modalCarrito" id="btn-carrito">
+    <i class="bi bi-bag"></i> Carrito
+    <span id="carrito-contador" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
+      0
+    </span>
+  </button>
+        <?php } ?>
       </div>
     </div>
   </div>
+  
 </nav>
 
   <!-- Contenido principal -->
@@ -80,6 +88,64 @@ session_start();
   </div>
 </div>
 
+ <!-- Modal del Carrito (se abre desde la derecha) -->
+<div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-slideout modal-lg">
+    <div class="modal-content h-100 rounded-start-4">
+      <div class="modal-header bg-primary text-white border-0">
+        <h5 class="modal-title fw-bold " id="modalCarritoLabel">
+          <i class="bi bi-cart3"></i> Tu Carrito de Compras
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body overflow-auto p-3">
+        <div id="carrito-vacio" class="text-center py-5">
+          <i class="bi bi-cart-x text-muted" style="font-size: 3rem;"></i>
+          <p class="mt-3 text-muted">Tu carrito está vacío</p>
+        </div>
+        <div id="carrito-contenido" style="display: none;">
+          <div class="table-responsive">
+            <table class="table table-borderless">
+              <thead>
+                <tr class="border-bottom">
+                  <th>Producto</th>
+                  <th style="width: 140px;">Cantidad</th>
+                  <th style="width: 100px;" class="text-end">Precio</th>
+                  <th style="width: 100px;" class="text-end">Subtotal</th>
+                  <th style="width: 40px;"></th>
+                </tr>
+              </thead>
+              <tbody id="carrito-items">
+                <!-- Los items del carrito se generan dinámicamente aquí -->
+              </tbody>
+              <tfoot class="border-top">
+                <tr>
+                  <td colspan="3" class="text-end fw-bold">Total:</td>
+                  <td class="text-end fw-bold" id="carrito-total">$0.00</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 d-flex justify-content-between bg-light">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-arrow-left"></i> Seguir comprando
+        </button>
+        <div>
+          <button type="button" class="btn btn-outline-danger me-2" id="vaciar-carrito">
+            <i class="bi bi-trash"></i> Vaciar
+          </button>
+          <a href="../views/pagar.php" class="btn btn-success" id="btn-pagar">
+            <i class="bi bi-credit-card"></i> Pagar
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
   <!-- Footer -->
 <footer class="bg-dark text-white py-4 mt-5">
   <div class="container text-center">
@@ -89,6 +155,219 @@ session_start();
 </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar carrito desde localStorage
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    
+    // Actualizar contador del carrito
+    function actualizarContador() {
+      const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
+      const contador = document.getElementById('carrito-contador');
+      
+      if (totalItems > 0) {
+        contador.textContent = totalItems;
+        contador.style.display = 'block';
+      } else {
+        contador.style.display = 'none';
+      }
+    }
+    
+    // Renderizar carrito en el modal
+    function renderizarCarrito() {
+      const carritoItems = document.getElementById('carrito-items');
+      const carritoVacio = document.getElementById('carrito-vacio');
+      const carritoContenido = document.getElementById('carrito-contenido');
+      const carritoTotal = document.getElementById('carrito-total');
+      
+      if (carrito.length === 0) {
+        carritoVacio.style.display = 'block';
+        carritoContenido.style.display = 'none';
+        document.getElementById('btn-pagar').style.display = 'none';
+        document.getElementById('vaciar-carrito').style.display = 'none';
+      } else {
+        carritoVacio.style.display = 'none';
+        carritoContenido.style.display = 'block';
+        document.getElementById('btn-pagar').style.display = 'inline-block';
+        document.getElementById('vaciar-carrito').style.display = 'inline-block';
+        
+        carritoItems.innerHTML = '';
+        let total = 0;
+        
+        carrito.forEach((item, index) => {
+          const subtotal = item.precio * item.cantidad;
+          total += subtotal;
+          
+          const tr = document.createElement('tr');
+tr.innerHTML = `
+  <td>
+    <div class="d-flex align-items-center">
+      <img src="${item.imagen}" alt="${item.nombre}" class="me-2" style="width: 60px; height: 60px; object-fit: cover;">
+      <span class="text-truncate" style="max-width: 150px;">${item.nombre}</span>
+    </div>
+  </td>
+  <td>
+    <div class="input-group" style="min-width: 140px;">
+      <button class="btn btn-outline-secondary decrementar-cantidad py-1" type="button" data-index="${index}">-</button>
+      <input type="number" class="form-control text-center py-1" value="${item.cantidad}" min="1" max="${item.stock}" data-index="${index}">
+      <button class="btn btn-outline-secondary incrementar-cantidad py-1" type="button" data-index="${index}">+</button>
+    </div>
+  </td>
+  <td class="text-end align-middle">$${item.precio.toFixed(2)}</td>
+  <td class="text-end align-middle">$${subtotal.toFixed(2)}</td>
+  <td class="text-center align-middle">
+    <button class="btn btn-sm btn-outline-danger p-1 eliminar-item" data-index="${index}">
+      <i class="bi bi-trash"></i>
+    </button>
+  </td>
+`;
+          carritoItems.appendChild(tr);
+        });
+        
+        carritoTotal.textContent = `$${total.toFixed(2)}`;
+      }
+    }
+    
+    // Manejar el formulario de agregar al carrito
+    document.addEventListener('submit', function(e) {
+      if (e.target && e.target.classList.contains('agregar-carrito-form')) {
+        e.preventDefault();
+        
+        const form = e.target;
+        const id = form.querySelector('input[name="id"]').value;
+        const nombre = form.querySelector('input[name="nombre"]').value;
+        const precio = parseFloat(form.querySelector('input[name="precio"]').value);
+        const imagen = form.querySelector('input[name="imagen"]').value;
+        const stock = parseInt(form.querySelector('input[name="stock"]').value);
+        const cantidad = parseInt(form.querySelector('input[name="cantidad"]').value);
+        
+        // Verificar si el producto ya está en el carrito
+        const itemExistente = carrito.find(item => item.id === id);
+        
+        if (itemExistente) {
+          // Actualizar cantidad si no supera el stock
+          const nuevaCantidad = itemExistente.cantidad + cantidad;
+          if (nuevaCantidad <= stock) {
+            itemExistente.cantidad = nuevaCantidad;
+          } else {
+            alert('No hay suficiente stock disponible');
+            return;
+          }
+        } else {
+          // Agregar nuevo item al carrito
+          carrito.push({
+            id,
+            nombre,
+            precio,
+            imagen,
+            cantidad,
+            stock
+          });
+        }
+        
+        // Guardar en localStorage y actualizar UI
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        actualizarContador();
+        renderizarCarrito();
+        
+        // Mostrar notificación
+        const toast = new bootstrap.Toast(document.getElementById('toast-agregado'));
+        toast.show();
+      }
+    });
+    
+    // Incrementar/decrementar cantidad en el modal de producto
+    document.addEventListener('click', function(e) {
+      // Botones + y - en el modal de producto
+      if (e.target && (e.target.id === 'incrementar' || e.target.id === 'decrementar')) {
+        const input = e.target.closest('.input-group').querySelector('input');
+        let value = parseInt(input.value);
+        
+        if (e.target.id === 'incrementar' && value < parseInt(input.max)) {
+          input.value = value + 1;
+        } else if (e.target.id === 'decrementar' && value > parseInt(input.min)) {
+          input.value = value - 1;
+        }
+      }
+      
+      // Eliminar item del carrito
+      if (e.target && (e.target.classList.contains('eliminar-item') || e.target.closest('.eliminar-item'))) {
+        const button = e.target.classList.contains('eliminar-item') ? e.target : e.target.closest('.eliminar-item');
+        const index = button.dataset.index;
+        carrito.splice(index, 1);
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        actualizarContador();
+        renderizarCarrito();
+      }
+      
+      // Vaciar carrito
+      if (e.target && e.target.id === 'vaciar-carrito') {
+        if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+          carrito = [];
+          localStorage.setItem('carrito', JSON.stringify(carrito));
+          actualizarContador();
+          renderizarCarrito();
+        }
+      }
+      
+      // Incrementar cantidad en el carrito
+      if (e.target && (e.target.classList.contains('incrementar-cantidad') || e.target.closest('.incrementar-cantidad'))) {
+        const button = e.target.classList.contains('incrementar-cantidad') ? e.target : e.target.closest('.incrementar-cantidad');
+        const index = button.dataset.index;
+        const input = button.closest('.input-group').querySelector('input');
+        
+        if (carrito[index].cantidad < carrito[index].stock) {
+          carrito[index].cantidad++;
+          input.value = carrito[index].cantidad;
+          localStorage.setItem('carrito', JSON.stringify(carrito));
+          renderizarCarrito();
+          actualizarContador();
+        }
+      }
+      
+      // Decrementar cantidad en el carrito
+      if (e.target && (e.target.classList.contains('decrementar-cantidad') || e.target.closest('.decrementar-cantidad'))) {
+        const button = e.target.classList.contains('decrementar-cantidad') ? e.target : e.target.closest('.decrementar-cantidad');
+        const index = button.dataset.index;
+        const input = button.closest('.input-group').querySelector('input');
+        
+        if (carrito[index].cantidad > 1) {
+          carrito[index].cantidad--;
+          input.value = carrito[index].cantidad;
+          localStorage.setItem('carrito', JSON.stringify(carrito));
+          renderizarCarrito();
+          actualizarContador();
+        }
+      }
+    });
+    
+    // Actualizar cantidad desde el input en el carrito
+    document.addEventListener('change', function(e) {
+      if (e.target && e.target.matches('.input-group input[type="number"]')) {
+        const input = e.target;
+        const index = input.closest('.input-group').querySelector('button').dataset.index;
+        const nuevaCantidad = parseInt(input.value);
+        
+        if (nuevaCantidad > 0 && nuevaCantidad <= carrito[index].stock) {
+          carrito[index].cantidad = nuevaCantidad;
+          localStorage.setItem('carrito', JSON.stringify(carrito));
+          renderizarCarrito();
+          actualizarContador();
+        } else {
+          alert('La cantidad no puede ser mayor al stock disponible');
+          input.value = carrito[index].cantidad;
+        }
+      }
+    });
+    
+    // Renderizar carrito cuando se abre el modal
+    document.getElementById('modalCarrito').addEventListener('show.bs.modal', function() {
+      renderizarCarrito();
+    });
+    
+    // Inicializar contador al cargar la página
+    actualizarContador();
+  });
 </body>
 </html>
 
