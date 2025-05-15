@@ -1,0 +1,69 @@
+
+    table {
+        width: 80%;
+        margin: 30px auto;
+        border-collapse: separate;
+        border-spacing: 0;
+        background-color: #ffe6f0; /* fondo rosa claro */
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    th, td {
+        padding: 15px 20px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #ffccdd; /* encabezado más fuerte */
+        color: #b30059;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    td {
+        background-color: #fff0f5;
+        color: #333;
+        font-size: 14px;
+    }
+
+    tr:nth-child(even) td {
+        background-color: #ffe6f0; /* zebra rows */
+    }
+
+    .imgId {
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ff99bb;
+    }
+    .btn-editar, .btn-eliminar {
+    padding: 6px 12px;
+    margin-right: 5px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.btn-editar {
+    background-color: #ffccf2;
+    color: #b30059;
+    border: 1px solid #ff99cc;
+}
+
+.btn-editar:hover {
+    background-color: #ffb3e6;
+}
+
+.btn-eliminar {
+    background-color: #ffe6e6;
+    color: #cc0000;
+    border: 1px solid #ffcccc;
+}
+
+.btn-eliminar:hover {
+    background-color: #ffcccc;
+}
+
