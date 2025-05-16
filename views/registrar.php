@@ -87,12 +87,12 @@ session_start();
 
     <div class="mb-3">
       <label for="password" class="form-label">Contraseña</label>
-      <input type="text" class="form-control border-pink" id="password" name="password" placeholder="********" required>
+      <input type="password" class="form-control border-pink" id="password" name="password" placeholder="********" required>
     </div>
 
     <div class="mb-3">
       <label for="confirmar_password" class="form-label">Confirmar contraseña</label>
-      <input type="text" class="form-control border-pink" id="confirmar_password" name="confirmar_password" placeholder="********" required>
+      <input type="password" class="form-control border-pink" id="confirmar_password" name="confirmar_password" placeholder="********" required>
     </div>
 
     <div class="mb-3">

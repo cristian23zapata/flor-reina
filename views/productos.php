@@ -3,12 +3,6 @@ require_once '../models/MySQL.php';
 
 session_start();
 
-    if (!isset($_SESSION['correo'])) {
-    header("refresh:1;url=../views/login.php");
-
-    exit();
-} 
-
 $mysql = new MySQL();
 $mysql->conectar(); 
 
@@ -114,9 +108,7 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
               <p class="mb-1 text-success"><strong>Precio:</strong> $<?php echo htmlspecialchars($producto['precio']); ?></p>
               <p class="mb-2 text-secondary"><strong>Stock:</strong> <?php echo htmlspecialchars($producto['stock']); ?></p>
               <div class="d-flex gap-2">
-                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                  <a href="#" class="btn btn-outline-success w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalVerMas<?php echo $producto['id']; ?>">Ver Más</a>
-                <?php } ?>
+                <a href="#" class="btn btn-outline-success w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalVerMas<?php echo $producto['id']; ?>">Ver Más</a>
                 <!-- Botón para abrir el modal -->
                 <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?> 
                 <button type="button" class="btn btn-outline-success w-100 rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditar<?php echo $producto['id']; ?>">Editar</button>
@@ -201,10 +193,18 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
                 <input type="number" name="cantidad" class="form-control text-center" value="1" min="1" max="<?php echo htmlspecialchars($producto['stock']); ?>">
                 <button class="btn btn-outline-secondary" type="button" id="incrementar">+</button>
               </div>
-              <!-- Boton Agregar al Carrito -->
-              <button type="submit" class="btn btn-primary w-100 py-2">
-                <i class="bi bi-cart-plus"></i> Agregar al Carrito
-              </button>
+                  
+              <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+                  <!-- Boton Agregar al Carrito -->
+                  <button type="submit" class="btn btn-primary w-100 py-2">
+                    <i class="bi bi-cart-plus"></i> Agregar al Carrito
+                  </button>
+              <?php } ?>
+              <?php if (isset($_SESSION['tipo']) == NULL) { ?>
+                <a href="../views/login.php" class="btn btn-primary w-100 py-2">
+                  <i class="bi bi-cart-plus"></i> Agregar al Carrito
+                </a>
+              <?php } ?>
             </div>
           </form>
           <!-- Boton Ver comentarios y dejar opinion -->
@@ -348,7 +348,7 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
             });
         <?php endif; ?>
 
-        // ✅ Eliminar los parámetros de la URL sin recargar
+        // Eliminar los parámetros de la URL sin recargar
         if (window.history.replaceState) {
             const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
             window.history.replaceState({ path: url }, "", url);

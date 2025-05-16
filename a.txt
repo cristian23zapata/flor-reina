@@ -1,5 +1,3 @@
-1-dashboard
-incluye: 
--agregar tabla a la base de datos con los repartidores y admins
--hacer la funcionalidad en controllers
--en el dashboard se debe poder editar y eliminar
+1-enviar factura al correo 
+2-parte de repartidor recibir y aceptar pedidos
+3-contacto enviar datos al correo 
