@@ -90,15 +90,33 @@ $mysql->desconectar();
   <div class="carousel-inner">
     
     
-    <!-- Yogur 4 -->
+    <!-- Yogur 1 -->
     <div class="carousel-item active">
-      <img src="assets/imagenes/yogur4.png" class="d-block w-100" alt="Yogur de Vainilla">
+      <img src="assets/imagenes/carrusel2.jpg" class="d-block w-100" alt="Yogur de Vainilla">
       <div class="carousel-caption animate-fadeInUp">
         <h3>Yogur de Vainilla</h3>
         <p>Vainilla natural de Madagascar para un sabor suave y aromático.</p>
       </div>
     </div>
   
+      <!-- Yogur 1 -->
+      <div class="carousel-item active">
+      <img src="assets/imagenes/yogur4.png" class="d-block w-100" alt="Yogur de Vainilla">
+      <div class="carousel-caption animate-fadeInUp">
+        <h3>Yogur de Fresas</h3>
+        <p>Vainilla natural de Madagascar para un sabor suave y aromático.</p>
+      </div>
+    </div>
+
+     <!-- Yogur 1 -->
+    <div class="carousel-item active">
+      <img src="assets/imagenes/carrusel1.jpg" class="d-block w-100" alt="Yogur de Vainilla">
+      <div class="carousel-caption animate-fadeInUp">
+        <h3>Yogur de Fresas3</h3>
+        <p>Vainilla natural de Madagascar para un sabor suave y aromático.</p>
+      </div>
+    </div>
+
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselYogures" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
