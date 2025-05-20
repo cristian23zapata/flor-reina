@@ -22,6 +22,8 @@ $mysql->desconectar();
   <link rel="stylesheet" href="../assets/css/estilo_nav.css">
   <link rel="stylesheet" href="../assets/css/estilo_blog.css">
   <link rel="stylesheet" href="../assets/css/estilo_productos.css">
+  <link rel="stylesheet" href="../assets/css/new.css">
+   
 </head>
 <body>
 
@@ -253,12 +255,12 @@ $mysql->desconectar();
 </div>
 
 <!-- Footer -->
-<footer class="bg-dark text-white py-4 mt-5">
-  <div class="container text-center">
-    <p class="mb-1">&copy; 2025 Flor Reina. Todos los derechos reservados.</p>
-    <small>Contacto: info@florreina.es | Tel: +34 666 999 123</small>
-  </div>
-</footer>
+
+<footer class="bg-dark text-white py-4 mt-auto">
+    <div class="container text-center">
+      <p class="mb-1">&copy; 2025 The Rains. Todos los derechos reservados.</p>
+      <small>Contacto: info@tralemda.com | Tel: +34 666 999 125</small>
+    </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
