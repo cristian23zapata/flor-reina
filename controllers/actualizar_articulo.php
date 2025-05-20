@@ -37,8 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
         $mysql->desconectar();
         
-        echo "Articulo Actualizado con exito. <br><br>";
-        
-        header("refresh:3;url=../views/blog.php");
+        header("refresh:3;url=../views/blog.php?estado=exito");
     }
 }

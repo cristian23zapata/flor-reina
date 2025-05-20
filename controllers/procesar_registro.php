@@ -27,6 +27,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     $mysql->efectuarConsulta("INSERT INTO Usuarios (nombre, correo, password, tipo) VALUES ('$nombre', '$correo', '$hashed_password', 'user')");
 
-    echo "Registro exitoso. Redirigiendo a la página de inicio de sesión...";
-    header("refresh:3;url=../views/login.php");
+    header("refresh:3;url=../views/login.php?estado=exito");
 }
