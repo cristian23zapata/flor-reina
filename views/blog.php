@@ -154,12 +154,8 @@ $mysql->desconectar();
       </div>
     </div>
   </div>
-<?php endforeach; ?>
 
-  </div>
-</div>
-
-<!-- Modal de edición de artículo -->
+  <!-- Modal de edición de artículo -->
 <div class="modal fade" id="modalEditar<?php echo $articulo['id']; ?>" tabindex="-1" aria-labelledby="modalEditarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <form class="modal-content form-container" action="../controllers/actualizar_articulo.php" method="POST" enctype="multipart/form-data">
@@ -174,12 +170,12 @@ $mysql->desconectar();
 
         <div class="mb-3">
           <label class="form-label">Título del artículo</label>
-          <input type="text" name="titulo" class="form-control" value="<?php echo htmlspecialchars($articulo['titulo']); ?>" required>
+          <input type="text" name="titulo" class="form-control" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" value="<?php echo htmlspecialchars($articulo['titulo']); ?>" required>
         </div>
 
         <div class="mb-3">
           <label class="form-label">Contenido</label>
-          <textarea name="contenido" rows="6" class="form-control" required><?php echo htmlspecialchars($articulo['contenido']); ?></textarea>
+          <textarea name="contenido" rows="6" class="form-control" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" required><?php echo htmlspecialchars($articulo['contenido']); ?></textarea>
         </div>
 
         <div class="mb-3">
@@ -195,6 +191,13 @@ $mysql->desconectar();
     </form>
   </div>
 </div>
+
+<?php endforeach; ?>
+
+  </div>
+</div>
+
+
 
  <!-- Modal del Carrito (se abre desde la derecha) -->
 <div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">

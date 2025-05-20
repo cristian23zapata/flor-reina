@@ -80,12 +80,12 @@ session_start();
     
     <div class="mb-3">
       <label for="nombre" class="form-label">Nombre del producto</label>
-      <input type="text" class="form-control" id="nombre" name="nombre" title="Solo letras y espacios" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" required>
+      <input type="text" class="form-control" id="nombre" name="nombre" title="Solo letras y espacios" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" required>
     </div>
 
     <div class="mb-3">
       <label for="descripcion" class="form-label">Descripción</label>
-      <textarea class="form-control" id="descripcion" name="descripcion" title="Solo letras y espacios" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" rows="3" required></textarea>
+      <textarea class="form-control" id="descripcion" name="descripcion" title="Solo letras y espacios" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" rows="3" required></textarea>
     </div>
 
     <div class="mb-3">
@@ -162,12 +162,12 @@ session_start();
     
     <div class="mb-3">
       <label for="titulo" class="form-label">Título del artículo</label>
-      <input type="text" class="form-control" id="titulo" name="titulo" title="Solo letras y espacios" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" required>
+      <input type="text" class="form-control" id="titulo" name="titulo" title="Solo letras y espacios" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" required>
     </div>
 
     <div class="mb-3">
       <label for="contenido" class="form-label">Contenido</label>
-      <textarea class="form-control" id="contenido" name="contenido" title="Solo letras y espacios" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" rows="6" required></textarea>
+      <textarea class="form-control" id="contenido" name="contenido" title="Solo letras y espacios" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" rows="6" required></textarea>
     </div>
 
     <div class="mb-4">
