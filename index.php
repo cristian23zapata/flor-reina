@@ -51,11 +51,6 @@ $mysql->desconectar();
          <?php } ?>
       </ul>
 
-      <form class="d-flex me-3" role="search">
-        <input class="form-control me-2" type="search" placeholder="Buscar productos..." aria-label="Buscar">
-        <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
-      </form>
-
       <div class="d-flex align-items-center gap-2">
         <?php if (isset($_SESSION['correo'])): ?>
           <span class="fw-bold"><i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
