@@ -29,7 +29,137 @@ session_start();
     <link rel="stylesheet" href="../assets/css/estilo_contacto.css">
     <link rel="stylesheet" href="../assets/css/estilo_nav.css">
 </head>
-<body>
+
+<style>
+/* Estilos para la sección de contacto */
+.contact-section {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    gap: 3rem;
+    background-color:linear-gradient(to right, #ffe6f0, #fff0f5);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.contact-info, .contact-form {
+    flex: 1;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.contact-info h3, .contact-form h3 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+}
+
+.contact-info p {
+    margin-bottom: 1rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.whatsapp-section {
+    background-color: #f0f8ff;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #25D366;
+}
+
+.whatsapp-btn {
+    background-color: #25D366;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.small-text {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.pqrs-section {
+    background-color: #fff8f0;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #FFA500;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.25rem rgba(52,152,219,0.25);
+}
+
+textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color:rgb(124, 152, 170);
+}
+
+/* Estilo para validación de teléfono */
+#telefono:invalid {
+    border-color: #ff4444;
+}
+
+#telefono:valid {
+    border-color: #00C851;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* El contenido principal debe crecer para empujar el footer */
+main {
+  flex: 1 0 auto;
+}
+
+/* El footer no debe crecer */
+footer {
+  flex-shrink: 0;
+}   
+</style>
+
 
 <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
   <div class="container">
@@ -67,26 +197,64 @@ session_start();
   </div>
   
 </nav>
-
-  <!-- Contenido principal -->
-  <div class="contact-section">
+<!-- Contenido principal -->
+<div class="contact-section">
   <div class="contact-info">
     <h3>Información de contacto</h3>
-    <p>📞 +34 123 456 789</p>
-    <p>✉️ contacto@tutienda.com</p>
-    <p>📍 Calle Ficticia 123, Madrid, España</p>
-    <p>🕒 Lunes a Viernes, 9:00 - 18:00</p>
+    <p><i class="bi bi-telephone"></i> +57 321 213 8319</p>
+    <p><i class="bi bi-envelope"></i> sugerencias@yogures.com</p>
+    <p><i class="bi bi-geo-alt"></i> Calle 8va #5-55</p>
+    <p><i class="bi bi-clock"></i> Lun a Vie: 9 am - 4 pm | Sáb: 9 am - 12 m</p>
+    
+    <div class="whatsapp-section mt-4">
+      <h4>Escríbenos a WhatsApp</h4>
+      <a href="https://wa.me/3146318358" class="btn btn-success whatsapp-btn">
+        <i class="bi bi-whatsapp"></i> Chatear con asesores
+      </a>
+      <p class="small-text mt-2">Si no estamos disponibles, déjanos un correo y te responderemos en 20-36 horas.</p>
+    </div>
+    
+    <div class="pqrs-section mt-4">
+      <h5>PQRS</h5>
+      <p class="small-text">Para peticiones, quejas, reclamos y sugerencias:</p>
+      <p class="small-text"><strong>flor-reina@yogures.com</strong></p>
+    </div>
   </div>
+  
   <div class="contact-form">
     <h3>Contáctanos</h3>
-    <form>
-      <input type="text" placeholder="Nombre" required>
-      <input type="email" placeholder="Correo electrónico" required>
-      <textarea placeholder="Mensaje" rows="5" required></textarea>
-      <button type="submit">Enviar mensaje</button>
+    <p class="form-description">Si tienes alguna duda o requerimiento, completa el formulario:</p>
+    
+    <form method="POST" action="">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Nombre" required>
+      </div>
+      
+      <div class="form-group">
+        <input type="tel" class="form-control" id="telefono" name="telefono" 
+               placeholder="Teléfono de Contacto (10 dígitos)" 
+               pattern="[0-9]{10}" 
+               maxlength="10" 
+               required
+               oninput="validarTelefono(this)">
+        <small id="telefono-error" class="text-danger" style="display:none;">
+          El teléfono debe tener exactamente 10 dígitos numéricos
+        </small>
+      </div>
+      
+      <div class="form-group">
+        <input type="email" class="form-control" placeholder="Correo Electrónico" required>
+      </div>
+      
+      <div class="form-group">
+        <textarea class="form-control" placeholder="Mensaje" rows="5" required></textarea>
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Enviar mensaje</button>
     </form>
   </div>
 </div>
+
 
  <!-- Modal del Carrito (se abre desde la derecha) -->
 <div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
@@ -147,227 +315,18 @@ session_start();
 </div>
 
   <!-- Footer -->
-<footer class="bg-dark text-white py-4 mt-5">
-  <div class="container text-center">
-    <p class="mb-1">&copy; 2025 Flor Reina. Todos los derechos reservados.</p>
-    <small>Contacto: info@florreina.es | Tel: +34 666 999 123</small>
-  </div>
-</footer>
+
+
+<footer class="bg-dark text-white py-4 mt-auto">
+    <div class="container text-center">
+      <p class="mb-1">&copy; 2025 The Rains. Todos los derechos reservados.</p>
+      <small>Contacto: info@tralemda.com | Tel: +34 666 999 125</small>
+    </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar carrito desde localStorage
-    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-    
-    // Actualizar contador del carrito
-    function actualizarContador() {
-      const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
-      const contador = document.getElementById('carrito-contador');
-      
-      if (totalItems > 0) {
-        contador.textContent = totalItems;
-        contador.style.display = 'block';
-      } else {
-        contador.style.display = 'none';
-      }
-    }
-    
-    // Renderizar carrito en el modal
-    function renderizarCarrito() {
-      const carritoItems = document.getElementById('carrito-items');
-      const carritoVacio = document.getElementById('carrito-vacio');
-      const carritoContenido = document.getElementById('carrito-contenido');
-      const carritoTotal = document.getElementById('carrito-total');
-      
-      if (carrito.length === 0) {
-        carritoVacio.style.display = 'block';
-        carritoContenido.style.display = 'none';
-        document.getElementById('btn-pagar').style.display = 'none';
-        document.getElementById('vaciar-carrito').style.display = 'none';
-      } else {
-        carritoVacio.style.display = 'none';
-        carritoContenido.style.display = 'block';
-        document.getElementById('btn-pagar').style.display = 'inline-block';
-        document.getElementById('vaciar-carrito').style.display = 'inline-block';
-        
-        carritoItems.innerHTML = '';
-        let total = 0;
-        
-        carrito.forEach((item, index) => {
-          const subtotal = item.precio * item.cantidad;
-          total += subtotal;
-          
-          const tr = document.createElement('tr');
-tr.innerHTML = `
-  <td>
-    <div class="d-flex align-items-center">
-      <img src="${item.imagen}" alt="${item.nombre}" class="me-2" style="width: 60px; height: 60px; object-fit: cover;">
-      <span class="text-truncate" style="max-width: 150px;">${item.nombre}</span>
-    </div>
-  </td>
-  <td>
-    <div class="input-group" style="min-width: 140px;">
-      <button class="btn btn-outline-secondary decrementar-cantidad py-1" type="button" data-index="${index}">-</button>
-      <input type="number" class="form-control text-center py-1" value="${item.cantidad}" min="1" max="${item.stock}" data-index="${index}">
-      <button class="btn btn-outline-secondary incrementar-cantidad py-1" type="button" data-index="${index}">+</button>
-    </div>
-  </td>
-  <td class="text-end align-middle">$${item.precio.toFixed(2)}</td>
-  <td class="text-end align-middle">$${subtotal.toFixed(2)}</td>
-  <td class="text-center align-middle">
-    <button class="btn btn-sm btn-outline-danger p-1 eliminar-item" data-index="${index}">
-      <i class="bi bi-trash"></i>
-    </button>
-  </td>
-`;
-          carritoItems.appendChild(tr);
-        });
-        
-        carritoTotal.textContent = `$${total.toFixed(2)}`;
-      }
-    }
-    
-    // Manejar el formulario de agregar al carrito
-    document.addEventListener('submit', function(e) {
-      if (e.target && e.target.classList.contains('agregar-carrito-form')) {
-        e.preventDefault();
-        
-        const form = e.target;
-        const id = form.querySelector('input[name="id"]').value;
-        const nombre = form.querySelector('input[name="nombre"]').value;
-        const precio = parseFloat(form.querySelector('input[name="precio"]').value);
-        const imagen = form.querySelector('input[name="imagen"]').value;
-        const stock = parseInt(form.querySelector('input[name="stock"]').value);
-        const cantidad = parseInt(form.querySelector('input[name="cantidad"]').value);
-        
-        // Verificar si el producto ya está en el carrito
-        const itemExistente = carrito.find(item => item.id === id);
-        
-        if (itemExistente) {
-          // Actualizar cantidad si no supera el stock
-          const nuevaCantidad = itemExistente.cantidad + cantidad;
-          if (nuevaCantidad <= stock) {
-            itemExistente.cantidad = nuevaCantidad;
-          } else {
-            alert('No hay suficiente stock disponible');
-            return;
-          }
-        } else {
-          // Agregar nuevo item al carrito
-          carrito.push({
-            id,
-            nombre,
-            precio,
-            imagen,
-            cantidad,
-            stock
-          });
-        }
-        
-        // Guardar en localStorage y actualizar UI
-        localStorage.setItem('carrito', JSON.stringify(carrito));
-        actualizarContador();
-        renderizarCarrito();
-        
-        // Mostrar notificación
-        const toast = new bootstrap.Toast(document.getElementById('toast-agregado'));
-        toast.show();
-      }
-    });
-    
-    // Incrementar/decrementar cantidad en el modal de producto
-    document.addEventListener('click', function(e) {
-      // Botones + y - en el modal de producto
-      if (e.target && (e.target.id === 'incrementar' || e.target.id === 'decrementar')) {
-        const input = e.target.closest('.input-group').querySelector('input');
-        let value = parseInt(input.value);
-        
-        if (e.target.id === 'incrementar' && value < parseInt(input.max)) {
-          input.value = value + 1;
-        } else if (e.target.id === 'decrementar' && value > parseInt(input.min)) {
-          input.value = value - 1;
-        }
-      }
-      
-      // Eliminar item del carrito
-      if (e.target && (e.target.classList.contains('eliminar-item') || e.target.closest('.eliminar-item'))) {
-        const button = e.target.classList.contains('eliminar-item') ? e.target : e.target.closest('.eliminar-item');
-        const index = button.dataset.index;
-        carrito.splice(index, 1);
-        localStorage.setItem('carrito', JSON.stringify(carrito));
-        actualizarContador();
-        renderizarCarrito();
-      }
-      
-      // Vaciar carrito
-      if (e.target && e.target.id === 'vaciar-carrito') {
-        if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
-          carrito = [];
-          localStorage.setItem('carrito', JSON.stringify(carrito));
-          actualizarContador();
-          renderizarCarrito();
-        }
-      }
-      
-      // Incrementar cantidad en el carrito
-      if (e.target && (e.target.classList.contains('incrementar-cantidad') || e.target.closest('.incrementar-cantidad'))) {
-        const button = e.target.classList.contains('incrementar-cantidad') ? e.target : e.target.closest('.incrementar-cantidad');
-        const index = button.dataset.index;
-        const input = button.closest('.input-group').querySelector('input');
-        
-        if (carrito[index].cantidad < carrito[index].stock) {
-          carrito[index].cantidad++;
-          input.value = carrito[index].cantidad;
-          localStorage.setItem('carrito', JSON.stringify(carrito));
-          renderizarCarrito();
-          actualizarContador();
-        }
-      }
-      
-      // Decrementar cantidad en el carrito
-      if (e.target && (e.target.classList.contains('decrementar-cantidad') || e.target.closest('.decrementar-cantidad'))) {
-        const button = e.target.classList.contains('decrementar-cantidad') ? e.target : e.target.closest('.decrementar-cantidad');
-        const index = button.dataset.index;
-        const input = button.closest('.input-group').querySelector('input');
-        
-        if (carrito[index].cantidad > 1) {
-          carrito[index].cantidad--;
-          input.value = carrito[index].cantidad;
-          localStorage.setItem('carrito', JSON.stringify(carrito));
-          renderizarCarrito();
-          actualizarContador();
-        }
-      }
-    });
-    
-    // Actualizar cantidad desde el input en el carrito
-    document.addEventListener('change', function(e) {
-      if (e.target && e.target.matches('.input-group input[type="number"]')) {
-        const input = e.target;
-        const index = input.closest('.input-group').querySelector('button').dataset.index;
-        const nuevaCantidad = parseInt(input.value);
-        
-        if (nuevaCantidad > 0 && nuevaCantidad <= carrito[index].stock) {
-          carrito[index].cantidad = nuevaCantidad;
-          localStorage.setItem('carrito', JSON.stringify(carrito));
-          renderizarCarrito();
-          actualizarContador();
-        } else {
-          alert('La cantidad no puede ser mayor al stock disponible');
-          input.value = carrito[index].cantidad;
-        }
-      }
-    });
-    
-    // Renderizar carrito cuando se abre el modal
-    document.getElementById('modalCarrito').addEventListener('show.bs.modal', function() {
-      renderizarCarrito();
-    });
-    
-    // Inicializar contador al cargar la página
-    actualizarContador();
-  });
+  <script src="../assets/js/carrito.js"></script>
+  
+  <script src="../assets/js/contacto.js"></scrip>
 </body>
 </html>
 

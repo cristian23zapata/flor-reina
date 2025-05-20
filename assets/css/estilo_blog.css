@@ -1,3 +1,4 @@
+
 .blog-card {
     border-radius: 1.5rem;
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
@@ -11,3 +12,25 @@
     object-fit: cover;
     width: 100%;
   }
+
+  /* sticky-footer.css */
+:root {
+  --footer-height: 60px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+  padding-bottom: var(--footer-height);
+}
+
+footer {
+  height: var(--footer-height);
+  margin-top: calc(-1 * var(--footer-height));
+}
+
