@@ -1,13 +1,23 @@
 <?php
 require_once '../models/MySQL.php';
-
 session_start();
 
 $mysql = new MySQL();
-$mysql->conectar(); 
+$mysql->conectar();
 
-$resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
+// Construcción de consulta dinámica con filtros
+$consulta = "SELECT * FROM productos WHERE 1";
 
+// Filtrar por ingredientes seleccionados
+if (isset($_GET['ingredientes']) && is_array($_GET['ingredientes'])) {
+  foreach ($_GET['ingredientes'] as $ing) {
+    $ing = addslashes($ing); // Escapar si no tienes un método como real_escape_string
+    $consulta .= " AND ingredientes LIKE '%$ing%'";
+  }
+}
+
+// Ejecutar consulta con filtros (o sin ellos si no hay GET)
+$resultado = $mysql->efectuarConsulta($consulta);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -80,9 +90,69 @@ $resultado = $mysql->efectuarConsulta("SELECT * FROM productos");
   </div>
 </header>
 
+<!-- Filtro desplegable -->
+<div class="col-md-12 bg-white p-4 mb-4 rounded shadow-sm">
+  <div class="accordion" id="accordionFiltros">
+    <div class="accordion-item border-0">
+      <h2 class="accordion-header" id="headingFiltros">
+        <button class="accordion-button collapsed fw-bold text-uppercase" 
+                type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#collapseFiltros" 
+                aria-expanded="false" 
+                aria-controls="collapseFiltros"
+                style="color: #5a6268; background-color: #f8f9fa;">
+          Filtrar por ingredientes
+        </button>
+      </h2>
+      <div id="collapseFiltros" class="accordion-collapse collapse" 
+           aria-labelledby="headingFiltros" 
+           data-bs-parent="#accordionFiltros">
+        <div class="accordion-body p-0 pt-3">
+          <form method="GET" action="">
+            <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+              <?php
+              // Obtener ingredientes únicos
+              $query = "SELECT ingredientes FROM productos";
+              $result = $mysql->efectuarConsulta("SELECT ingredientes FROM productos");
+              $ingredientes_unicos = [];
+
+              while ($row = mysqli_fetch_assoc($result)) {
+                $ingredientes = explode(',', $row['ingredientes']);
+                foreach ($ingredientes as $ing) {
+                  $ing = trim($ing);
+                  if (!in_array($ing, $ingredientes_unicos)) {
+                    $ingredientes_unicos[] = $ing;
+                  }
+                }
+              }
+
+              sort($ingredientes_unicos);
+              foreach ($ingredientes_unicos as $ing): ?>
+                <div class="form-check form-check-inline m-0">
+                  <input class="form-check-input" type="checkbox" name="ingredientes[]" 
+                         id="ing-<?= htmlspecialchars($ing) ?>" 
+                         value="<?= htmlspecialchars($ing) ?>"
+                         <?= (isset($_GET['ingredientes']) && in_array($ing, $_GET['ingredientes'])) ? 'checked' : '' ?>>
+                  <label class="form-check-label small" for="ing-<?= htmlspecialchars($ing) ?>">
+                    <?= htmlspecialchars($ing) ?>
+                  </label>
+                </div>
+              <?php endforeach; ?>
+            </div>
+            <button type="submit" class="btn btn-primary px-4 py-2 fw-bold">Aplicar Filtros</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container py-5">
   <!-- Renderizar productos -->
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+
+  
     <?php while ($producto = mysqli_fetch_assoc($resultado)) : ?>
       <div class="col">
         <div class="card h-100 shadow-sm rounded-4 border-0">

@@ -1,32 +1,49 @@
 <?php
 require_once '../models/MySQL.php';
-
 session_start();
 
 $mysql = new MySQL();
 $mysql->conectar();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $correo = $_POST['correo'];
     $password = $_POST['password'];
 
-    $resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios WHERE correo = '$correo';");
+    // Buscar en usuarios
+    $resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios WHERE correo = '$correo'");
     $usuario = $resultado->fetch_assoc();
 
-    if (password_verify($password, $usuario['password'])) {
-
-        $_SESSION['nombre'] = $usuario['nombre'];
-        $_SESSION['correo'] = $usuario['correo'];
-        $_SESSION['password'] = $usuario['password'];
-        $_SESSION['tipo'] = $usuario['tipo'];
-
-        header("refresh:3;url=../index.php");
-
-        exit();
+    // Buscar en repartidores solo si no se encontró en usuarios
+    if (!$usuario) {
+        $resultado2 = $mysql->efectuarConsulta("SELECT * FROM Repartidores WHERE correo = '$correo'");
+        $repartidor = $resultado2->fetch_assoc();
     }
-    else {
-        echo "Contraseña incorrecta. Por favor, inténtalo de nuevo.";
+
+    $verificar = null;
+    $datos = null;
+    $tipo = null;
+
+    if ($usuario) {
+        $verificar = $usuario['password'];
+        $datos = $usuario;
+        $tipo = $usuario['tipo']; // 'cliente' o 'administrador'
+    } elseif (isset($repartidor)) {
+        $verificar = $repartidor['password'];
+        $datos = $repartidor;
+        $tipo = $repartidor['tipo']; // 'repartidor'
+    }
+
+    if ($verificar && password_verify($password, $verificar)) {
+        $_SESSION['nombre'] = $datos['nombre'];
+        $_SESSION['correo'] = $datos['correo'];
+        $_SESSION['tipo'] = $tipo;
+
+        header("Location: ../index.php");
+        exit();
+    } else {
+        echo "Correo o contraseña incorrectos.";
         header("refresh:3;url=../views/login.php");
     }
 }
+?>
