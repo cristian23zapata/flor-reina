@@ -1,6 +1,17 @@
 <?php
 require_once '../models/MySQL.php';
 
+
+// Mostrar mensajes de éxito/error
+if (isset($_GET['success']) && $_GET['success'] == 'true') {
+    echo '<div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+            ¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>';
+}
+
+
+
 session_start();
 
     if (!isset($_SESSION['correo'])) {
@@ -225,35 +236,67 @@ footer {
     <h3>Contáctanos</h3>
     <p class="form-description">Si tienes alguna duda o requerimiento, completa el formulario:</p>
     
-    <form method="POST" action="">
-      <div class="form-group">
-        <input type="text" class="form-control" placeholder="Nombre" required>
-      </div>
-      
-      <div class="form-group">
-        <input type="tel" class="form-control" id="telefono" name="telefono" 
-               placeholder="Teléfono de Contacto (10 dígitos)" 
-               pattern="[0-9]{10}" 
-               maxlength="10" 
-               required
-               oninput="validarTelefono(this)">
-        <small id="telefono-error" class="text-danger" style="display:none;">
-          El teléfono debe tener exactamente 10 dígitos numéricos
-        </small>
-      </div>
-      
-      <div class="form-group">
-        <input type="email" class="form-control" placeholder="Correo Electrónico" required>
-      </div>
-      
-      <div class="form-group">
-        <textarea class="form-control" placeholder="Mensaje" rows="5" required></textarea>
-      </div>
-      
-      <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+
+    <!-- Formulario de contacto -->
+    <form method="POST" action="../controllers/procesar_contacto.php">
+  <div class="form-group">
+    <input type="text" class="form-control" name="nombre" placeholder="Nombre" required> 
+  </div>
+  
+  <div class="form-group">
+      <input type="tel" class="form-control" id="telefono" name="telefono" 
+        placeholder="Teléfono de Contacto (10 dígitos)" 
+        pattern="[0-9]{10}" 
+        maxlength="10" 
+        required
+       oninput="validarTelefono(this)">
+    <small id="telefono-error" class="text-danger" style="display:none;">
+      El teléfono debe tener exactamente 10 dígitos numéricos
+    </small>
+  </div>
+
+  <div class="form-group">
+    <input type="email" class="form-control" name="email" placeholder="Correo Electrónico" required> 
+  </div>
+  
+  <div class="form-group">
+    <textarea class="form-control" name="mensaje" placeholder="Mensaje" rows="5" required></textarea> 
+  </div>
+  
+  <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+</form>
+
+      <?php
+// Mostrar mensajes de error
+if (isset($_GET['error'])) {
+    $error = $_GET['error'];
+    $mensaje = "";
+    
+    switch ($error) {
+        case 'campos_vacios':
+            $mensaje = "Por favor completa todos los campos obligatorios.";
+            break;
+        case 'email_invalido':
+            $mensaje = "El correo electrónico proporcionado no es válido.";
+            break;
+        case 'envio_fallido':
+            $mensaje = "Hubo un error al enviar el mensaje. Por favor inténtalo de nuevo más tarde.";
+            break;
+        default:
+            $mensaje = "Ocurrió un error desconocido.";
+    }
+    
+    echo '<div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+            '.$mensaje.'
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>';
+}
+?>
     </form>
   </div>
 </div>
+
+
 
 
  <!-- Modal del Carrito (se abre desde la derecha) -->
