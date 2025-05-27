@@ -2,10 +2,14 @@
 require_once '../models/MySQL.php';
 
 session_start();
-
     if (!isset($_SESSION['correo'])) {
     header("refresh:1;url=../views/login.php");
     exit();
+    }
+
+    if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { 
+        header("Location: ../views/index.php");
+        exit();
     }
 
     $mysql = new MySQL;

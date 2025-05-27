@@ -8,6 +8,11 @@ session_start();
     exit();
     }
 
+    if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { 
+    header("Location: ../views/index.php");
+    exit();
+}
+
     $mysql = new MySQL;
     $mysql->conectar();
 

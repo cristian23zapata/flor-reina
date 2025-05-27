@@ -49,8 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: ../index.php");
         exit();
     } else {
-        echo "Correo o contraseña incorrectos.";
-        header("refresh:3;url=../views/login.php");
+        header("Location: ../views/login.php?estado=contraseña_incorrecta");
     }
 }
 ?>

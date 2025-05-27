@@ -48,29 +48,50 @@
 <?php if (isset($_GET['estado'])): ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        <?php if ($_GET['estado'] === 'exito'): ?>
-            Swal.fire({
-                icon: 'success',
-                title: '¡Éxito!',
-                text: 'Registro éxitoso. Ahora puedes iniciar sesión.',
-                confirmButtonText: 'Aceptar'
-            });
-        <?php elseif ($_GET['estado'] === 'error'): ?>
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: '<?= htmlspecialchars($_GET["mensaje"] ?? "Hubo un error") ?>',
-                confirmButtonText: 'Intentar de nuevo'
-            });
-        <?php endif; ?>
+        document.addEventListener('DOMContentLoaded', () => {
+            <?php
+                $estado = $_GET['estado'];
+                $mensajeError = htmlspecialchars($_GET['mensaje'] ?? "Hubo un error", ENT_QUOTES, 'UTF-8');
 
-        // ✅ Eliminar los parámetros de la URL sin recargar
-        if (window.history.replaceState) {
-            const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            window.history.replaceState({ path: url }, "", url);
-        }
+                if ($estado === 'exito') {
+                    echo "
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Éxito!',
+                            text: 'Registro exitoso. Ahora puedes iniciar sesión.',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    ";
+                } elseif ($estado === 'error') {
+                    echo "
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: '$mensajeError',
+                            confirmButtonText: 'Intentar de nuevo'
+                        });
+                    ";
+                } elseif ($estado === 'contraseña_incorrecta') {
+                    echo "
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Contraseña Incorrecta',
+                            text: 'La contraseña ingresada es incorrecta. Por favor, inténtalo de nuevo.',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    ";
+                }
+            ?>
+
+            // ✅ Limpia la URL
+            if (window.history.replaceState) {
+                const cleanUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, '', cleanUrl);
+            }
+        });
     </script>
 <?php endif; ?>
+
 
 </div>
 
