@@ -1,4 +1,6 @@
 <?php
+// models/MySQL.php
+
 //Clase para gestionar la conexion a la base de datos
 class MySQL {
 
@@ -8,42 +10,75 @@ class MySQL {
     private $contrasena = "";
     private $nombreBaseDatos = "florreina_bd";
 
-    private $conexion;
+    private $conexion; // Ahora $this->conexion será un objeto mysqli
 
     //Metodo para conectar a la base de datos
     public function conectar(){
-        $this->conexion = mysqli_connect($this->ipServidor, $this->usuarioBase, $this->contrasena, $this->nombreBaseDatos);
+        // Usamos new mysqli() para obtener un objeto mysqli
+        $this->conexion = new mysqli($this->ipServidor, $this->usuarioBase, $this->contrasena, $this->nombreBaseDatos);
 
         //Validar si hubo un error en la conexion
-        if (!$this->conexion){
-            die("Error al conectar a la base de datos : " . mysqli_connect_error());
+        if ($this->conexion->connect_error){ // Acceder a connect_error del objeto
+            die("Error al conectar a la base de datos : " . $this->conexion->connect_error);
         }
 
-        //Establecer codificacion utf8
-        mysqli_set_charset($this->conexion, "utf8");
+        //Establecer codificacion utf8 usando el método del objeto
+        $this->conexion->set_charset("utf8");
     }
 
     //Metodo para desconectar la base de datos
     public function desconectar(){
         if($this->conexion){
-            mysqli_close($this->conexion);
+            $this->conexion->close(); // Usar el método close() del objeto
         }
     }
 
-    //Metodo para ejecutar una consulta y devolver su resultaddo
-    public function efectuarConsulta($consulta){
-        //Verificar que la codificacion sea utf8 antes de ejecutar
-        mysqli_query($this->conexion, "SET NAMES 'utf8'");
-        mysqli_query($this->conexion, "SET CHARACTER SET 'utf8'");
+    // Método para obtener el objeto de conexión mysqli
+    // ESTE ES EL MÉTODO CRUCIAL QUE FALTABA
+    public function getConexion() {
+        return $this->conexion;
+    }
 
-        $resultado = mysqli_query($this->conexion, $consulta);
+    // Metodo para preparar una consulta (usando el objeto mysqli)
+    public function prepare($consulta) {
+        return $this->conexion->prepare($consulta);
+    }
+
+    // Metodo para ejecutar una consulta y devolver su resultaddo
+    // Nota: Es mejor usar prepared statements para todas las consultas con datos de usuario
+    // pero si mantienes esta, asegúrate de que no haya inyección SQL.
+    public function efectuarConsulta($consulta){
+        // Ya se estableció utf8 en conectar, pero si es necesario aquí:
+        // $this->conexion->query("SET NAMES 'utf8'");
+        // $this->conexion->query("SET CHARACTER SET 'utf8'");
+
+        $resultado = $this->conexion->query($consulta); // Usar el método query() del objeto
 
         if(!$resultado){
-            echo "Error en la consulta : " .mysqli_error($this->conexion);
+            echo "Error en la consulta : " .$this->conexion->error; // Acceder a error del objeto
         }
 
         return $resultado;
     }
 
+    // Puedes añadir estos métodos para encapsular las transacciones
+    // Si los añades, podrías llamar a $mysql->beginTransaction() en lugar de $mysql->getConexion()->beginTransaction()
+    /*
+    public function beginTransaction() {
+        $this->conexion->begin_transaction();
+    }
+
+    public function commit() {
+        $this->conexion->commit();
+    }
+
+    public function rollback() {
+        $this->conexion->rollback();
+    }
+
+    public function insertId() {
+        return $this->conexion->insert_id;
+    }
+    */
 }
 ?>

@@ -1,23 +1,30 @@
 <?php
-require_once '../models/MySQL.php';
 session_start();
+require_once '../models/MySQL.php';
 
 $mysql = new MySQL();
 $mysql->conectar();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
     $correo = $_POST['correo'];
     $password = $_POST['password'];
 
     // Buscar en usuarios
-    $resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios WHERE correo = '$correo'");
+    $query = "SELECT * FROM Usuarios WHERE correo = ?";
+    $stmt = $mysql->prepare($query);
+    $stmt->bind_param("s", $correo);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
     $usuario = $resultado->fetch_assoc();
 
     // Buscar en repartidores solo si no se encontró en usuarios
     if (!$usuario) {
-        $resultado2 = $mysql->efectuarConsulta("SELECT * FROM Repartidores WHERE correo = '$correo'");
-        $repartidor = $resultado2->fetch_assoc();
+        $query = "SELECT * FROM Repartidores WHERE correo = ?";
+        $stmt = $mysql->prepare($query);
+        $stmt->bind_param("s", $correo);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        $repartidor = $resultado->fetch_assoc();
     }
 
     $verificar = null;

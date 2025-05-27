@@ -1,79 +1,148 @@
 <?php
-require '../vendor/autoload.php';  // Incluye PHPMailer si usas Composer
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+// controllers/Correo.php (Ejemplo simplificado)
 
-// Función para generar un código aleatorio de 20 caracteres
-function generarCodigo() {
-    return bin2hex(random_bytes(10));  // Genera un código de 20 caracteres hexadecimales
-}
+// Puedes necesitar incluir PHPMailer si no lo tienes ya en tu proyecto.
+// Descárgalo desde https://github.com/PHPMailer/PHPMailer/releases
+// e incluye los archivos necesarios.
+// Por ejemplo, si lo pones en una carpeta 'PHPMailer' dentro de 'controllers':
+// use PHPMailer\PHPMailer\PHPMailer;
+// use PHPMailer\PHPMailer\Exception;
+// require 'PHPMailer/src/Exception.php';
+// require 'PHPMailer/src/PHPMailer.php';
+// require 'PHPMailer/src/SMTP.php';
 
 class Correo {
+    public function enviarFactura(
+        $destinatario_email,
+        $destinatario_nombre,
+        $numero_pedido,
+        $fecha_pedido,
+        $datos_cliente, // Array: ['nombre', 'correo', 'direccion', 'telefono']
+        $productos,     // Array de productos del carrito
+        $subtotal,
+        $iva_monto,
+        $total
+    ) {
+        // --- CONTENIDO DEL CORREO HTML BÁSICO ---
+        $cuerpo_html = "
+        <html>
+        <head>
+            <title>Confirmación de Pedido Flor Reina</title>
+            <style>
+                body { font-family: sans-serif; line-height: 1.6; color: #333; }
+                .container { width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+                h2 { color: #28a745; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { border: 1px solid #eee; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+                .text-right { text-align: right; }
+                .total-section { margin-top: 20px; border-top: 2px solid #28a745; padding-top: 10px; }
+                .total-section p { margin: 5px 0; }
+                .total-section .grand-total { font-size: 1.2em; font-weight: bold; color: #28a745; }
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <h2>¡Gracias por tu compra en Flor Reina!</h2>
+                <p>Hola <strong>" . htmlspecialchars($destinatario_nombre) . "</strong>,</p>
+                <p>Tu pedido ha sido confirmado exitosamente.</p>
 
-    private $mail;
-    
-    public function __construct() {
-        $this->mail = new PHPMailer(true);
-    }
+                <h3>Detalles del Pedido</h3>
+                <p><strong>Número de Pedido:</strong> " . htmlspecialchars($numero_pedido) . "</p>
+                <p><strong>Fecha del Pedido:</strong> " . htmlspecialchars($fecha_pedido) . "</p>
 
-    // Función para enviar el correo con el enlace de recuperación
-    public function enviarCorreo($destinatario, $asunto, $mensaje) {
+                <h3>Datos de Envío</h3>
+                <p><strong>Nombre:</strong> " . htmlspecialchars($datos_cliente['nombre']) . "</p>
+                <p><strong>Correo:</strong> " . htmlspecialchars($datos_cliente['correo']) . "</p>
+                <p><strong>Dirección:</strong> " . htmlspecialchars($datos_cliente['direccion']) . "</p>
+                <p><strong>Teléfono:</strong> " . htmlspecialchars($datos_cliente['telefono']) . "</p>
+
+                <h3>Resumen de Artículos</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th class='text-right'>Precio Unitario</th>
+                            <th class='text-right'>Cantidad</th>
+                            <th class='text-right'>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+        foreach ($productos as $item) {
+            $cuerpo_html .= "
+                        <tr>
+                            <td>" . htmlspecialchars($item['nombre']) . "</td>
+                            <td class='text-right'>$" . number_format($item['precio'], 2) . "</td>
+                            <td class='text-right'>" . htmlspecialchars($item['cantidad']) . "</td>
+                            <td class='text-right'>$" . number_format($item['precio'] * $item['cantidad'], 2) . "</td>
+                        </tr>";
+        }
+        $cuerpo_html .= "
+                    </tbody>
+                </table>
+
+                <div class='total-section'>
+                    <p>Subtotal: <span class='text-right'>$" . number_format($subtotal, 2) . "</span></p>
+                    <p>IVA (21%): <span class='text-right'>$" . number_format($iva_monto, 2) . "</span></p>
+                    <p class='grand-total'>Total a Pagar: <span class='text-right'>$" . number_format($total, 2) . "</span></p>
+                </div>
+
+                <p>Tu pedido será procesado y enviado en un plazo de 24-48 horas. Te enviaremos otra notificación cuando esté en camino.</p>
+                <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
+                <p>Saludos cordiales,</p>
+                <p>El equipo de Flor Reina</p>
+            </div>
+        </body>
+        </html>";
+        // --- FIN CONTENIDO DEL CORREO HTML BÁSICO ---
+
+        // Configuración de PHPMailer (ajusta con tus credenciales SMTP)
+        // ESTO ES UN EJEMPLO. DEBES CONFIGURAR TU SERVIDOR SMTP REAL.
+        // EN UN ENTORNO DE PRUEBA, PUEDES USAR SERVICIOS COMO Mailtrap.io
+        // o un servidor SMTP local si lo tienes configurado (ej. Sendmail/Postfix en Linux, hMailServer en Windows).
+        /*
+        $mail = new PHPMailer(true);
         try {
-            // Configuración del servidor SMTP de Gmail
-            $this->mail->isSMTP();
-            $this->mail->Host = 'smtp.gmail.com';  // Dirección SMTP de Gmail
-            $this->mail->SMTPAuth = true;
-            $this->mail->Username = 'pruebaadso2025@gmail.com';  // Tu correo SMTP
-            $this->mail->Password = 'aypi xyao docb utjv';  // Contraseña de la aplicación para Gmail
-            $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $this->mail->Port = 587;
+            //Server settings
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.example.com'; // Servidor SMTP
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'user@example.com'; // Usuario SMTP
+            $mail->Password   = 'password';         // Contraseña SMTP
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // o PHPMailer::ENCRYPTION_SMTPS
+            $mail->Port       = 587; // Puerto SMTP (465 para SMTPS, 587 para STARTTLS)
 
-            // Remitente
-            $this->mail->setFrom('pruebaadso2025@gmail.com', 'Prueba de correo');
-            // Destinatario
-            $this->mail->addAddress($destinatario);
+            //Recipients
+            $mail->setFrom('no-reply@florreina.es', 'Flor Reina');
+            $mail->addAddress($destinatario_email, $destinatario_nombre);
 
-            // Contenido del correo
-            $this->mail->isHTML(true);
-            $this->mail->Subject = $asunto;
-            $this->mail->Body    = $mensaje;
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = 'Confirmacion de Pedido #' . $numero_pedido . ' - Flor Reina';
+            $mail->Body    = $cuerpo_html;
+            $mail->AltBody = strip_tags($cuerpo_html); // Versión de texto plano
 
-            // Enviar el correo
-            $this->mail->send();
+            $mail->send();
+            return true;
         } catch (Exception $e) {
-            echo "Error al enviar el correo: {$this->mail->ErrorInfo}";
+            error_log("Error al enviar el correo: {$mail->ErrorInfo}");
+            return false;
         }
-    }
+        */
 
-    // Función para manejar la recuperación de contraseña
-    public function recuperarContrasena($correo) {
-        // Conectar a la base de datos
-        $mysqli = new mysqli('localhost', 'root', '', 'florreina_bd');
-
-        // Verificar la conexión
-        if ($mysqli->connect_error) {
-            die('Conexión fallida: ' . $mysqli->connect_error);
-        }
-
-        // Generar el código de recuperación
-        $codigo = generarCodigo();
-
-        // Insertar el código y el correo en la base de datos
-        $stmt = $mysqli->prepare("INSERT INTO recuperacion (correo, codigo) VALUES (?, ?)");
-        $stmt->bind_param("ss", $correo, $codigo);
-        $stmt->execute();
-
-        // Crear el enlace con el código de recuperación
-        $enlace = "http://localhost/flor-reina/views/recuperar.php?codigo=" . $codigo . "&correo=" . urlencode($correo);
-
-        // Enviar el correo con el enlace de recuperación
-        $asunto = 'Recuperación de Contraseña';
-        $mensaje = "Haz clic en el siguiente enlace para recuperar tu contraseña: <a href='" . $enlace . "'>Recuperar Contraseña</a>";
-
-        // Llamar a la función de enviarCorreo
-        $this->enviarCorreo($correo, $asunto, $mensaje);
-
-        $mysqli->close();
+        // --- Para propósitos de prueba sin SMTP real (descomentar y probar) ---
+        // Simplemente "simula" el envío. En un entorno real, descomentarías PHPMailer.
+        // O podrías guardar el correo en un archivo para verificarlo.
+        $log_file = '../logs/email_log.txt';
+        $log_entry = "--- Correo de Confirmación de Pedido ---\n";
+        $log_entry .= "Para: " . $destinatario_email . " (" . $destinatario_nombre . ")\n";
+        $log_entry .= "Asunto: Confirmacion de Pedido #" . $numero_pedido . " - Flor Reina\n";
+        $log_entry .= "Fecha: " . date('Y-m-d H:i:s') . "\n";
+        $log_entry .= "Contenido HTML:\n" . $cuerpo_html . "\n";
+        $log_entry .= "--------------------------------------\n\n";
+        file_put_contents($log_file, $log_entry, FILE_APPEND);
+        return true; // Simula que el envío fue exitoso
+        // --- FIN de la simulación ---
     }
 }
 ?>
