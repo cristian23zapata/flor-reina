@@ -12,14 +12,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $confirmar_password = $_POST['confirmar_password'];
 
     if ($password !== $confirmar_password) {
-        echo "Las contraseñas no coinciden.";
+        header("refresh:1;url=../views/registro.php?estado=error");
         exit();
     }
 
     // Verificar si el correo ya está registrado
     $resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios WHERE correo = '$correo'");
     if ($resultado->num_rows > 0) {
-        echo "El correo ya está registrado.";
+        header("refresh:1;url=../views/registro.php?estado=correo_existente");
         exit();
     }
 

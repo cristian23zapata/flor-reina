@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Si ninguna de las autenticaciones fue exitosa
-    header('Location: ../views/login.php?error=invalid_credentials');
+    header('Location: ../views/login.php?estado=invalid_credentials');
     exit();
 
 } else {

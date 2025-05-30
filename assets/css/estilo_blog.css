@@ -18,6 +18,14 @@
   --footer-height: 60px;
 }
 
+.img-fluid {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+  height: 300px;
+}
+
 body {
   display: flex;
   flex-direction: column;

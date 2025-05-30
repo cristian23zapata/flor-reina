@@ -50,6 +50,46 @@
   </div>
 </div>
 
+  <!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<?php if (isset($_GET['estado'])): ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            <?php
+                $estado = $_GET['estado'];
+                $mensajeError = htmlspecialchars($_GET['mensaje'] ?? "Hubo un error", ENT_QUOTES, 'UTF-8');
+
+            if ($estado === 'correo_existente') {
+                    echo "
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Correo Existente',
+                            text: 'El correo electrónico ya está registrado. Por favor, utiliza otro correo.',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    ";
+                }elseif ($estado === 'error') {
+                    echo "
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Contraseña no coincide. Por favor, verifica tus contraseñas.',
+                            confirmButtonText: 'Intentar de nuevo'
+                        });
+                    ";
+                }
+            ?>
+
+            // ✅ Limpia la URL
+            if (window.history.replaceState) {
+                const cleanUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, '', cleanUrl);
+            }
+        });
+    </script>
+<?php endif; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
