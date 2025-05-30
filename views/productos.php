@@ -397,7 +397,73 @@ sort($ingredientes_unicos);
                         </div>
                     </div>
                 </div>
-                <?php endwhile; ?>
+                <!-- Modal de edición -->
+      <div class="modal fade" id="modalEditar<?php echo $producto['id']; ?>" tabindex="-1" aria-labelledby="modalEditarLabel<?php echo $producto['id']; ?>" aria-hidden="true">
+        <div class="modal-dialog">
+          <form class="modal-content" action="../controllers/actualizar_producto.php" method="POST" enctype="multipart/form-data">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalEditarLabel<?php echo $producto['id']; ?>">Editar Producto</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <input type="hidden" name="imagenActual" value="<?php echo $producto['imagen']; ?>">
+            <div class="modal-body">
+              <input type="hidden" name="id" value="<?php echo $producto['id']; ?>">
+              <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" name="nombre" class="form-control" value="<?php echo htmlspecialchars($producto['nombre']); ?>" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea name="descripcion" class="form-control" required><?php echo htmlspecialchars($producto['descripcion']); ?></textarea>
+              </div>
+              <!-- Ingredientes -->
+              <div>
+                <label class="form-label">Ingredientes</label>
+                <div id="contenedor-ingredientes" class="row">
+                  <div class="col-md-6" id="columna-ingredientes-1">
+                  <?php 
+                  $ingredientes = explode(',', $producto['ingredientes']);
+                  foreach ($ingredientes as $index => $ingrediente): 
+                    if ($index > 0 && $index % 5 === 0): ?>
+                    </div><div class="col-md-6" id="columna-ingredientes-<?php echo ceil(($index + 1) / 5); ?>">
+                    <?php endif; ?>
+                    <div class="input-group mb-2">
+                    <input type="text" name="ingredientes[]" class="form-control" value="<?php echo htmlspecialchars(trim($ingrediente)); ?>">
+                    <button type="button" class="btn btn-outline-danger" onclick="eliminarCampo(this)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                    </div>
+                  <?php endforeach; ?>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-outline-primary mt-2" onclick="agregarCampo()">
+                  <i class="bi bi-plus-circle"></i> Agregar otro ingrediente
+                </button>
+                </div>
+                <!-- Fin ingredientes -->
+                <div class="mb-3">
+                <label class="form-label">Precio ($)</label>
+                <input type="number" step="0.01" name="precio" class="form-control" min="1" value="<?php echo $producto['precio']; ?>" required>
+                </div>
+                <div class="mb-3">
+                <label class="form-label">Stock</label>
+                <input type="number" name="stock" class="form-control" min="1" value="<?php echo $producto['stock']; ?>" required>
+                </div>
+                <div class="mb-3">
+                <label class="form-label">Imagen (opcional)</label>
+                <input type="file" name="imagen" class="form-control">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+              </div>
+              </form>
+            </div>
+            </div>
+          <?php endwhile; ?>
+          </div>
+        </div>
             </div>
         </div>
     </div>
