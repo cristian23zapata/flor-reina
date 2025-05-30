@@ -48,6 +48,7 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/estilo_nav.css">
     <link rel="stylesheet" href="../assets/css/estilo_creacion.css">
+    <link rel="stylesheet" href="../assets/css/estilo_carrito.css">
     <style>
         .estado-pendiente { background-color: #fff3cd; color: #664d03; }
         .estado-confirmado { background-color: #d1e7dd; color: #0f5132; }
@@ -57,6 +58,7 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
     </style>
 </head>
 <body>
+    <?php include '../views/partials/carrito_modal.php'; ?>
     <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
         <div class="container">
             <a class="navbar-brand" href="../index.php">
@@ -97,12 +99,7 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                         <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
                     <?php endif; ?>
                     <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                        <button class="btn btn-outline-success position-relative" data-bs-toggle="modal" data-bs-target="#modalCarrito" id="btn-carrito">
-                            <i class="bi bi-bag"></i> Carrito
-                            <span id="carrito-contador" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
-                                0
-                            </span>
-                        </button>
+                       
                     <?php } ?>
                 </div>
             </div>
