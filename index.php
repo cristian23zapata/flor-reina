@@ -8,14 +8,12 @@ $mysql->conectar();
 $resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios;");
 $mysql->desconectar();
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Flor Reina</title>
-  <link rel="icon" type="image/png" href="assets/imagenes/icono.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/estilo_nav.css">
@@ -24,11 +22,35 @@ $mysql->desconectar();
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/estilo_creacion.css">
   <style>
+    /* Estilo para el encabezado con degradado */
+    .header-title-bg {
+      background: linear-gradient(to right, #FFD7E0, #FFC0CB); /* Un degradado de rosa claro a rosa pastel */
+      color: #333; /* Color de texto más oscuro para contraste */
+      padding: 6rem 0; /* Más espacio vertical para que el degradado se vea mejor */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil para profundidad */
+    }
+
+    /* Estilo opcional para que el título resalte más dentro del degradado */
+    .header-title-bg h1 {
+        color: #8B0000; /* Un rojo oscuro para el título, por ejemplo */
+        font-weight: 700; /* Asegura que el título sea negrita */
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Sombra de texto suave */
+    }
+
+    .header-title-bg p {
+        color: #555; /* Color para el subtítulo */
+    }
+
+    /* Estilos para el carrusel (asegúrate de que no haya conflicto con tus estilos existentes) */
+    .fullscreen-carousel {
+        height: 80vh; /* Ajusta la altura del carrusel para que sea visible */
+    }
+    .fullscreen-carousel .carousel-item img {
+        height: 100%;
+        object-fit: cover;
+    }
   </style>
 </head>
-
-<body>
-
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
   <div class="container">
@@ -81,7 +103,7 @@ $mysql->desconectar();
 </nav>
 
 <!-- Encabezado -->
-<header class="bg-light py-5 text-center">
+<header class="header-title-bg py-5 text-center">
   <div class="container">
     <h1 class="display-5">Productos Lácteos Artesanales</h1>
     <p class="lead">Disfruta del sabor auténtico de Asturias.</p>
