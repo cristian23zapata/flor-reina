@@ -34,7 +34,7 @@
         </form>
         <div class="text-center mt-3">
           <a href="#" class="small text-decoration-none text-muted">¿Olvidaste tu contraseña?</a><br>
-          <a href="../views/enviarEmail.php" class="small text-decoration-none text-pink">Click Aquí para Recuperarla</a> <br> <br>
+          <a href="../views/enviarEmail1.php" class="small text-decoration-none text-pink">Click Aquí para Recuperarla</a> <br> <br>
           <a href="../views/registro.php" class="small text-decoration-none text-pink">Registrarse</a>
         </div>
         <div class="text-center mt-4">
