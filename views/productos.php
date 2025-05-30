@@ -523,6 +523,35 @@ Producto agregado al carrito!
 </div>
 </div>
 </div>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<?php if (isset($_GET['estado'])): ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        <?php if ($_GET['estado'] === 'exito'): ?>
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: 'Producto actualizado con éxito',
+                confirmButtonText: 'Aceptar'
+            });
+        <?php elseif ($_GET['estado'] === 'error'): ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '<?= htmlspecialchars($_GET["mensaje"] ?? "Hubo un error") ?>',
+                confirmButtonText: 'Intentar de nuevo'
+            });
+        <?php endif; ?>
+
+        // ✅ Eliminar los parámetros de la URL sin recargar
+        if (window.history.replaceState) {
+            const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.replaceState({ path: url }, "", url);
+        }
+    </script>
+<?php endif; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
