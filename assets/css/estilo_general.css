@@ -1,0 +1,106 @@
+/* Definición de la paleta de colores */
+:root {
+    --primary-color: #7a2048; /* Un tono de baya oscuro/vino, similar al de tu logo */
+    --secondary-color: #f7e6e9; /* Un rosa claro/beige, ideal para secciones de fondo suaves */
+    --accent-color: #e67e22; /* Un naranja quemado o tierra para detalles si se necesita un contraste cálido */
+    --text-color: #333333; /* Gris oscuro para el texto general del cuerpo */
+    --heading-color: #2c3e50; /* Un azul grisáceo oscuro para los títulos */
+    --light-bg-color: #f8f9fa; /* Un gris muy claro para fondos de secciones */
+    --white-color: #ffffff; /* Blanco puro */
+    --dark-color: #343a40; /* Gris oscuro para el footer o elementos de contraste */
+}
+
+/* Estilos Generales para el Cuerpo y la Tipografía */
+body {
+    font-family: 'Montserrat', sans-serif; /* Fuente principal para todo el texto */
+    color: var(--text-color); /* Color de texto predeterminado */
+    line-height: 1.6; /* Espaciado entre líneas para mejor legibilidad */
+    background-color: var(--white-color); /* Fondo blanco para la página por defecto */
+}
+
+/* Estilos para Títulos (h1, h2, etc.) */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif; /* Fuente elegante y con serifa para los títulos */
+    color: var(--heading-color); /* Color más oscuro para los títulos */
+    font-weight: 700; /* Negrita */
+}
+
+/* Sobrescribir colores de Bootstrap para que coincidan con tu paleta */
+.btn-primary,
+.bg-primary,
+.modal-header.bg-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.btn-outline-primary {
+    color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+.btn-outline-primary:hover {
+    background-color: var(--primary-color) !important;
+    color: var(--white-color) !important;
+}
+
+/* Estilos específicos para secciones de fondo */
+
+/* Encabezado */
+header.bg-light {
+    background-color: var(--light-bg-color) !important; /* Usar el gris claro definido */
+    color: var(--heading-color); /* Asegura que el texto del encabezado sea visible */
+}
+
+/* Carrusel Grande de Yogures */
+.fullscreen-carousel .carousel-item img {
+    filter: brightness(70%); /* Oscurece ligeramente las imágenes para que el texto resalte */
+}
+.fullscreen-carousel .carousel-caption {
+    background: rgba(0, 0, 0, 0.4); /* Fondo semitransparente para el texto del carrusel */
+    color: var(--white-color); /* Texto blanco para el carrusel */
+}
+
+/* Sección "¿Quiénes somos?" */
+.quienes-somos-section {
+    background-color: var(--secondary-color); /* Fondo rosa claro/beige */
+}
+
+/* Sección "Nuestra Esencia" (Visión y Misión) */
+.vision-mision-section {
+    /* Un degradado sutil para dar más profundidad */
+    background: linear-gradient(to right, var(--light-bg-color), #e9ecef);
+}
+
+.vision-card, .mision-card {
+    background-color: var(--white-color); /* Fondo blanco para las tarjetas */
+    box-shadow: 0 5px 20px rgba(0,0,0,.08); /* Sombra para resaltar */
+}
+
+.card-icon {
+    color: var(--primary-color); /* Iconos del color principal */
+}
+
+/* Sección "¿Dónde estamos?" */
+.ubicacion-section {
+    background-color: var(--light-bg-color); /* Un gris muy claro para el fondo */
+}
+
+/* Footer */
+footer.bg-dark {
+    background-color: var(--dark-color) !important; /* Usar el gris oscuro definido */
+    color: var(--light-bg-color); /* Texto claro para el footer */
+}
+footer small {
+    color: #adb5bd; /* Un gris un poco más oscuro para el texto pequeño del footer */
+}
+
+/* Modal del Carrito */
+#modalCarrito .modal-header.bg-primary {
+    background-color: var(--primary-color) !important; /* Color principal para el encabezado del modal */
+    color: var(--white-color);
+}
+#modalCarrito .modal-footer.bg-light {
+    background-color: var(--light-bg-color) !important; /* Fondo claro para el pie del modal */
+}
+#carrito-vacio i {
+    color: #6c757d; /* Color gris para el icono de carrito vacío */
+}

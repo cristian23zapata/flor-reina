@@ -40,6 +40,7 @@ sort($ingredientes_unicos);
 <link rel="icon" type="image/png" href="../assets/imagenes/icono.png">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+ <link rel="stylesheet" href="../assets/css/estilo_carrito.css">
 <link rel="stylesheet" href="../assets/css/estilo_nav.css">
 <link rel="stylesheet" href="../assets/css/estilo_productos.css">
 <link rel="stylesheet" href="../assets/css/estilo_creacion.css">
@@ -117,6 +118,7 @@ sort($ingredientes_unicos);
 </style>
 </head>
 <body>
+    <?php include '../views/partials/carrito_modal.php'; ?>
 <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
 <div class="container">
 <a class="navbar-brand" href="../index.php">
