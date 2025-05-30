@@ -96,8 +96,10 @@ if (isset($_GET['success'])) {
                                 <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
                                 <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
                                 <li><hr class="dropdown-divider"></li>
+                                <?php } ?>
                                 <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
                             </ul>
                         </div>
