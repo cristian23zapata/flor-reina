@@ -42,3 +42,6 @@ footer {
   margin-top: calc(-1 * var(--footer-height));
 }
 
+.bg-rosado {
+    background-color: #f84181; 
+  }

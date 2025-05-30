@@ -152,7 +152,7 @@ $mysql->desconectar();
        aria-labelledby="modalVerMasLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content rounded-4">
-        <div class="modal-header bg-primary text-white border-0">
+        <div class="modal-header bg-rodado text-white border-0">
           <h5 class="modal-title" id="modalVerMasLabel<?php echo $articulo['id']; ?>">
             <?php echo htmlspecialchars($articulo['titulo']); ?>
           </h5>

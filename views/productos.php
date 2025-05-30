@@ -286,7 +286,7 @@ sort($ingredientes_unicos);
                 <div class="modal fade" id="modalVerMas<?php echo $producto['id']; ?>" tabindex="-1" aria-labelledby="modalVerMasLabel<?php echo $producto['id']; ?>" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content rounded-4 shadow">
-                            <div class="modal-header border-0 bg-primary text-white">
+                            <div class="modal-header border-0 bg-rosado text-white">
                                 <h5 class="modal-title fw-bold" id="modalVerMasLabel<?php echo $producto['id']; ?>">
                                     <?php echo htmlspecialchars($producto['nombre']); ?>
                                 </h5>
