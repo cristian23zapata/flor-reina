@@ -2,14 +2,10 @@
 require_once '../models/MySQL.php';
 
 session_start();
+
     if (!isset($_SESSION['correo'])) {
     header("refresh:1;url=../views/login.php");
     exit();
-    }
-
-    if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { 
-        header("Location: ../views/index.php");
-        exit();
     }
 
     $mysql = new MySQL;
@@ -27,7 +23,6 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Flor Reina</title>
-    <link rel="icon" type="image/png" href="../assets/imagenes/icono.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/estilo_nav.css">
@@ -38,7 +33,7 @@ session_start();
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
   <div class="container">
-    <a class="navbar-brand" href="../index.php">
+    <a class="navbar-brand" href="../views/index.php">
       <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
@@ -48,34 +43,30 @@ session_start();
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-        <li class="nav-item"><a class="nav-link active" href="../views/admin_pedidos.php">PEDIDOS</a></li>
         <li class="nav-item"><a class="nav-link active" href="../views/creacion.php">CREAR</a></li>
-        <li class="nav-item"><a class="nav-link active" href="../views/registrar.php">REGISTRAR</a></li>
-        <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">REPARTIDORES</a></li>
-        <li class="nav-item"><a class="nav-link" href="../views/gestionar_repartidores.php">Gestion Repartidores</a></li>
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Tienda</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
       </ul>
+
+      <form class="d-flex me-3" role="search">
+        <input class="form-control me-2" type="search" placeholder="Buscar productos..." aria-label="Buscar">
+        <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+      </form>
 
       <div class="d-flex align-items-center gap-2">
         <?php if (isset($_SESSION['correo'])): ?>
-           
-<div class="dropdown">
-    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-       <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                                <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <?php } ?>
-        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
-    </ul>
-</div>
+          <span class="fw-bold"><i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
+          <a href="../controllers/logout.php" class="btn btn-outline-danger">Cerrar sesión</a>
         <?php else: ?>
           <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
         <?php endif; ?>
+        
+        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+          <a href="../views/carrito.php"><button class="btn btn-outline-success"><i class="bi bi-bag"></i> Carrito</button></a>
+        <?php } ?>
       </div>
     </div>
   </div>
@@ -98,29 +89,29 @@ session_start();
     
     <div class="mb-3">
       <label for="nombre" class="form-label">Nombre del producto</label>
-      <input type="text" class="form-control" id="nombre" name="nombre" title="Solo letras y espacios" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" required>
+      <input type="text" class="form-control" id="nombre" name="nombre" required>
     </div>
 
     <div class="mb-3">
       <label for="descripcion" class="form-label">Descripción</label>
-      <textarea class="form-control" id="descripcion" name="descripcion" title="Solo letras y espacios" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" rows="3" required></textarea>
+      <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
     </div>
 
     <div class="mb-3">
-      <label for="precio" class="form-label">Precio ($)</label>
-      <input type="number" class="form-control" id="precio" name="precio" step="0.01" min="1" required>
+      <label for="precio" class="form-label">Precio (€)</label>
+      <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
     </div>
 
     <div class="mb-3">
       <label for="stock" class="form-label">Stock disponible</label>
-      <input type="number" class="form-control" id="stock" name="stock" min="1" required>
+      <input type="number" class="form-control" id="stock" name="stock" required>
     </div>
     <!--ingredientes-->
     <div class="mb-3">
       <label for="ingredientes" class="form-label">Ingredientes</label>
       <div id="nuevos-ingredientes">
         <div class="input-group mb-2 w-50">
-        <input type="text" name="ingredientes[]" class="form-control" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" placeholder="Escribe un ingrediente">
+        <input type="text" name="ingredientes[]" class="form-control" placeholder="Escribe un ingrediente">
     <button type="button" class="btn btn-outline-danger" onclick="eliminarCampo(this)">
       <i class="bi bi-trash"></i>
     </button>
@@ -139,38 +130,10 @@ session_start();
     <div class="text-center">
       <button type="submit" class="btn btn-outline-success px-5">Crear producto</button>
     </div>
+
   </form>
 </div>
 </div>
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<?php if (isset($_GET['estado'])): ?>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        <?php if ($_GET['estado'] === 'exito'): ?>
-            Swal.fire({
-                icon: 'success',
-                title: '¡Éxito!',
-                text: 'Producto registrado con éxito',
-                confirmButtonText: 'Aceptar'
-            });
-        <?php elseif ($_GET['estado'] === 'error'): ?>
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: '<?= htmlspecialchars($_GET["mensaje"] ?? "Hubo un error") ?>',
-                confirmButtonText: 'Intentar de nuevo'
-            });
-        <?php endif; ?>
-
-        // ✅ Eliminar los parámetros de la URL sin recargar
-        if (window.history.replaceState) {
-            const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            window.history.replaceState({ path: url }, "", url);
-        }
-    </script>
-<?php endif; ?>
 
 <!-- Formulario de ARTÍCULO -->
 <div id="form-articulo" style="display: none;">
@@ -180,12 +143,12 @@ session_start();
     
     <div class="mb-3">
       <label for="titulo" class="form-label">Título del artículo</label>
-      <input type="text" class="form-control" id="titulo" name="titulo" title="Solo letras y espacios" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" required>
+      <input type="text" class="form-control" id="titulo" name="titulo" required>
     </div>
 
     <div class="mb-3">
       <label for="contenido" class="form-label">Contenido</label>
-      <textarea class="form-control" id="contenido" name="contenido" title="Solo letras y espacios" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" rows="6" required></textarea>
+      <textarea class="form-control" id="contenido" name="contenido" rows="6" required></textarea>
     </div>
 
     <div class="mb-4">
@@ -200,32 +163,6 @@ session_start();
 </div>
 </div>
 
-<?php if (isset($_GET['estado'])): ?>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        <?php if ($_GET['estado'] === 'exito'): ?>
-            Swal.fire({
-                icon: 'success',
-                title: '¡Éxito!',
-                text: 'Articulo registrado con éxito',
-                confirmButtonText: 'Aceptar'
-            });
-        <?php elseif ($_GET['estado'] === 'error'): ?>
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: '<?= htmlspecialchars($_GET["mensaje"] ?? "Hubo un error") ?>',
-                confirmButtonText: 'Intentar de nuevo'
-            });
-        <?php endif; ?>
-
-        // ✅ Eliminar los parámetros de la URL sin recargar
-        if (window.history.replaceState) {
-            const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            window.history.replaceState({ path: url }, "", url);
-        }
-    </script>
-<?php endif; ?>
 
 <script>
   function mostrarFormulario(tipo) {
@@ -272,5 +209,6 @@ function eliminarCampo(boton) {
 
   </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

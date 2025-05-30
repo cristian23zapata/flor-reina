@@ -13,9 +13,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Desconectar de la base de datos
     $mysql->desconectar();
-
-    header("Location: ../views/blog.php");
-    exit();
+    
+    echo "Articulo eliminado con éxito. <br><br>";
+    
+    header("refresh:3;url=../views/blog.php");
 } else {
     echo "Método no permitido.";
 }

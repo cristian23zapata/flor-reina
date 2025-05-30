@@ -12,14 +12,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $confirmar_password = $_POST['confirmar_password'];
 
     if ($password !== $confirmar_password) {
-        header("refresh:1;url=../views/registro.php?estado=error");
+        echo "Las contraseñas no coinciden.";
         exit();
     }
 
     // Verificar si el correo ya está registrado
     $resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios WHERE correo = '$correo'");
     if ($resultado->num_rows > 0) {
-        header("refresh:1;url=../views/registro.php?estado=correo_existente");
+        echo "El correo ya está registrado.";
         exit();
     }
 
@@ -27,5 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     $mysql->efectuarConsulta("INSERT INTO Usuarios (nombre, correo, password, tipo) VALUES ('$nombre', '$correo', '$hashed_password', 'user')");
 
-    header("refresh:3;url=../views/login.php?estado=exito");
+    echo "Registro exitoso. Redirigiendo a la página de inicio de sesión...";
+    header("refresh:3;url=../views/login.php");
 }

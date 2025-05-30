@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Iniciar Sesión - Flor Reina</title>
-    <link rel="icon" type="image/png" href="../assets/imagenes/icono.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/estilo_login.css">
@@ -34,66 +33,15 @@
         </form>
         <div class="text-center mt-3">
           <a href="#" class="small text-decoration-none text-muted">¿Olvidaste tu contraseña?</a><br>
-          <a href="../views/enviarEmail.php" class="small text-decoration-none text-pink">Click Aquí para Recuperarla</a> <br> <br>
+          <a href="../views/enviarEmail1.php" class="small text-decoration-none text-pink">Click Aquí para Recuperarla</a> <br> <br>
           <a href="../views/registro.php" class="small text-decoration-none text-pink">Registrarse</a>
         </div>
         <div class="text-center mt-4">
-          <a href="../index.php" class="btn btn-link text-decoration-none text-pink"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
+          <a href="../views/index.php" class="btn btn-link text-decoration-none text-pink"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
         </div>
       </div>
     </div>
   </div>
-  <!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<?php if (isset($_GET['estado'])): ?>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            <?php
-                $estado = $_GET['estado'];
-                $mensajeError = htmlspecialchars($_GET['mensaje'] ?? "Hubo un error", ENT_QUOTES, 'UTF-8');
-
-                if ($estado === 'exito') {
-                    echo "
-                        Swal.fire({
-                            icon: 'success',
-                            title: '¡Éxito!',
-                            text: 'Registro exitoso. Ahora puedes iniciar sesión.',
-                            confirmButtonText: 'Aceptar'
-                        });
-                    ";
-                } elseif ($estado === 'error') {
-                    echo "
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: '$mensajeError',
-                            confirmButtonText: 'Intentar de nuevo'
-                        });
-                    ";
-                } elseif ($estado === 'invalid_credentials') {
-                    echo "
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Correo o contraseña incorrectos',
-                            text: 'Por favor, verifica tus datos e intenta nuevamente.',
-                            confirmButtonText: 'Aceptar'
-                        });
-                    ";
-                }
-            ?>
-
-            // ✅ Limpia la URL
-            if (window.history.replaceState) {
-                const cleanUrl = window.location.origin + window.location.pathname;
-                window.history.replaceState({}, '', cleanUrl);
-            }
-        });
-    </script>
-<?php endif; ?>
-
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

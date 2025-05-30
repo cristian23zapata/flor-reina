@@ -38,7 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
         $mysql->desconectar();
         
-        header("Location: ../views/creacion.php?estado=exito");
-        exit();
+        echo "Articulo registrado con exito. <br><br>";
+        
+        header("refresh:3;url=../views/creacion.php");
     }
 }

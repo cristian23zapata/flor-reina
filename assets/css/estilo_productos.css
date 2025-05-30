@@ -63,7 +63,7 @@
   }
 
   .modal-content {
-    border-radius: 18px;
+    border-radius: 20px;
     border: 2px solid #f8c3da;
   }
 
@@ -71,7 +71,7 @@
     background-color: #fcdce7;
     color: #a61e66;
     border-bottom: none;
-    border-radius: 18px 18px 0 0;
+    border-radius: 20px 20px 0 0;
   }
 
   .modal-footer {
@@ -164,46 +164,3 @@
   font-size: 0.7rem;
   top: -5px;
 }
-
-/* Agrega esto a tu estilo_productos.css */
-.filter-form {
-  background: #f8f9fa;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-}
-
-.ingredient-list {
-  max-height: 400px;
-  overflow-y: auto;
-  padding-right: 10px;
-}
-
-.ingredient-list::-webkit-scrollbar {
-  width: 5px;
-}
-
-.ingredient-list::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.ingredient-list::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
-}
-
-.ingredient-list::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-.form-check-input:checked {
-  background-color: #28a745;
-  border-color: #28a745;
-}
-
-.filter-actions .btn {
-  padding: 0.5rem;
-}
-
-.bg-rosado {
-    background-color: #f78fb3; 
-  }

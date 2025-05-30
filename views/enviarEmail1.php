@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Recuperar Contraseña - Flor Reina</title>
-  <link rel="icon" type="image/png" href="../assets/imagenes/icono.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link rel="stylesheet" href="../assets/css/estilo_login.css" />
@@ -19,7 +18,7 @@
           <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="70" />
           <h4 class="mt-3 text-pink"><i class="bi bi-envelope-arrow-up me-1"></i> Recuperar Contraseña</h4>
         </div>
-        <form action="../controllers/EnviarCorreo1.php" method="POST">
+        <form action="../controllers/enviarCorreo1.php" method="POST">
           <div class="mb-3">
             <label for="correo" class="form-label fw-semibold text-secondary">Correo electrónico</label>
             <input type="email" class="form-control border-pink" id="correo" name="correo" placeholder="nombre@ejemplo.com" required />
@@ -29,7 +28,7 @@
           </div>
         </form>
         <div class="text-center mt-4">
-          <a href="../index.php" class="btn btn-link text-decoration-none text-pink"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
+          <a href="../views/index.php" class="btn btn-link text-decoration-none text-pink"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
         </div>
       </div>
     </div>

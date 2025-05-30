@@ -70,7 +70,6 @@ if (isset($_GET['codigo']) && isset($_GET['correo'])) {
             <head>
                 <meta charset="UTF-8">
                 <title>Recuperar contraseña</title>
-                <link rel="icon" type="image/png" href="../assets/imagenes/icono.png">
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
                 <link href="../assets/css/estilo_recuperar.css" rel="stylesheet">
