@@ -11,6 +11,9 @@ if (!isset($_SESSION['tipo']) || ($_SESSION['tipo'] !== 'repartidor' && $_SESSIO
 $mysql = new MySQL();
 $mysql->conectar();
 
+// Inicializar $mensaje_error para evitar el warning 'Undefined variable'
+$mensaje_error = '';
+
 // Obtener el ID del repartidor logueado si el tipo de sesión es 'repartidor'
 $id_repartidor_logueado = null;
 if ($_SESSION['tipo'] === 'repartidor') {
@@ -23,17 +26,27 @@ if ($_SESSION['tipo'] === 'repartidor') {
     $id_repartidor_logueado = $_SESSION['id_repartidor'];
 }
 
-// Consultar pedidos pendientes (sin repartidor asignado)
+// Consultar pedidos pendientes (sin repartidor asignado) - Admin only
 $pedidos_pendientes = [];
-$query_pendientes = "SELECT p.id, p.fecha_pedido, p.estado, p.total_pedido, u.nombre AS nombre_usuario, u.direccion, u.telefono
-                     FROM pedidos p
-                     JOIN usuarios u ON p.id_usuario = u.id_Usuarios
-                     WHERE p.id_repartidor IS NULL AND p.estado IN ('confirmado', 'preparacion')
-                     ORDER BY p.fecha_pedido ASC";
-$result_pendientes = $mysql->efectuarConsulta($query_pendientes);
-while ($row = mysqli_fetch_assoc($result_pendientes)) {
-    $pedidos_pendientes[] = $row;
+if ($_SESSION['tipo'] === 'admin') {
+    // La consulta de pedidos pendientes busca pedidos SIN repartidor asignado
+    // y en estados que indican que están listos para ser asignados.
+    $query_pendientes = "SELECT p.id, p.fecha_pedido, p.estado, p.total_pedido, u.nombre AS nombre_usuario, u.direccion, u.telefono
+                         FROM pedidos p
+                         JOIN usuarios u ON p.id_usuario = u.id_Usuarios
+                         WHERE p.id_repartidor IS NULL AND p.estado IN ('pendiente', 'confirmado', 'preparacion')
+                         ORDER BY p.fecha_pedido ASC";
+    $result_pendientes = $mysql->efectuarConsulta($query_pendientes);
+    if ($result_pendientes) {
+        while ($row = mysqli_fetch_assoc($result_pendientes)) {
+            $pedidos_pendientes[] = $row;
+        }
+    } else {
+        error_log("Error fetching pending orders: " . $mysql->getConexion()->error);
+        $mensaje_error = 'Error interno al cargar pedidos pendientes.';
+    }
 }
+
 
 // Consultar pedidos asignados
 $pedidos_asignados = [];
@@ -42,38 +55,76 @@ if ($_SESSION['tipo'] === 'repartidor') {
     $query_asignados = "SELECT p.id, p.fecha_pedido, p.estado, p.total_pedido, u.nombre AS nombre_usuario, u.direccion, u.telefono
                         FROM pedidos p
                         JOIN usuarios u ON p.id_usuario = u.id_Usuarios
-                        WHERE p.id_repartidor = $id_repartidor_logueado AND p.estado IN ('asignado', 'en_camino', 'entregado')
+                        WHERE p.id_repartidor = ? AND p.estado IN ('asignado', 'en_camino', 'entregado', 'enviado')
                         ORDER BY p.fecha_pedido ASC";
-    $result_asignados = $mysql->efectuarConsulta($query_asignados);
-    while ($row = mysqli_fetch_assoc($result_asignados)) {
-        $pedidos_asignados[] = $row;
+    
+    $stmt_asignados = $mysql->getConexion()->prepare($query_asignados);
+
+    if ($stmt_asignados === false) {
+        $mensaje_error = 'Error al preparar la consulta de pedidos asignados: ' . $mysql->getConexion()->error;
+        error_log("Error al preparar la consulta de pedidos asignados (repartidor): " . $mysql->getConexion()->error);
+    } else {
+        if (!$stmt_asignados->bind_param("i", $id_repartidor_logueado)) {
+            $mensaje_error = 'Error al enlazar parámetros para pedidos asignados: ' . $stmt_asignados->error;
+            error_log("Error al enlazar parámetros para pedidos asignados (repartidor): " . $stmt_asignados->error);
+            $stmt_asignados->close();
+        } else {
+            if (!$stmt_asignados->execute()) {
+                $mensaje_error = 'Error al ejecutar la consulta de pedidos asignados: ' . $stmt_asignados->error;
+                error_log("Error al ejecutar la consulta de pedidos asignados (repartidor): " . $stmt_asignados->error);
+                $stmt_asignados->close();
+            } else {
+                $result_asignados = $stmt_asignados->get_result();
+                if ($result_asignados) {
+                    while ($row = $result_asignados->fetch_assoc()) {
+                        $pedidos_asignados[] = $row;
+                    }
+                } else {
+                    $mensaje_error = 'Error al obtener resultados de pedidos asignados: ' . $stmt_asignados->error;
+                    error_log("Error al obtener resultados de pedidos asignados (repartidor): " . $stmt_asignados->error);
+                }
+                $stmt_asignados->close();
+            }
+        }
     }
 } elseif ($_SESSION['tipo'] === 'admin') {
     // Si es admin, ve todos los pedidos asignados a cualquier repartidor
+    // La imagen de la DB muestra 'enviado' y 'cancelado' como estados.
+    // Incluyo 'cancelado' para que el admin pueda ver todos los estados de los pedidos asignados,
+    // o puedes ajustarlo si solo quieres ver los 'activos'
     $query_asignados_admin = "SELECT p.id, p.fecha_pedido, p.estado, p.total_pedido, u.nombre AS nombre_usuario, u.direccion, u.telefono, r.nombre AS nombre_repartidor_asignado
                               FROM pedidos p
                               JOIN usuarios u ON p.id_usuario = u.id_Usuarios
                               JOIN repartidores r ON p.id_repartidor = r.id
-                              WHERE p.id_repartidor IS NOT NULL AND p.estado IN ('asignado', 'en_camino', 'entregado')
+                              WHERE p.id_repartidor IS NOT NULL AND p.estado IN ('asignado', 'en_camino', 'entregado', 'enviado', 'cancelado')
                               ORDER BY p.fecha_pedido ASC";
     $result_asignados_admin = $mysql->efectuarConsulta($query_asignados_admin);
-    while ($row = mysqli_fetch_assoc($result_asignados_admin)) {
-        $pedidos_asignados[] = $row;
+    if ($result_asignados_admin) {
+        while ($row = mysqli_fetch_assoc($result_asignados_admin)) {
+            $pedidos_asignados[] = $row;
+        }
+    } else {
+        error_log("Error fetching assigned orders (admin): " . $mysql->getConexion()->error);
+        $mensaje_error = 'Error interno al cargar pedidos asignados para admin.';
     }
 }
 
-
 // Consultar todos los repartidores disponibles (para el admin o para la asignación)
 $repartidores_disponibles = [];
-$query_repartidores = "SELECT id, nombre FROM repartidores WHERE estado = 'activo'"; // Asume un campo 'estado' en repartidores
+// Assuming 'estado' column exists in 'repartidores' table
+$query_repartidores = "SELECT id, nombre FROM repartidores WHERE estado = 'activo' ORDER BY nombre ASC"; 
 $result_repartidores = $mysql->efectuarConsulta($query_repartidores);
-while ($row = mysqli_fetch_assoc($result_repartidores)) {
-    $repartidores_disponibles[] = $row;
+if ($result_repartidores) {
+    while ($row = mysqli_fetch_assoc($result_repartidores)) {
+        $repartidores_disponibles[] = $row;
+    }
+} else {
+    error_log("Error fetching available deliverers: " . $mysql->getConexion()->error);
+    $mensaje_error = 'Error interno al cargar la lista de repartidores.';
 }
 
-// Mensajes de éxito o error
+// Mensajes de éxito o error (combinados con posibles errores internos)
 $mensaje_exito = '';
-$mensaje_error = '';
 if (isset($_GET['success'])) {
     if ($_GET['success'] === 'pedido_asignado') {
         $mensaje_exito = 'Pedido asignado con éxito.';
@@ -83,26 +134,33 @@ if (isset($_GET['success'])) {
         $mensaje_exito = 'Estado del pedido actualizado con éxito.';
     }
 } elseif (isset($_GET['error'])) {
+    // Si ya hay un mensaje de error por depuración, lo combinamos
+    if ($mensaje_error) {
+        $mensaje_error .= "<br>"; // Salto de línea para separar
+    }
     if ($_GET['error'] === 'db_error') {
-        $mensaje_error = 'Ocurrió un error en la base de datos. Inténtalo de nuevo.';
+        $mensaje_error .= 'Ocurrió un error en la base de datos. Inténtalo de nuevo.';
     } elseif ($_GET['error'] === 'no_data') {
-        $mensaje_error = 'Datos incompletos para la operación.';
+        $mensaje_error .= 'Datos incompletos para la operación.';
     } elseif ($_GET['error'] === 'no_autorizado') {
-        $mensaje_error = 'No estás autorizado para realizar esta acción.';
+        $mensaje_error .= 'No estás autorizado para realizar esta acción.';
     } elseif ($_GET['error'] === 'pedido_no_encontrado') {
-        $mensaje_error = 'Pedido no encontrado o ya procesado.';
+        $mensaje_error .= 'Pedido no encontrado o ya procesado.';
     } elseif ($_GET['error'] === 'repartidor_no_valido') {
-        $mensaje_error = 'El repartidor seleccionado no es válido.';
+        $mensaje_error .= 'El repartidor seleccionado no es válido.';
     } elseif ($_GET['error'] === 'pedido_ya_asignado') {
-        $mensaje_error = 'Este pedido ya ha sido asignado.';
+        $mensaje_error .= 'Este pedido ya ha sido asignado.';
     } elseif ($_GET['error'] === 'estado_no_valido') {
-        $mensaje_error = 'El estado de actualización no es válido.';
+        $mensaje_error .= 'El estado de actualización no es válido.';
     } elseif ($_GET['error'] === 'no_autorizado_pedido') {
-        $mensaje_error = 'No estás autorizado para modificar este pedido.';
-    } elseif ($_GET['error'] === 'sesion_repartidor_invalida') {
-        $mensaje_error = 'Sesión de repartidor inválida. Por favor, inicia sesión de nuevo.';
+        $mensaje_error .= 'No estás autorizado para modificar este pedido.';
+    } elseif ($_GET['error'] === 'sesion_repartidor_invalida' || $_GET['error'] === 'sesion_corrupta_gestion') {
+        $mensaje_error .= 'Sesión inválida. Por favor, inicia sesión de nuevo.';
     }
 }
+
+// Don't forget to close the connection when all database operations are done
+$mysql->desconectar();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -130,6 +188,13 @@ if (isset($_GET['success'])) {
         .order-card.delivered {
             border-left: 5px solid #198754; /* Color verde para entregados */
         }
+        .order-card.enviado {
+            border-left: 5px solid #6c757d; /* Gris para 'enviado' */
+        }
+        .order-card.cancelado { /* Nuevo estilo para 'cancelado' */
+            border-left: 5px solid #dc3545; /* Rojo para 'cancelado' */
+            opacity: 0.7; /* Ligeramente transparente para indicar que está inactivo */
+        }
     </style>
 </head>
 <body>
@@ -149,10 +214,9 @@ if (isset($_GET['success'])) {
                         <li class="nav-item"><a class="nav-link" href="../views/registrar.php">REGISTRAR</a></li>
                         <li class="nav-item"><a class="nav-link active" href="../views/repartidores.php">REPARTIDORES</a></li> 
                         <li class="nav-item"><a class="nav-link" href="../views/gestionar_repartidores.php">Gestion Repartidores</a></li>
-
-                        
                     <?php } elseif (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'repartidor') { ?>
-                         <li class="nav-item"><a class="nav-link active" href="../views/repartidores.php">Mis Entregas</a></li> <?php } ?>
+                           <li class="nav-item"><a class="nav-link active" href="../views/repartidores.php">Mis Entregas</a></li> 
+                    <?php } ?>
                     <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
                     <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
                     <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
@@ -163,15 +227,17 @@ if (isset($_GET['success'])) {
                 <div class="d-flex align-items-center gap-2">
                     <?php if (isset($_SESSION['correo'])): ?>
                         <div class="dropdown">
-    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-        <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
-    </ul>
-</div>
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+                                <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <?php } ?>
+                                <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
+                            </ul>
+                        </div>
                     <?php else: ?>
                         <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
                     <?php endif; ?>
@@ -187,7 +253,6 @@ if (isset($_GET['success'])) {
             </div>
         </div>
     </nav>
-
 
     <header class="bg-light py-4 text-center">
         <div class="container">
@@ -252,7 +317,6 @@ if (isset($_GET['success'])) {
                     </div>
                 </div>
             <?php endif; ?>
-
             <div class="col-md-<?php echo ($_SESSION['tipo'] === 'admin') ? '6' : '12'; ?>">
                 <div class="card shadow-sm mb-4">
                     <div class="card-header card-header-custom">
@@ -271,6 +335,10 @@ if (isset($_GET['success'])) {
                                         $card_class = "order-card";
                                         if ($pedido['estado'] === 'entregado') {
                                             $card_class .= " delivered";
+                                        } elseif ($pedido['estado'] === 'enviado') {
+                                            $card_class .= " enviado";
+                                        } elseif ($pedido['estado'] === 'cancelado') { // Estilo para 'cancelado'
+                                            $card_class .= " cancelado";
                                         }
                                     ?>
                                     <li class="list-group-item d-flex justify-content-between align-items-center <?php echo $card_class; ?> p-3 rounded">
@@ -291,10 +359,10 @@ if (isset($_GET['success'])) {
                                                     <input type="hidden" name="id_pedido" value="<?php echo htmlspecialchars($pedido['id']); ?>">
                                                     <select name="nuevo_estado" class="form-select form-select-sm" required>
                                                         <option value="">Actualizar estado...</option>
-                                                        <?php if ($pedido['estado'] === 'asignado'): ?>
+                                                        <?php if ($pedido['estado'] === 'asignado' || $pedido['estado'] === 'enviado'): ?>
                                                             <option value="en_camino">En camino</option>
-                                                            <option value="entregado">Entregado</option>
-                                                        <?php elseif ($pedido['estado'] === 'en_camino'): ?>
+                                                        <?php endif; ?>
+                                                        <?php if ($pedido['estado'] === 'en_camino' || $pedido['estado'] === 'asignado' || $pedido['estado'] === 'enviado'): ?>
                                                             <option value="entregado">Entregado</option>
                                                         <?php endif; ?>
                                                     </select>
@@ -302,7 +370,6 @@ if (isset($_GET['success'])) {
                                                 </form>
                                                 <form action="../controllers/gestionar_asignacion_repartidor.php" method="POST">
                                                     <input type="hidden" name="id_pedido" value="<?php echo htmlspecialchars($pedido['id']); ?>">
-                                                    <button type="submit" name="desasignar_pedido" class="btn btn-sm btn-danger mt-2">Desasignarme</button>
                                                 </form>
                                             <?php endif; ?>
                                             <?php if ($_SESSION['tipo'] === 'admin' && $pedido['estado'] !== 'entregado' && $pedido['estado'] !== 'cancelado'): ?>
@@ -464,7 +531,7 @@ if (isset($_GET['success'])) {
                         `;
                         carritoItems.appendChild(tr);
                     });
-                    carritoTotal.textContent = $${total.toFixed(2)};
+                    carritoTotal.textContent = `$${total.toFixed(2)}`;
                 }
             }
 
@@ -511,7 +578,6 @@ if (isset($_GET['success'])) {
                     }
                 }
             });
-
 
             document.getElementById('modalCarrito').addEventListener('show.bs.modal', function() {
                 renderizarCarrito();

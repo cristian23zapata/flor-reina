@@ -224,8 +224,18 @@ $mysql->desconectar(); // Desconectar la base de datos después de usarla
 
                 <div class="d-flex align-items-center gap-2">
                     <?php if (isset($_SESSION['correo'])): ?>
-                        <span class="fw-bold"><i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
-                        <a href="../controllers/logout.php" class="btn btn-outline-danger">Cerrar sesión</a>
+                        <div class="dropdown">
+    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+                                <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <?php } ?>
+        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
+    </ul>
+</div>
                     <?php else: ?>
                         <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
                     <?php endif; ?>
