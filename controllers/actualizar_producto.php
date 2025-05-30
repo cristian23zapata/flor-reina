@@ -45,8 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
         $mysql->desconectar();
         
-        echo "Producto Actualizado con exito. <br><br>";
-        
-        header("refresh:3;url=../views/productos.php");
+        header("Location: ../views/productos.php?estado=exito");
+        exit();
     }
 }

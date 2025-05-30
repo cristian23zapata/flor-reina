@@ -1,42 +1,108 @@
+/* Estilos para la sección de contacto */
 .contact-section {
-    background-color: #fde8f4;
-    padding: 40px 20px;
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-  
-.contact-info, .contact-form {
-    flex: 1 1 45%;
-    margin: 10px;
-}
-  
-.contact-info h3 {
-    color: #d63384;
-    font-weight: bold;
-}
-  
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #f7c4dd;
-    border-radius: 8px;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    gap: 3rem;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.contact-form button {
-    background-color: #d63384;
-    color: white;
-    padding: 12px 24px;
-    border: none;
+.contact-info, .contact-form {
+    flex: 1;
+    background: #fff;
+    padding: 2rem;
     border-radius: 8px;
-    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
-  
-.contact-form button:hover {
-    background-color: #c0266b;
+
+.contact-info h3, .contact-form h3 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
 }
-  
+
+.contact-info p {
+    margin-bottom: 1rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.whatsapp-section {
+    background-color: #f0f8ff;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #25D366;
+}
+
+.whatsapp-btn {
+    background-color: #25D366;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.small-text {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.pqrs-section {
+    background-color: #fff8f0;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #FFA500;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.25rem rgba(52,152,219,0.25);
+}
+
+textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+/* Estilo para validación de teléfono */
+#telefono:invalid {
+    border-color: #ff4444;
+}
+
+#telefono:valid {
+    border-color: #00C851;
+}

@@ -5,15 +5,15 @@ $mysql = new MySQL();
 $mysql->conectar(); 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nombre = $_POST['nombre'];
-    $descripcion = $_POST['descripcion'];
+    $nombre = filter_var($_POST['nombre'], FILTER_SANITIZE_STRING);
+    $descripcion = filter_var($_POST['descripcion'], FILTER_SANITIZE_STRING);;
     $precio = $_POST['precio'];
     $stock = $_POST['stock'];
     //procesar ingredientes
     $ingredientes = $_POST['ingredientes'];
     $ingredientes_filtrados = array_filter(array_map('trim', $ingredientes));
     $ingredientes_str = implode(',', $ingredientes_filtrados);
-
+    
     if ($_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
         $permitidos = ['image/jpeg' => '.jpg', 'image/png' => '.png'];
         $tipo = mime_content_type($_FILES['imagen']['tmp_name']);
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Debe seleccionar una imagen.");
     }
 
-    if (!empty($nombre) || !empty($descripcion) || !empty($precio) || !empty($stock)) {
+    if (!empty($nombre) && !empty($descripcion) && !empty($precio) && !empty($stock)) {
         
 
         $consulta = "INSERT INTO productos (nombre, descripcion, precio, stock, imagen, ingredientes) VALUES ('$nombre', '$descripcion', $precio, $stock, '$ruta', '$ingredientes_str')";
@@ -44,8 +44,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
         $mysql->desconectar();
         
-        echo "Producto registrado con exito. <br><br>";
-        
-        header("refresh:3;url=../views/creacion.php");
+        header("Location: ../views/creacion.php?estado=exito");
+        exit();
+    }else {
+        header("Location: ../views/creacion.php?estado=error&mensaje=" . urlencode("Faltan campos requeridos"));
+        exit();
     }
 }

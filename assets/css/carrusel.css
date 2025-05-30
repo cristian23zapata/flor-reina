@@ -77,4 +77,23 @@
       
       .animate-fadeInUp {
         animation: fadeInUp 1s ease-out;
-      }
+      } 
+
+       h1 {
+  font-family: 'Playfair Display', serif;
+}
+.lead {
+  font-family: 'Montserrat', sans-serif;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.text-gradient {
+  animation: fadeInUp 1s ease-out;
+}
+.hero-section {
+  background: url('assets/imagenes/fondo-leche.jpg') center/cover no-repeat;
+}
