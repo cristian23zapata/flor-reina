@@ -21,6 +21,7 @@ $mysql->desconectar();
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/carrusel.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/estilo_creacion.css">
   <style>
   </style>
 </head>
@@ -40,32 +41,38 @@ $mysql->desconectar();
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
+        <li class="nav-item"><a class="nav-link active" href="views/admin_pedidos.php">PEDIDOS</a></li>
         <li class="nav-item"><a class="nav-link active" href="views/creacion.php">CREAR</a></li>
         <li class="nav-item"><a class="nav-link active" href="views/registrar.php">REGISTRAR</a></li>
         <li class="nav-item"><a class="nav-link" href="views/repartidores.php">Repartidores</a></li>
+        <li class="nav-item"><a class="nav-link" href="views/gestionar_repartidores.php">Gestion Repartidores</a></li>
         <?php } ?>
         <li class="nav-item"><a class="nav-link" href="views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="views/blog.php">Blog</a></li>
          <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
         <li class="nav-item"><a class="nav-link" href="views/contacto.php">Contacto</a></li>
+        <li class="nav-item"><a class="nav-link" href="views/user_pedidos.php">Mis Pedidos</a></li>
          <?php } ?>
       </ul>
 
       <div class="d-flex align-items-center gap-2">
         <?php if (isset($_SESSION['correo'])): ?>
-          <span class="fw-bold"><i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
-          <a href="controllers/logout.php" class="btn btn-outline-danger">Cerrar sesión</a>
+          <div class="dropdown">
+    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+        <li><a class="dropdown-item" href="views/editar_perfil.php">Editar Perfil</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="controllers/logout.php">Cerrar Sesión</a></li>
+    </ul>
+</div>
         <?php else: ?>
           <a href="views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
         <?php endif; ?>
         
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-          <button class="btn btn-outline-success position-relative" data-bs-toggle="modal" data-bs-target="#modalCarrito" id="btn-carrito">
-    <i class="bi bi-bag"></i> Carrito
-    <span id="carrito-contador" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
-      0
-    </span>
-  </button>
+          
         <?php } ?>
       </div>
     </div>

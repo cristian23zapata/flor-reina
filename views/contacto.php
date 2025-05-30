@@ -37,6 +37,7 @@ session_start();
     <title>Contacto | Tu Tienda</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/estilo_creacion.css">
     <link rel="stylesheet" href="../assets/css/estilo_contacto.css">
     <link rel="stylesheet" href="../assets/css/estilo_nav.css">
 </head>
@@ -186,12 +187,21 @@ footer {
         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/user_pedidos.php">Mis Pedidos</a></li>
       </ul>
 
       <div class="d-flex align-items-center gap-2">
         <?php if (isset($_SESSION['correo'])): ?>
-          <span class="fw-bold"><i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
-          <a href="../controllers/logout.php" class="btn btn-outline-danger">Cerrar sesión</a>
+          <div class="dropdown">
+    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+        <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
+    </ul>
+</div>
         <?php else: ?>
           <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
         <?php endif; ?>

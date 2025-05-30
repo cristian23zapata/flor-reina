@@ -2,291 +2,540 @@
 require_once '../models/MySQL.php';
 session_start();
 
-if (!isset($_SESSION['correo'])) {
-    header("refresh:1;url=../views/login.php");
+// Redirigir si no hay sesión activa o el usuario no es 'repartidor' ni 'admin'
+if (!isset($_SESSION['tipo']) || ($_SESSION['tipo'] !== 'repartidor' && $_SESSION['tipo'] !== 'admin')) {
+    header('Location: ../views/login.php');
     exit();
 }
 
-if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { 
-    header("Location: ../views/index.php");
-    exit();
-}
-
-$mysql = new MySQL;
+$mysql = new MySQL();
 $mysql->conectar();
 
-$resultado = $mysql->efectuarConsulta("SELECT * FROM repartidores;");
+// Obtener el ID del repartidor logueado si el tipo de sesión es 'repartidor'
+$id_repartidor_logueado = null;
+if ($_SESSION['tipo'] === 'repartidor') {
+    if (!isset($_SESSION['id_repartidor'])) {
+        // Error crítico: el ID de repartidor no está en la sesión
+        session_destroy();
+        header('Location: ../views/login.php?error=sesion_repartidor_invalida');
+        exit();
+    }
+    $id_repartidor_logueado = $_SESSION['id_repartidor'];
+}
 
-$mysql->desconectar();
+// Consultar pedidos pendientes (sin repartidor asignado)
+$pedidos_pendientes = [];
+$query_pendientes = "SELECT p.id, p.fecha_pedido, p.estado, p.total_pedido, u.nombre AS nombre_usuario, u.direccion, u.telefono
+                     FROM pedidos p
+                     JOIN usuarios u ON p.id_usuario = u.id_Usuarios
+                     WHERE p.id_repartidor IS NULL AND p.estado IN ('confirmado', 'preparacion')
+                     ORDER BY p.fecha_pedido ASC";
+$result_pendientes = $mysql->efectuarConsulta($query_pendientes);
+while ($row = mysqli_fetch_assoc($result_pendientes)) {
+    $pedidos_pendientes[] = $row;
+}
+
+// Consultar pedidos asignados
+$pedidos_asignados = [];
+if ($_SESSION['tipo'] === 'repartidor') {
+    // Si es repartidor, solo ve sus propios pedidos asignados
+    $query_asignados = "SELECT p.id, p.fecha_pedido, p.estado, p.total_pedido, u.nombre AS nombre_usuario, u.direccion, u.telefono
+                        FROM pedidos p
+                        JOIN usuarios u ON p.id_usuario = u.id_Usuarios
+                        WHERE p.id_repartidor = $id_repartidor_logueado AND p.estado IN ('asignado', 'en_camino', 'entregado')
+                        ORDER BY p.fecha_pedido ASC";
+    $result_asignados = $mysql->efectuarConsulta($query_asignados);
+    while ($row = mysqli_fetch_assoc($result_asignados)) {
+        $pedidos_asignados[] = $row;
+    }
+} elseif ($_SESSION['tipo'] === 'admin') {
+    // Si es admin, ve todos los pedidos asignados a cualquier repartidor
+    $query_asignados_admin = "SELECT p.id, p.fecha_pedido, p.estado, p.total_pedido, u.nombre AS nombre_usuario, u.direccion, u.telefono, r.nombre AS nombre_repartidor_asignado
+                              FROM pedidos p
+                              JOIN usuarios u ON p.id_usuario = u.id_Usuarios
+                              JOIN repartidores r ON p.id_repartidor = r.id
+                              WHERE p.id_repartidor IS NOT NULL AND p.estado IN ('asignado', 'en_camino', 'entregado')
+                              ORDER BY p.fecha_pedido ASC";
+    $result_asignados_admin = $mysql->efectuarConsulta($query_asignados_admin);
+    while ($row = mysqli_fetch_assoc($result_asignados_admin)) {
+        $pedidos_asignados[] = $row;
+    }
+}
+
+
+// Consultar todos los repartidores disponibles (para el admin o para la asignación)
+$repartidores_disponibles = [];
+$query_repartidores = "SELECT id, nombre FROM repartidores WHERE estado = 'activo'"; // Asume un campo 'estado' en repartidores
+$result_repartidores = $mysql->efectuarConsulta($query_repartidores);
+while ($row = mysqli_fetch_assoc($result_repartidores)) {
+    $repartidores_disponibles[] = $row;
+}
+
+// Mensajes de éxito o error
+$mensaje_exito = '';
+$mensaje_error = '';
+if (isset($_GET['success'])) {
+    if ($_GET['success'] === 'pedido_asignado') {
+        $mensaje_exito = 'Pedido asignado con éxito.';
+    } elseif ($_GET['success'] === 'pedido_desasignado') {
+        $mensaje_exito = 'Pedido desasignado con éxito.';
+    } elseif ($_GET['success'] === 'estado_actualizado') {
+        $mensaje_exito = 'Estado del pedido actualizado con éxito.';
+    }
+} elseif (isset($_GET['error'])) {
+    if ($_GET['error'] === 'db_error') {
+        $mensaje_error = 'Ocurrió un error en la base de datos. Inténtalo de nuevo.';
+    } elseif ($_GET['error'] === 'no_data') {
+        $mensaje_error = 'Datos incompletos para la operación.';
+    } elseif ($_GET['error'] === 'no_autorizado') {
+        $mensaje_error = 'No estás autorizado para realizar esta acción.';
+    } elseif ($_GET['error'] === 'pedido_no_encontrado') {
+        $mensaje_error = 'Pedido no encontrado o ya procesado.';
+    } elseif ($_GET['error'] === 'repartidor_no_valido') {
+        $mensaje_error = 'El repartidor seleccionado no es válido.';
+    } elseif ($_GET['error'] === 'pedido_ya_asignado') {
+        $mensaje_error = 'Este pedido ya ha sido asignado.';
+    } elseif ($_GET['error'] === 'estado_no_valido') {
+        $mensaje_error = 'El estado de actualización no es válido.';
+    } elseif ($_GET['error'] === 'no_autorizado_pedido') {
+        $mensaje_error = 'No estás autorizado para modificar este pedido.';
+    } elseif ($_GET['error'] === 'sesion_repartidor_invalida') {
+        $mensaje_error = 'Sesión de repartidor inválida. Por favor, inicia sesión de nuevo.';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Repartidores</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flor Reina - Panel de Repartidores</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/estilo_nav.css">
+    <link rel="stylesheet" href="../assets/css/estilo_creacion.css">
     <style>
-        .img-repartidor {
-            max-width: 150px;
-            max-height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
+        .card-header-custom {
+            background-color: #f8f9fa; /* Un color ligero para el header */
+            border-bottom: 1px solid #e9ecef;
         }
-        .modal-content {
-            border-radius: 10px;
+        .order-card {
+            border-left: 5px solid #0d6efd; /* Color azul para pedidos asignados */
+            margin-bottom: 20px;
         }
-        .btn-action {
-            min-width: 80px;
+        .order-card.pending {
+            border-left: 5px solid #ffc107; /* Color amarillo para pendientes */
         }
-        body {
-            background-color: #fff5f7;
-        }
-        .card-repartidor {
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-            border: none;
-        }
-        .card-repartidor:hover {
-            transform: translateY(-5px);
-        }
-        .btn-primary {
-            background-color: #ff6b9d;
-            border-color: #ff6b9d;
-        }
-        .btn-primary:hover {
-            background-color: #ff4785;
-            border-color: #ff4785;
-        }
-        .btn-danger {
-            background-color: #ff8fab;
-            border-color: #ff8fab;
-        }
-        .btn-danger:hover {
-            background-color: #ff6b8b;
-            border-color: #ff6b8b;
-        }
-        .table th {
-            background-color: #ff6b9d;
-            color: white;
+        .order-card.delivered {
+            border-left: 5px solid #198754; /* Color verde para entregados */
         }
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="../index.php">
+                <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menuNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
+                        <li class="nav-item"><a class="nav-link" href="../views/admin_pedidos.php">PEDIDOS</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../views/creacion.php">CREAR</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../views/registrar.php">REGISTRAR</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="../views/repartidores.php">REPARTIDORES</a></li> 
+                        <li class="nav-item"><a class="nav-link" href="../views/gestionar_repartidores.php">Gestion Repartidores</a></li>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light navbar-custom">
-  <div class="container">
-    <a class="navbar-brand" href="../index.php">
-      <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60">
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
-      <span class="navbar-toggler-icon"></span>
+                        
+                    <?php } elseif (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'repartidor') { ?>
+                         <li class="nav-item"><a class="nav-link active" href="../views/repartidores.php">Mis Entregas</a></li> <?php } ?>
+                    <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
+                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+                        <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../views/user_pedidos.php">Mis Pedidos</a></li>
+                    <?php } ?>
+                </ul>
+                <div class="d-flex align-items-center gap-2">
+                    <?php if (isset($_SESSION['correo'])): ?>
+                        <div class="dropdown">
+    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
     </button>
-
-    <div class="collapse navbar-collapse" id="menuNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-        <li class="nav-item"><a class="nav-link active" href="../views/creacion.php">CREAR</a></li>
-        <li class="nav-item"><a class="nav-link active" href="../views/registrar.php">REGISTRAR</a></li>
-        <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">Repartidores</a></li>
-        <?php } ?>
-        <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
-        <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-        <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
-        <?php } ?>
-      </ul>
-
-      <div class="d-flex align-items-center gap-2">
-        <?php if (isset($_SESSION['correo'])): ?>
-          <span class="fw-bold"><i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
-          <a href="../controllers/logout.php" class="btn btn-outline-danger">Cerrar sesión</a>
-        <?php else: ?>
-          <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
-        <?php endif; ?>
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-          <button class="btn btn-outline-success position-relative" data-bs-toggle="modal" data-bs-target="#modalCarrito" id="btn-carrito">
-    <i class="bi bi-bag"></i> Carrito
-    <span id="carrito-contador" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
-      0
-    </span>
-  </button>
-        <?php } ?>
-      </div>
-    </div>
-  </div>
-  
-</nav>
-
-<div class="container py-4">
-    <h2 class="text-center mb-4" style="color: #ff6b9d;">Lista de Repartidores</h2>
-
-    <?php if ($resultado->num_rows > 0): ?>
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Correo</th>
-                        <th>Teléfono</th>
-                        <th>Tipo Transporte</th>
-                        <th>Foto</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while($repartidor = $resultado->fetch_assoc()): ?>
-                    <tr class="bg-white">
-                        <td><?= htmlspecialchars($repartidor['id']) ?></td>
-                        <td><?= htmlspecialchars($repartidor['nombre']) ?></td>
-                        <td><?= htmlspecialchars($repartidor['correo']) ?></td>
-                        <td><?= htmlspecialchars($repartidor['telefono']) ?></td>
-                        <td><?= htmlspecialchars($repartidor['tipo_transporte']) ?></td>
-                        <td>
-                            <img src="../<?= htmlspecialchars($repartidor['foto_identificacion']) ?>" 
-                                 alt="Foto repartidor" 
-                                 class="img-repartidor">
-                        </td>
-                        <td>
-                            <button class="btn btn-primary btn-sm btn-action" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#modalEditarRepartidor<?= $repartidor['id'] ?>">
-                                <i class="bi bi-pencil"></i> Editar
-                            </button>
-                            <!-- Botón de eliminar con modal de confirmación -->
-                            <button type="button" class="btn btn-danger btn-sm btn-action" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#confirmarEliminar<?= $repartidor['id'] ?>">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
-                            
-                            <!-- Modal de confirmación de eliminación -->
-                            <div class="modal fade" id="confirmarEliminar<?= $repartidor['id'] ?>" tabindex="-1" 
-                                 aria-labelledby="confirmarEliminarLabel<?= $repartidor['id'] ?>" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-danger text-white">
-                                            <h5 class="modal-title" id="confirmarEliminarLabel<?= $repartidor['id'] ?>">Confirmar eliminación</h5>
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            ¿Estás seguro de que deseas eliminar al repartidor <strong><?= htmlspecialchars($repartidor['nombre']) ?></strong>?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                            <form action="../controllers/eliminar_repartidor.php" method="POST">
-                                                <input type="hidden" name="id" value="<?= $repartidor['id'] ?>">
-                                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
-        </div>
-    <?php else: ?>
-        <div class="alert alert-info text-center">
-            No se encontraron repartidores registrados.
-        </div>
-    <?php endif; ?>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+        <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
+    </ul>
 </div>
-
-<!-- Modales de edición -->
-<?php 
-// Reiniciamos el puntero del resultado para volver a iterar
-$resultado->data_seek(0);
-while($repartidor = $resultado->fetch_assoc()): 
-?>
-<!-- Modal de Edición -->
-<div class="modal fade" id="modalEditarRepartidor<?= $repartidor['id'] ?>" tabindex="-1" 
-     aria-labelledby="modalEditarRepartidorLabel<?= $repartidor['id'] ?>" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <form class="modal-content" action="../controllers/actualizar_repartidor.php" method="POST" enctype="multipart/form-data">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalEditarRepartidorLabel<?= $repartidor['id'] ?>">
-                    <i class="bi bi-person-badge me-2"></i> Editar Repartidor
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <?php else: ?>
+                        <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
+                    <?php endif; ?>
+                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+                        <button class="btn btn-outline-success position-relative" data-bs-toggle="modal" data-bs-target="#modalCarrito" id="btn-carrito">
+                            <i class="bi bi-bag"></i> Carrito
+                            <span id="carrito-contador" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
+                                0
+                            </span>
+                        </button>
+                    <?php } ?>
+                </div>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <input type="hidden" name="id" value="<?= $repartidor['id'] ?>">
-                        <input type="hidden" name="fotoActual" value="<?= $repartidor['foto_identificacion'] ?>">
-                        
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Nombre completo</label>
-                            <input type="text" name="nombre" class="form-control" 
-                                   value="<?= htmlspecialchars($repartidor['nombre']) ?>" required>
+        </div>
+    </nav>
+
+
+    <header class="bg-light py-4 text-center">
+        <div class="container">
+            <h1 class="display-6">Panel de Repartidores</h1>
+            <p class="lead">Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre']); ?>. Gestiona la asignación y el estado de los pedidos.</p>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        <?php if ($mensaje_exito): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php echo $mensaje_exito; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+        <?php if ($mensaje_error): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?php echo $mensaje_error; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
+        <div class="row">
+            <?php if ($_SESSION['tipo'] === 'admin'): ?>
+                <div class="col-md-6">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header card-header-custom">
+                            <h5 class="mb-0">Pedidos Pendientes de Asignación <span class="badge bg-warning text-dark"><?php echo count($pedidos_pendientes); ?></span></h5>
                         </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Correo electrónico</label>
-                            <input type="email" name="correo" class="form-control" 
-                                   value="<?= htmlspecialchars($repartidor['correo']) ?>" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Teléfono</label>
-                            <input type="tel" name="telefono" class="form-control" 
-                                   value="<?= htmlspecialchars($repartidor['telefono']) ?>" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Tipo de Transporte</label>
-                            <select name="tipo_transporte" class="form-select" required>
-                                <option value="Moto" <?= ($repartidor['tipo_transporte'] == 'Moto') ? 'selected' : '' ?>>Moto</option>
-                                <option value="Bicicleta" <?= ($repartidor['tipo_transporte'] == 'Bicicleta') ? 'selected' : '' ?>>Bicicleta</option>
-                                <option value="Automóvil" <?= ($repartidor['tipo_transporte'] == 'Automóvil') ? 'selected' : '' ?>>Automóvil</option>
-                                <option value="Caminando" <?= ($repartidor['tipo_transporte'] == 'Caminando') ? 'selected' : '' ?>>Caminando</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <div class="card h-100">
-                            <div class="card-body text-center">
-                                <h6 class="card-title fw-bold">Foto de Identificación</h6>
-                                
-                                <div class="mb-3">
-                                    <img src="../<?= htmlspecialchars($repartidor['foto_identificacion']) ?>" 
-                                         alt="Foto actual" 
-                                         class="img-fluid rounded border" 
-                                         style="max-height: 200px;">
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Cambiar foto</label>
-                                    <input type="file" name="foto_identificacion" 
-                                           class="form-control" accept="image/*">
-                                    <small class="text-muted">Formatos: JPG, PNG (Máx. 2MB)</small>
-                                </div>
-                            </div>
+                        <div class="card-body">
+                            <?php if (empty($pedidos_pendientes)): ?>
+                                <p class="text-muted text-center">No hay pedidos pendientes de asignación.</p>
+                            <?php else: ?>
+                                <ul class="list-group list-group-flush">
+                                    <?php foreach ($pedidos_pendientes as $pedido): ?>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center order-card pending p-3 rounded">
+                                            <div>
+                                                <p class="mb-1"><strong>Pedido #<?php echo htmlspecialchars($pedido['id']); ?></strong> (<?php echo htmlspecialchars(ucfirst(str_replace('_', ' ', $pedido['estado']))); ?>)</p>
+                                                <p class="mb-1">Cliente: <?php echo htmlspecialchars($pedido['nombre_usuario']); ?></p>
+                                                <p class="mb-1">Dirección: <?php echo htmlspecialchars($pedido['direccion']); ?></p>
+                                                <p class="mb-1">Teléfono: <?php echo htmlspecialchars($pedido['telefono']); ?></p>
+                                                <p class="fw-bold mb-0">Total: $<?php echo number_format($pedido['total_pedido'], 2); ?></p>
+                                                <small class="text-muted">Fecha: <?php echo htmlspecialchars(date('d/m/Y H:i', strtotime($pedido['fecha_pedido']))); ?></small>
+                                            </div>
+                                            <form action="../controllers/gestionar_asignacion_repartidor.php" method="POST" class="d-flex align-items-center gap-2">
+                                                <input type="hidden" name="id_pedido" value="<?php echo htmlspecialchars($pedido['id']); ?>">
+                                                <select name="id_repartidor" class="form-select form-select-sm" required>
+                                                    <option value="">Asignar a...</option>
+                                                    <?php foreach ($repartidores_disponibles as $repartidor): ?>
+                                                        <option value="<?php echo htmlspecialchars($repartidor['id']); ?>">
+                                                            <?php echo htmlspecialchars($repartidor['nombre']); ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                                <button type="submit" name="asignar_pedido" class="btn btn-sm btn-primary">Asignar</button>
+                                            </form>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-circle me-1"></i> Cancelar
-                </button>
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-save me-1"></i> Guardar cambios
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-<?php endwhile; ?>
+            <?php endif; ?>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            <div class="col-md-<?php echo ($_SESSION['tipo'] === 'admin') ? '6' : '12'; ?>">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header card-header-custom">
+                        <h5 class="mb-0">
+                            <?php echo ($_SESSION['tipo'] === 'repartidor') ? 'Mis Pedidos Asignados' : 'Pedidos Asignados a Repartidores'; ?> 
+                            <span class="badge bg-primary"><?php echo count($pedidos_asignados); ?></span>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <?php if (empty($pedidos_asignados)): ?>
+                            <p class="text-muted text-center">No hay pedidos asignados actualmente.</p>
+                        <?php else: ?>
+                            <ul class="list-group list-group-flush">
+                                <?php foreach ($pedidos_asignados as $pedido): ?>
+                                    <?php
+                                        $card_class = "order-card";
+                                        if ($pedido['estado'] === 'entregado') {
+                                            $card_class .= " delivered";
+                                        }
+                                    ?>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center <?php echo $card_class; ?> p-3 rounded">
+                                        <div>
+                                            <p class="mb-1"><strong>Pedido #<?php echo htmlspecialchars($pedido['id']); ?></strong> (Estado: <?php echo htmlspecialchars(ucfirst(str_replace('_', ' ', $pedido['estado']))); ?>)</p>
+                                            <p class="mb-1">Cliente: <?php echo htmlspecialchars($pedido['nombre_usuario']); ?></p>
+                                            <p class="mb-1">Dirección: <?php echo htmlspecialchars($pedido['direccion']); ?></p>
+                                            <p class="mb-1">Teléfono: <?php echo htmlspecialchars($pedido['telefono']); ?></p>
+                                            <?php if ($_SESSION['tipo'] === 'admin' && isset($pedido['nombre_repartidor_asignado'])): ?>
+                                                <p class="mb-1">Asignado a: <strong><?php echo htmlspecialchars($pedido['nombre_repartidor_asignado']); ?></strong></p>
+                                            <?php endif; ?>
+                                            <p class="fw-bold mb-0">Total: $<?php echo number_format($pedido['total_pedido'], 2); ?></p>
+                                            <small class="text-muted">Fecha: <?php echo htmlspecialchars(date('d/m/Y H:i', strtotime($pedido['fecha_pedido']))); ?></small>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-end gap-2">
+                                            <?php if ($_SESSION['tipo'] === 'repartidor' && $pedido['estado'] !== 'entregado' && $pedido['estado'] !== 'cancelado'): ?>
+                                                <form action="../controllers/gestionar_asignacion_repartidor.php" method="POST" class="d-flex align-items-center gap-2">
+                                                    <input type="hidden" name="id_pedido" value="<?php echo htmlspecialchars($pedido['id']); ?>">
+                                                    <select name="nuevo_estado" class="form-select form-select-sm" required>
+                                                        <option value="">Actualizar estado...</option>
+                                                        <?php if ($pedido['estado'] === 'asignado'): ?>
+                                                            <option value="en_camino">En camino</option>
+                                                            <option value="entregado">Entregado</option>
+                                                        <?php elseif ($pedido['estado'] === 'en_camino'): ?>
+                                                            <option value="entregado">Entregado</option>
+                                                        <?php endif; ?>
+                                                    </select>
+                                                    <button type="submit" name="actualizar_estado" class="btn btn-sm btn-info">Actualizar</button>
+                                                </form>
+                                                <form action="../controllers/gestionar_asignacion_repartidor.php" method="POST">
+                                                    <input type="hidden" name="id_pedido" value="<?php echo htmlspecialchars($pedido['id']); ?>">
+                                                    <button type="submit" name="desasignar_pedido" class="btn btn-sm btn-danger mt-2">Desasignarme</button>
+                                                </form>
+                                            <?php endif; ?>
+                                            <?php if ($_SESSION['tipo'] === 'admin' && $pedido['estado'] !== 'entregado' && $pedido['estado'] !== 'cancelado'): ?>
+                                                <form action="../controllers/gestionar_asignacion_repartidor.php" method="POST">
+                                                    <input type="hidden" name="id_pedido" value="<?php echo htmlspecialchars($pedido['id']); ?>">
+                                                    <button type="submit" name="desasignar_pedido_admin" class="btn btn-sm btn-danger mt-2">Desasignar</button>
+                                                </form>
+                                            <?php endif; ?>
+                                        </div>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="modalCarritoLabel">
+                        <i class="bi bi-bag"></i> Mi Carrito
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="carrito-vacio" class="text-center">
+                        <p>Tu carrito está vacío.</p>
+                    </div>
+                    <div id="carrito-contenido" style="display: none;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Subtotal</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="carrito-items">
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-end fw-bold">Total:</td>
+                                    <td class="text-end fw-bold" id="carrito-total"></td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger" id="vaciar-carrito">Vaciar Carrito</button>
+                    <button type="button" class="btn btn-success" id="btn-pagar-modal">Pagar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toast-agregado" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <strong class="me-auto">Éxito</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+            </div>
+            <div class="toast-body">
+                Producto agregado al carrito!
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Este script es el mismo que en productos.php, admin_pedidos.php y user_pedidos.php
+            // Idealmente, se movería a un archivo JS externo y se incluiría.
+            const carritoContador = document.getElementById('carrito-contador');
+            const carritoItems = document.getElementById('carrito-items');
+            const carritoTotal = document.getElementById('carrito-total');
+            const carritoVacio = document.getElementById('carrito-vacio');
+            const carritoContenido = document.getElementById('carrito-contenido');
+
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+            function actualizarContador() {
+                let totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+                carritoContador.textContent = totalItems;
+                carritoContador.style.display = totalItems > 0 ? 'inline-block' : 'none';
+            }
+
+            function eliminarItem(index) {
+                carrito.splice(index, 1);
+                localStorage.setItem('carrito', JSON.stringify(carrito));
+                renderizarCarrito();
+                actualizarContador();
+            }
+
+            function vaciarCarrito() {
+                carrito = [];
+                localStorage.removeItem('carrito');
+                renderizarCarrito();
+                actualizarContador();
+            }
+
+            const vaciarCarritoBtn = document.getElementById('vaciar-carrito');
+            if (vaciarCarritoBtn) {
+                vaciarCarritoBtn.addEventListener('click', vaciarCarrito);
+            }
+
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('eliminar-item')) {
+                    const index = e.target.dataset.index;
+                    eliminarItem(index);
+                }
+            });
+
+            function renderizarCarrito() {
+                if (carrito.length === 0) {
+                    carritoVacio.style.display = 'block';
+                    carritoContenido.style.display = 'none';
+                    document.getElementById('btn-pagar-modal').style.display = 'none';
+                    document.getElementById('vaciar-carrito').style.display = 'none';
+                } else {
+                    carritoVacio.style.display = 'none';
+                    carritoContenido.style.display = 'block';
+                    document.getElementById('btn-pagar-modal').style.display = 'inline-block';
+                    document.getElementById('vaciar-carrito').style.display = 'inline-block';
+                    carritoItems.innerHTML = '';
+                    let total = 0;
+                    carrito.forEach((item, index) => {
+                        const subtotal = item.precio * item.cantidad;
+                        total += subtotal;
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="../${item.imagen}" alt="${item.nombre}" class="me-2" style="width: 60px; height: 60px; object-fit: cover;">
+                                    <span class="text-truncate" style="max-width: 150px;">${item.nombre}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group" style="min-width: 140px;">
+                                    <button class="btn btn-outline-secondary decrementar-cantidad py-1" type="button" data-index="${index}">-</button>
+                                    <input type="number" class="form-control text-center py-1" value="${item.cantidad}" min="1" max="${item.stock}" data-index="${index}">
+                                    <button class="btn btn-outline-secondary incrementar-cantidad py-1" type="button" data-index="${index}">+</button>
+                                </div>
+                            </td>
+                            <td class="text-end align-middle">$${item.precio.toFixed(2)}</td>
+                            <td class="text-end align-middle">$${subtotal.toFixed(2)}</td>
+                            <td class="text-center align-middle">
+                                <button class="btn btn-sm btn-outline-danger p-1 eliminar-item" data-index="${index}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        `;
+                        carritoItems.appendChild(tr);
+                    });
+                    carritoTotal.textContent = $${total.toFixed(2)};
+                }
+            }
+
+            document.addEventListener('change', function(e) {
+                if (e.target && e.target.matches('.input-group input[type="number"]')) {
+                    const input = e.target;
+                    const index = input.closest('.input-group').querySelector('button').dataset.index;
+                    const nuevaCantidad = parseInt(input.value);
+                    if (nuevaCantidad > 0 && nuevaCantidad <= carrito[index].stock) {
+                        carrito[index].cantidad = nuevaCantidad;
+                        localStorage.setItem('carrito', JSON.stringify(carrito));
+                        renderizarCarrito();
+                        actualizarContador();
+                    } else {
+                        alert('La cantidad no puede ser mayor al stock disponible');
+                        input.value = carrito[index].cantidad;
+                    }
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('incrementar-cantidad')) {
+                    const index = e.target.dataset.index;
+                    const input = e.target.previousElementSibling;
+                    const currentQuantity = parseInt(input.value);
+                    if (currentQuantity < carrito[index].stock) {
+                        input.value = currentQuantity + 1;
+                        carrito[index].cantidad = currentQuantity + 1;
+                        localStorage.setItem('carrito', JSON.stringify(carrito));
+                        renderizarCarrito();
+                        actualizarContador();
+                    }
+                }
+                if (e.target && e.target.classList.contains('decrementar-cantidad')) {
+                    const index = e.target.dataset.index;
+                    const input = e.target.nextElementSibling;
+                    const currentQuantity = parseInt(input.value);
+                    if (currentQuantity > 1) {
+                        input.value = currentQuantity - 1;
+                        carrito[index].cantidad = currentQuantity - 1;
+                        localStorage.setItem('carrito', JSON.stringify(carrito));
+                        renderizarCarrito();
+                        actualizarContador();
+                    }
+                }
+            });
+
+
+            document.getElementById('modalCarrito').addEventListener('show.bs.modal', function() {
+                renderizarCarrito();
+            });
+
+            actualizarContador();
+
+            document.getElementById('btn-pagar-modal').addEventListener('click', function() {
+                const carritoData = localStorage.getItem('carrito');
+                if (carritoData && JSON.parse(carritoData).length > 0) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '../views/pagar.php';
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'carrito';
+                    input.value = carritoData;
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+                    form.submit();
+                } else {
+                    alert('Tu carrito está vacío. Agrega productos antes de pagar.');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

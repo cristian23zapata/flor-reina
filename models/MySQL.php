@@ -61,6 +61,13 @@ class MySQL {
         return $resultado;
     }
 
+     public function escape_string($string) {
+        if ($this->conexion) {
+            return mysqli_real_escape_string($this->conexion, $string);
+        }
+        return $string; // Retorna sin escapar si no hay conexión, aunque esto no debería ocurrir
+    }
+    
     // Puedes añadir estos métodos para encapsular las transacciones
     // Si los añades, podrías llamar a $mysql->beginTransaction() en lugar de $mysql->getConexion()->beginTransaction()
     /*

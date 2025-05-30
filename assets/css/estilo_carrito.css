@@ -1,0 +1,71 @@
+/* assets/css/estilo_carrito.css */
+
+/* Colores personalizados basados en tu logo y estilo general */
+:root {
+    --florreina-pink: #ff6b9d; /* Color principal de Flor Reina */
+    --florreina-light-pink: #ff8fab; /* Un rosa más claro */
+    --florreina-dark-pink: #ff4785;  /* Un rosa más oscuro */
+    --florreina-accent-color: #ffc107; /* Si quieres un toque de amarillo suave, si no, usa un rosa más*/
+}
+
+/* Encabezado del modal y del toast */
+.bg-custom-pink {
+    background-color: var(--florreina-pink) !important;
+    color: white !important; /* Asegura que el texto sea blanco */
+}
+
+/* Botón "Pagar" dentro del modal */
+.btn-primary-custom {
+    background-color: var(--florreina-pink);
+    border-color: var(--florreina-pink);
+    color: white;
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--florreina-dark-pink);
+    border-color: var(--florreina-dark-pink);
+    color: white;
+}
+
+/* Botón "Vaciar Carrito" */
+.btn-danger-custom {
+    background-color: var(--florreina-light-pink);
+    border-color: var(--florreina-light-pink);
+    color: white;
+}
+
+.btn-danger-custom:hover {
+    background-color: var(--florreina-dark-pink);
+    border-color: var(--florreina-dark-pink);
+    color: white;
+}
+
+
+/* Contador del carrito */
+#carrito-contador {
+    background-color: var(--florreina-dark-pink) !important; /* Un rojo más oscuro o rosa oscuro */
+    color: white !important;
+}
+
+/* Si hay otros botones de añadir al carrito en productos.php que son verdes */
+.btn-outline-success {
+    border-color: var(--florreina-pink);
+    color: var(--florreina-pink);
+}
+
+.btn-outline-success:hover {
+    background-color: var(--florreina-pink);
+    color: white;
+}
+
+/* Si hay algún `btn-success` que quieres cambiar, por ejemplo, los botones "Añadir al carrito" de los productos */
+.btn-success {
+    background-color: var(--florreina-pink) !important;
+    border-color: var(--florreina-pink) !important;
+    color: white !important;
+}
+
+.btn-success:hover {
+    background-color: var(--florreina-dark-pink) !important;
+    border-color: var(--florreina-dark-pink) !important;
+}

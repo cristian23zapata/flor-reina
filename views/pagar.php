@@ -229,8 +229,7 @@ $mysql->desconectar(); // Desconectar la base de datos después de usarla
                         <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
                     <?php endif; ?>
                     <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                        <button class="btn btn-outline-success position-relative" data-bs-toggle="modal" data-bs-target="#modalCarrito" id="btn-carrito">
-                            <i class="bi bi-bag"></i> Carrito
+                        
                             <span id="carrito-contador" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
                                 0
                             </span>
