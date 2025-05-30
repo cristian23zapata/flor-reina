@@ -23,6 +23,7 @@ $mysql->desconectar();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/estilo_nav.css">
+    <link rel="stylesheet" href="../assets/css/estilo_creacion.css">
     <style>
         .img-repartidor {
             max-width: 150px;
@@ -101,17 +102,15 @@ $mysql->desconectar();
                 <div class="d-flex align-items-center gap-2">
                     <?php if (isset($_SESSION['correo'])): ?>
                         <div class="dropdown">
-                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                                <?php if ($_SESSION['tipo'] === 'user'): ?>
-                                    <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                <?php endif; ?>
-                                <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
-                            </ul>
-                        </div>
+    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+        <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>    
+    </ul>
+</div>
                     <?php else: ?>
                         <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
                     <?php endif; ?>
