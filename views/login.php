@@ -71,12 +71,12 @@
                             confirmButtonText: 'Intentar de nuevo'
                         });
                     ";
-                } elseif ($estado === 'contraseña_incorrecta') {
+                } elseif ($estado === 'invalid_credentials') {
                     echo "
                         Swal.fire({
                             icon: 'error',
-                            title: 'Contraseña Incorrecta',
-                            text: 'La contraseña ingresada es incorrecta. Por favor, inténtalo de nuevo.',
+                            title: 'Correo o contraseña incorrectos',
+                            text: 'Por favor, verifica tus datos e intenta nuevamente.',
                             confirmButtonText: 'Aceptar'
                         });
                     ";

@@ -52,7 +52,8 @@ session_start();
             <li class="nav-item"><a class="nav-link active" href="../views/admin_pedidos.php">PEDIDOS</a></li>
             <li class="nav-item"><a class="nav-link active" href="../views/creacion.php">CREAR</a></li>
             <li class="nav-item"><a class="nav-link active" href="../views/registrar.php">REGISTRAR</a></li>
-            <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">Repartidores</a></li>
+            <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">REPARTIDORES</a></li>
+            <li class="nav-item"><a class="nav-link" href="../views/gestionar_repartidores.php">Gestion Repartidores</a></li>
             <?php } ?>
             <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
             <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
