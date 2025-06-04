@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Desconectar de la base de datos
     $mysql->desconectar();
     
-    header("Location: ../views/repartidores.php");
+    header("Location: ../views/gestionar_repartidores.php?estado=eliminado");
     exit();
 } else {
     echo "Método no permitido.";

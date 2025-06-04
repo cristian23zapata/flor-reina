@@ -25,6 +25,14 @@
             <input type="text" class="form-control border-pink" title="Solo letras y espacios" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
           </div>
           <div class="mb-3">
+            <label for="nombre" class="form-label text-secondary fw-semibold">Direccion </label>
+            <input type="text" class="form-control border-pink" title="Solo letras, espacios y numeros" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" id="direccion" name="direccion" placeholder="Tu direccion" required>
+          </div>
+          <div class="mb-3">
+            <label for="nombre" class="form-label text-secondary fw-semibold">Telefono</label>
+            <input type="text" class="form-control border-pink" title="Solo numeros" pattern="^[0-9]+$" id="telefono" name="telefono" placeholder="#######" required>
+          </div>
+          <div class="mb-3">
             <label for="correo" class="form-label text-secondary fw-semibold">Correo electrónico</label>
             <input type="email" class="form-control border-pink" id="correo" name="correo" placeholder="nombre@ejemplo.com" required>
           </div>

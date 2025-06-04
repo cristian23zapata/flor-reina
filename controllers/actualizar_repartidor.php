@@ -44,10 +44,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mysql->efectuarConsulta($consulta);
         $mysql->desconectar();
 
-        header("Location: ../views/repartidores.php?estado=exito");
+        header("Location: ../views/gestionar_repartidores.php?estado=exito");
         exit();
     } else {
-        header("Location: ../views/repartidores.php?estado=error");
+        header("Location: ../views/gestionar_repartidores.php?estado=error");
         exit();
     }
 }

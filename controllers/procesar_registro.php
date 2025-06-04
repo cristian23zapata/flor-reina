@@ -8,6 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     $nombre = $_POST['nombre'];
     $correo = $_POST['correo'];
+    $direccion = $_POST['direccion'];
+    $telefono = $_POST['telefono'];
     $password = $_POST['password'];
     $confirmar_password = $_POST['confirmar_password'];
 
@@ -25,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     // Insertar el nuevo usuario en la base de datos
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    $mysql->efectuarConsulta("INSERT INTO Usuarios (nombre, correo, password, tipo) VALUES ('$nombre', '$correo', '$hashed_password', 'user')");
+    $mysql->efectuarConsulta("INSERT INTO Usuarios (nombre, correo, direccion, telefono, password, tipo) VALUES ('$nombre', '$correo', '$direccion', '$telefono', '$hashed_password', 'user')");
 
     header("refresh:3;url=../views/login.php?estado=exito");
 }
