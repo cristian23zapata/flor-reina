@@ -1,209 +1,297 @@
 <?php
 require_once '../models/MySQL.php';
-session_start();
 
-// Redirigir si no hay sesión activa o el usuario no es 'admin'
-if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'admin') {
-    header('Location: ../views/login.php');
+session_start();
+if (!isset($_SESSION['correo'])) {
+    header("refresh:1;url=../views/login.php");
     exit();
 }
 
-$mysql = new MySQL();
+if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { 
+    header("Location: ../views/index.php");
+    exit();
+}
+
+$mysql = new MySQL;
 $mysql->conectar();
-
 $resultado = $mysql->efectuarConsulta("SELECT * FROM repartidores;");
-
 $mysql->desconectar();
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Flor Reina - Gestionar Repartidores</title>
     <link rel="icon" type="image/png" href="../assets/imagenes/icono.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/estilo_nav.css">
-    <link rel="stylesheet" href="../assets/css/estilo_creacion.css">
     <style>
-        .img-repartidor {
-            max-width: 150px;
-            max-height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .modal-content {
-            border-radius: 10px;
-        }
-        .btn-action {
-            min-width: 80px;
-        }
-        body {
-            background-color: #fff5f7;
-        }
-        .card-repartidor {
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-            border: none;
-        }
-        .card-repartidor:hover {
-            transform: translateY(-5px);
-        }
-        .btn-primary {
-            background-color: #ff6b9d;
-            border-color: #ff6b9d;
-        }
-        .btn-primary:hover {
-            background-color: #ff4785;
-            border-color: #ff4785;
-        }
-        .btn-danger {
-            background-color: #ff8fab;
-            border-color: #ff8fab;
-        }
-        .btn-danger:hover {
-            background-color: #ff6b8b;
-            border-color: #ff6b8b;
-        }
-        .table th {
-            background-color: #ff6b9d;
-            color: white;
-        }
+      /* SIDEBAR BASE */
+      .sidebar {
+          background-color: #ffe6f0; /* Fondo rosa claro */
+          border-right: 1px solid #f8c8dc; /* Borde más suave rosado */
+          min-width: 220px;
+          transition: all 0.3s ease;
+          padding: 1rem 0.5rem;
+      }
+
+      /* LOGO */
+      .sidebar .navbar-brand {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding-bottom: 1rem;
+          font-weight: bold;
+          color: #d63384;
+      }
+
+      /* NAV LINKS */
+      .sidebar .nav-link {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          color: #444;
+          font-weight: 500;
+          border-radius: 0.375rem;
+          transition: background 0.2s ease;
+      }
+
+      .sidebar .nav-link i {
+          margin-right: 0.75rem;
+          color: #d63384;
+      }
+
+      .sidebar .nav-link span {
+          white-space: nowrap;
+      }
+
+      .sidebar .nav-link:hover,
+      .sidebar .nav-link:focus {
+          background-color: #fddbe9; /* Hover rosado suave */
+          color: #d63384;
+      }
+
+      /* TOGGLE BUTTON */
+      .toggle-btn {
+          border: none;
+          background: none;
+          font-size: 1.25rem;
+          color: #d63384;
+      }
+
+      /* COLLAPSED SIDEBAR */
+      .sidebar.collapsed {
+          min-width: 60px !important;
+          overflow: hidden;
+          background-color: #ffe6f0; /* Mantener fondo cuando colapsa */
+      }
+
+      .sidebar.collapsed .nav-link span,
+      .sidebar.collapsed .navbar-brand span {
+          display: none;
+      }
+
+      .sidebar.collapsed .nav-link {
+          text-align: center;
+      }
+
+      .sidebar.collapsed .navbar-brand {
+          padding: 0.5rem 0;
+      }
+
+      .sidebar.collapsed .bi {
+          margin-right: 0;
+          font-size: 1.25rem;
+      }
+
+      /* MOBILE SIDEBAR */
+      @media (max-width: 991.98px) {
+          .sidebar {
+              position: fixed;
+              top: 0;
+              left: -250px;
+              height: 100vh;
+              width: 220px;
+              z-index: 1050;
+              background-color: #ffe6f0; /* Fondo rosa también en móvil */
+              box-shadow: 0 0 10px rgba(0,0,0,0.1);
+              transition: left 0.3s ease-in-out;
+          }
+
+          .sidebar.show {
+              left: 0;
+          }
+      }
+      
+      /* Estilos específicos para la gestión de repartidores */
+      .img-repartidor {
+          max-width: 150px;
+          max-height: 150px;
+          object-fit: cover;
+          border-radius: 8px;
+      }
+      
+      .btn-action {
+          min-width: 80px;
+      }
+      
+      .card-repartidor {
+          border-radius: 15px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+          transition: transform 0.3s;
+          border: none;
+      }
+      
+      .card-repartidor:hover {
+          transform: translateY(-5px);
+      }
+      
+      .table th {
+          background-color: #ff6b9d;
+          color: white;
+      }
+      
+      .modal-content {
+          border-radius: 10px;
+      }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="../index.php">
-                <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60">
+<!-- Botón para abrir sidebar en móvil -->
+<button class="btn btn-outline-secondary d-lg-none m-3" id="mobileSidebarToggle">
+    <i class="bi bi-list"></i>
+</button>
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="border-end p-3 sidebar" style="min-width: 220px; min-height: 100vh;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a class="navbar-brand d-block text-center" href="../index.php">
+                <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60" class="sidebar-logo">
+                <span class="ms-2">Flor Reina</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="toggle-btn d-none d-lg-inline" id="sidebarToggle">
+                <i class="bi bi-chevron-left"></i>
             </button>
-            <div class="collapse navbar-collapse" id="menuNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-                        <li class="nav-item"><a class="nav-link active" href="../views/admin_pedidos.php">PEDIDOS</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/creacion.php">CREAR</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/registrar.php">REGISTRAR</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">REPARTIDORES</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="../views/gestionar_repartidores.php">Gestion Repartidores</a></li> 
-                    <?php } elseif (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'repartidor') { ?>
-                         <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">Mis Entregas</a></li>
-                    <?php } ?>
-                    <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
-                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                        <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/user_pedidos.php">Mis Pedidos</a></li>
-                    <?php } ?>
-                </ul>
-                <div class="d-flex align-items-center gap-2">
-                    <?php if (isset($_SESSION['correo'])): ?>
-                        <div class="dropdown">
-    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                                <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <?php } ?>
-        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>    
-    </ul>
-</div>
-                    <?php else: ?>
-                        <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
-                    <?php endif; ?>
-                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                        <button class="btn btn-outline-success position-relative" data-bs-toggle="modal" data-bs-target="#modalCarrito" id="btn-carrito">
-                            <i class="bi bi-bag"></i> Carrito
-                            <span id="carrito-contador" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
-                                0
-                            </span>
-                        </button>
-                    <?php } ?>
-                </div>
-            </div>
         </div>
+
+        <ul class="nav flex-column">
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/admin_pedidos.php"><i class="bi bi-cart"></i><span> PEDIDOS</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/creacion.php"><i class="bi bi-plus-circle"></i><span> CREAR</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/registrar.php"><i class="bi bi-person-plus"></i><span> REGISTRAR</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> REPARTIDORES</span></a></li>
+                <li class="nav-item"><a class="nav-link active text-dark" href="../views/gestionar_repartidores.php"><i class="bi bi-gear"></i><span> Gestion Repartidores</span></a></li>
+            <?php } ?>
+            <li class="nav-item"><a class="nav-link text-dark" href="../views/productos.php"><i class="bi bi-flower1"></i><span> Productos</span></a></li>
+            <li class="nav-item"><a class="nav-link text-dark" href="../views/blog.php"><i class="bi bi-newspaper"></i><span> Blog</span></a></li>
+        </ul>
     </nav>
 
-<div class="container py-4">
-    <h2 class="text-center mb-4" style="color: #ff6b9d;">Lista de Repartidores Registrados</h2>
+    <!-- Contenido principal -->
+    <div class="flex-grow-1 p-4 main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">Gestión de Repartidores</h1>
+            <?php if (isset($_SESSION['correo'])): ?>
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <?php if ($_SESSION['tipo'] === 'user') { ?>
+                            <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                        <?php } ?>
+                        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            <?php else: ?>
+                <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
+            <?php endif; ?>
+        </div>
 
-    <?php if ($resultado->num_rows > 0): ?>
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Correo</th>
-                        <th>Teléfono</th>
-                        <th>Tipo Transporte</th>
-                        <th>Foto</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while($repartidor = $resultado->fetch_assoc()): ?>
-                    <tr class="bg-white">
-                        <td><?= htmlspecialchars($repartidor['id']) ?></td>
-                        <td><?= htmlspecialchars($repartidor['nombre']) ?></td>
-                        <td><?= htmlspecialchars($repartidor['correo']) ?></td>
-                        <td><?= htmlspecialchars($repartidor['telefono']) ?></td>
-                        <td><?= htmlspecialchars($repartidor['tipo_transporte']) ?></td>
-                        <td>
-                            <img src="../<?= htmlspecialchars($repartidor['foto_identificacion']) ?>" 
-                                 alt="Foto repartidor" 
-                                 class="img-repartidor">
-                        </td>
-                        <td>
-                            <button class="btn btn-primary btn-sm btn-action" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#modalEditarRepartidor<?= $repartidor['id'] ?>">
-                                <i class="bi bi-pencil"></i> Editar
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm btn-action" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#confirmarEliminar<?= $repartidor['id'] ?>">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
-                            
-                            <div class="modal fade" id="confirmarEliminar<?= $repartidor['id'] ?>" tabindex="-1" 
-                                 aria-labelledby="confirmarEliminarLabel<?= $repartidor['id'] ?>" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-danger text-white">
-                                            <h5 class="modal-title" id="confirmarEliminarLabel<?= $repartidor['id'] ?>">Confirmar eliminación</h5>
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            ¿Estás seguro de que deseas eliminar al repartidor <strong><?= htmlspecialchars($repartidor['nombre']) ?></strong>?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                            <form action="../controllers/eliminar_repartidor.php" method="POST">
-                                                <input type="hidden" name="id" value="<?= $repartidor['id'] ?>">
-                                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                                            </form>
+        <!-- Lista de repartidores -->
+        <div class="container py-4">
+            <h2 class="text-center mb-4" style="color: #ff6b9d;">Lista de Repartidores Registrados</h2>
+
+            <?php if ($resultado->num_rows > 0): ?>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Teléfono</th>
+                                <th>Tipo Transporte</th>
+                                <th>Foto</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while($repartidor = $resultado->fetch_assoc()): ?>
+                            <tr class="bg-white">
+                                <td><?= htmlspecialchars($repartidor['id']) ?></td>
+                                <td><?= htmlspecialchars($repartidor['nombre']) ?></td>
+                                <td><?= htmlspecialchars($repartidor['correo']) ?></td>
+                                <td><?= htmlspecialchars($repartidor['telefono']) ?></td>
+                                <td><?= htmlspecialchars($repartidor['tipo_transporte']) ?></td>
+                                <td>
+                                    <img src="../<?= htmlspecialchars($repartidor['foto_identificacion']) ?>" 
+                                         alt="Foto repartidor" 
+                                         class="img-repartidor">
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm btn-action" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modalEditarRepartidor<?= $repartidor['id'] ?>">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm btn-action" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#confirmarEliminar<?= $repartidor['id'] ?>">
+                                        <i class="bi bi-trash"></i> Eliminar
+                                    </button>
+                                    
+                                    <!-- Modal de confirmación para eliminar -->
+                                    <div class="modal fade" id="confirmarEliminar<?= $repartidor['id'] ?>" tabindex="-1" 
+                                         aria-labelledby="confirmarEliminarLabel<?= $repartidor['id'] ?>" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-danger text-white">
+                                                    <h5 class="modal-title" id="confirmarEliminarLabel<?= $repartidor['id'] ?>">Confirmar eliminación</h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    ¿Estás seguro de que deseas eliminar al repartidor <strong><?= htmlspecialchars($repartidor['nombre']) ?></strong>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <form action="../controllers/eliminar_repartidor.php" method="POST">
+                                                        <input type="hidden" name="id" value="<?= $repartidor['id'] ?>">
+                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
+                                </td>
+                            </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php else: ?>
+                <div class="alert alert-info text-center">
+                    No se encontraron repartidores registrados.
+                </div>
+            <?php endif; ?>
         </div>
-    <?php else: ?>
-        <div class="alert alert-info text-center">
-            No se encontraron repartidores registrados.
-        </div>
-    <?php endif; ?>
+    </div>
 </div>
 
 <?php 
@@ -211,6 +299,7 @@ $mysql->desconectar();
 $resultado->data_seek(0);
 while($repartidor = $resultado->fetch_assoc()): 
 ?>
+<!-- Modal para editar repartidor -->
 <div class="modal fade" id="modalEditarRepartidor<?= $repartidor['id'] ?>" tabindex="-1" 
      aria-labelledby="modalEditarRepartidorLabel<?= $repartidor['id'] ?>" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -292,9 +381,7 @@ while($repartidor = $resultado->fetch_assoc()):
 </div>
 <?php endwhile; ?>
 
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<!-- SweetAlert2 para notificaciones -->
 <?php if (isset($_GET['estado'])): ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -321,7 +408,7 @@ while($repartidor = $resultado->fetch_assoc()):
             });
         <?php endif; ?>
 
-        // ✅ Eliminar los parámetros de la URL sin recargar
+        // Eliminar los parámetros de la URL sin recargar
         if (window.history.replaceState) {
             const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
             window.history.replaceState({ path: url }, "", url);
@@ -331,161 +418,42 @@ while($repartidor = $resultado->fetch_assoc()):
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const carritoContador = document.getElementById('carrito-contador');
-        const carritoItems = document.getElementById('carrito-items');
-        const carritoTotal = document.getElementById('carrito-total');
-        const carritoVacio = document.getElementById('carrito-vacio');
-        const carritoContenido = document.getElementById('carrito-contenido');
+// Sidebar functionality
+document.addEventListener('DOMContentLoaded', function () {
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
 
-        let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-
-        function actualizarContador() {
-            let totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-            carritoContador.textContent = totalItems;
-            carritoContador.style.display = totalItems > 0 ? 'inline-block' : 'none';
-        }
-
-        function eliminarItem(index) {
-            carrito.splice(index, 1);
-            localStorage.setItem('carrito', JSON.stringify(carrito));
-            renderizarCarrito();
-            actualizarContador();
-        }
-
-        function vaciarCarrito() {
-            carrito = [];
-            localStorage.removeItem('carrito');
-            renderizarCarrito();
-            actualizarContador();
-        }
-
-        const vaciarCarritoBtn = document.getElementById('vaciar-carrito');
-        if (vaciarCarritoBtn) {
-            vaciarCarritoBtn.addEventListener('click', vaciarCarrito);
-        }
-
-        document.addEventListener('click', function(e) {
-            if (e.target && e.target.classList.contains('eliminar-item')) {
-                const index = e.target.dataset.index;
-                eliminarItem(index);
-            }
-        });
-
-        function renderizarCarrito() {
-            if (carrito.length === 0) {
-                carritoVacio.style.display = 'block';
-                carritoContenido.style.display = 'none';
-                document.getElementById('btn-pagar-modal').style.display = 'none';
-                document.getElementById('vaciar-carrito').style.display = 'none';
+    // Desktop toggle
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', function () {
+            sidebar.classList.toggle('collapsed');
+            const icon = this.querySelector('i');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.classList.remove('bi-chevron-left');
+                icon.classList.add('bi-chevron-right');
             } else {
-                carritoVacio.style.display = 'none';
-                carritoContenido.style.display = 'block';
-                document.getElementById('btn-pagar-modal').style.display = 'inline-block';
-                document.getElementById('vaciar-carrito').style.display = 'inline-block';
-                carritoItems.innerHTML = '';
-                let total = 0;
-                carrito.forEach((item, index) => {
-                    const subtotal = item.precio * item.cantidad;
-                    total += subtotal;
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <img src="../${item.imagen}" alt="${item.nombre}" class="me-2" style="width: 60px; height: 60px; object-fit: cover;">
-                                <span class="text-truncate" style="max-width: 150px;">${item.nombre}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-group" style="min-width: 140px;">
-                                <button class="btn btn-outline-secondary decrementar-cantidad py-1" type="button" data-index="${index}">-</button>
-                                <input type="number" class="form-control text-center py-1" value="${item.cantidad}" min="1" max="${item.stock}" data-index="${index}">
-                                <button class="btn btn-outline-secondary incrementar-cantidad py-1" type="button" data-index="${index}">+</button>
-                            </div>
-                        </td>
-                        <td class="text-end align-middle">$${item.precio.toFixed(2)}</td>
-                        <td class="text-end align-middle">$${subtotal.toFixed(2)}</td>
-                        <td class="text-center align-middle">
-                            <button class="btn btn-sm btn-outline-danger p-1 eliminar-item" data-index="${index}">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    `;
-                    carritoItems.appendChild(tr);
-                });
-                carritoTotal.textContent = `$${total.toFixed(2)}`;
-            }
-        }
-
-        document.addEventListener('change', function(e) {
-            if (e.target && e.target.matches('.input-group input[type="number"]')) {
-                const input = e.target;
-                const index = input.closest('.input-group').querySelector('button').dataset.index;
-                const nuevaCantidad = parseInt(input.value);
-                if (nuevaCantidad > 0 && nuevaCantidad <= carrito[index].stock) {
-                    carrito[index].cantidad = nuevaCantidad;
-                    localStorage.setItem('carrito', JSON.stringify(carrito));
-                    renderizarCarrito();
-                    actualizarContador();
-                } else {
-                    alert('La cantidad no puede ser mayor al stock disponible');
-                    input.value = carrito[index].cantidad;
-                }
+                icon.classList.remove('bi-chevron-right');
+                icon.classList.add('bi-chevron-left');
             }
         });
+    }
 
-        document.addEventListener('click', function(e) {
-            if (e.target && e.target.classList.contains('incrementar-cantidad')) {
-                const index = e.target.dataset.index;
-                const input = e.target.previousElementSibling;
-                const currentQuantity = parseInt(input.value);
-                if (currentQuantity < carrito[index].stock) {
-                    input.value = currentQuantity + 1;
-                    carrito[index].cantidad = currentQuantity + 1;
-                    localStorage.setItem('carrito', JSON.stringify(carrito));
-                    renderizarCarrito();
-                    actualizarContador();
-                }
-            }
-            if (e.target && e.target.classList.contains('decrementar-cantidad')) {
-                const index = e.target.dataset.index;
-                const input = e.target.nextElementSibling;
-                const currentQuantity = parseInt(input.value);
-                if (currentQuantity > 1) {
-                    input.value = currentQuantity - 1;
-                    carrito[index].cantidad = currentQuantity - 1;
-                    localStorage.setItem('carrito', JSON.stringify(carrito));
-                    renderizarCarrito();
-                    actualizarContador();
-                }
-            }
+    // Mobile toggle
+    if (mobileSidebarToggle) {
+        mobileSidebarToggle.addEventListener('click', function () {
+            sidebar.classList.toggle('show');
         });
 
-
-        document.getElementById('modalCarrito').addEventListener('show.bs.modal', function() {
-            renderizarCarrito();
-        });
-
-        actualizarContador();
-
-        document.getElementById('btn-pagar-modal').addEventListener('click', function() {
-            const carritoData = localStorage.getItem('carrito');
-            if (carritoData && JSON.parse(carritoData).length > 0) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '../views/pagar.php';
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'carrito';
-                input.value = carritoData;
-                form.appendChild(input);
-                document.body.appendChild(form);
-                form.submit();
-            } else {
-                alert('Tu carrito está vacío. Agrega productos antes de pagar.');
+        // Close on outside click
+        document.addEventListener('click', function (event) {
+            const isClickInside = sidebar.contains(event.target) || mobileSidebarToggle.contains(event.target);
+            if (!isClickInside && window.innerWidth < 992) {
+                sidebar.classList.remove('show');
             }
         });
-    });
+    }
+});
 </script>
 </body>
 </html>

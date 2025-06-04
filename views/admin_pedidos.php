@@ -4,7 +4,7 @@ session_start();
 
 // Redirigir si no es admin
 if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'admin') {
-    header('Location: ../views/login.php'); // O a una página de error/acceso denegado
+    header('Location: ../views/login.php');
     exit();
 }
 
@@ -37,85 +37,199 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Flor Reina - Gestión de Pedidos</title>
     <link rel="icon" type="image/png" href="../assets/imagenes/icono.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/estilo_nav.css">
     <link rel="stylesheet" href="../assets/css/estilo_creacion.css">
     <style>
+        /* SIDEBAR BASE */
+        .sidebar {
+            background-color: #ffe6f0; /* Fondo rosa claro */
+            border-right: 1px solid #f8c8dc; /* Borde más suave rosado */
+            min-width: 220px;
+            transition: all 0.3s ease;
+            padding: 1rem 0.5rem;
+        }
+
+        /* LOGO */
+        .sidebar .navbar-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 1rem;
+            font-weight: bold;
+            color: #d63384;
+        }
+
+        /* NAV LINKS */
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: #444;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            transition: background 0.2s ease;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 0.75rem;
+            color: #d63384;
+        }
+
+        .sidebar .nav-link span {
+            white-space: nowrap;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link:focus {
+            background-color: #fddbe9; /* Hover rosado suave */
+            color: #d63384;
+        }
+
+        /* TOGGLE BUTTON */
+        .toggle-btn {
+            border: none;
+            background: none;
+            font-size: 1.25rem;
+            color: #d63384;
+        }
+
+        /* COLLAPSED SIDEBAR */
+        .sidebar.collapsed {
+            min-width: 60px !important;
+            overflow: hidden;
+            background-color: #ffe6f0; /* Mantener fondo cuando colapsa */
+        }
+
+        .sidebar.collapsed .nav-link span,
+        .sidebar.collapsed .navbar-brand span {
+            display: none;
+        }
+
+        .sidebar.collapsed .nav-link {
+            text-align: center;
+        }
+
+        .sidebar.collapsed .navbar-brand {
+            padding: 0.5rem 0;
+        }
+
+        .sidebar.collapsed .bi {
+            margin-right: 0;
+            font-size: 1.25rem;
+        }
+
+        /* MOBILE SIDEBAR */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: -250px;
+                height: 100vh;
+                width: 220px;
+                z-index: 1050;
+                background-color: #ffe6f0; /* Fondo rosa también en móvil */
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                transition: left 0.3s ease-in-out;
+            }
+
+            .sidebar.show {
+                left: 0;
+            }
+        }
+
+        /* ESTILOS PARA PEDIDOS */
         .estado-pendiente { background-color: #fff3cd; color: #664d03; } /* light yellow */
         .estado-confirmado { background-color: #d1e7dd; color: #0f5132; } /* light green */
         .estado-enviado { background-color: #cff4fc; color: #055160; } /* light blue */
         .estado-entregado { background-color: #d4edda; color: #155724; } /* medium green */
         .estado-cancelado { background-color: #f8d7da; color: #842029; } /* light red */
+        
+        .main-content {
+            padding: 20px;
+            width: 100%;
+        }
+        
+        .filter-buttons .btn {
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .card-pedido {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .card-header-pedido {
+            font-weight: bold;
+            padding: 15px;
+        }
+        
+        .producto-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="../index.php">
-                <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60">
+
+<!-- Botón para abrir sidebar en móvil -->
+<button class="btn btn-outline-secondary d-lg-none m-3" id="mobileSidebarToggle">
+    <i class="bi bi-list"></i>
+</button>
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="border-end p-3 sidebar" style="min-width: 220px; min-height: 100vh;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a class="navbar-brand d-block text-center" href="../index.php">
+                <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60" class="sidebar-logo">
+                <span class="ms-2">Flor Reina</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="toggle-btn d-none d-lg-inline" id="sidebarToggle">
+                <i class="bi bi-chevron-left"></i>
             </button>
-            <div class="collapse navbar-collapse" id="menuNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-                        <li class="nav-item"><a class="nav-link active" href="../views/admin_pedidos.php">PEDIDOS</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/creacion.php">CREAR</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/registrar.php">REGISTRAR</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">REPARTIDORES</a></li>
-                        
-                        <li class="nav-item"><a class="nav-link" href="../views/gestionar_repartidores.php">Gestion Repartidores</a></li>
-                         <?php } ?>
-                    <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
-                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                        <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
-                    <?php } ?>
-                </ul>
-                <div class="d-flex align-items-center gap-2">
-                    <?php if (isset($_SESSION['correo'])): ?>
-                        
-<div class="dropdown">
-    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                                <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <?php } ?>
-        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
-    </ul>
-</div>
-                    <?php else: ?>
-                        <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
-                    <?php endif; ?>
-                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                        <button class="btn btn-outline-success position-relative" data-bs-toggle="modal" data-bs-target="#modalCarrito" id="btn-carrito">
-                            <i class="bi bi-bag"></i> Carrito
-                            <span id="carrito-contador" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
-                                0
-                            </span>
-                        </button>
-                    <?php } ?>
-                </div>
-            </div>
         </div>
+
+        <ul class="nav flex-column">
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/admin_pedidos.php"><i class="bi bi-cart"></i><span> PEDIDOS</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/creacion.php"><i class="bi bi-plus-circle"></i><span> CREAR</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/registrar.php"><i class="bi bi-person-plus"></i><span> REGISTRAR</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> REPARTIDORES</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/gestionar_repartidores.php"><i class="bi bi-gear"></i><span> Gestión Repartidores</span></a></li>
+            <?php } ?>
+            <li class="nav-item"><a class="nav-link text-dark" href="../views/productos.php"><i class="bi bi-flower1"></i><span> Productos</span></a></li>
+            <li class="nav-item"><a class="nav-link text-dark" href="../views/blog.php"><i class="bi bi-newspaper"></i><span> Blog</span></a></li>
+        </ul>
     </nav>
 
-    <header class="bg-light py-4 text-center">
-        <div class="container">
-            <h1 class="display-6">Gestión de Pedidos</h1>
-            <p class="lead">Administra y sigue el estado de todos los pedidos.</p>
+    <!-- Contenido principal -->
+    <div class="flex-grow-1 p-4 main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">Gestión de Pedidos</h1>
+            <?php if (isset($_SESSION['correo'])): ?>
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            <?php else: ?>
+                <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
+            <?php endif; ?>
         </div>
-    </header>
 
-    <main class="container py-5">
         <div class="mb-4">
             <h4>Filtrar por Estado:</h4>
-            <div class="btn-group" role="group" aria-label="Filtro de estados">
+            <div class="btn-group filter-buttons" role="group" aria-label="Filtro de estados">
                 <a href="admin_pedidos.php?estado=todos" class="btn btn-outline-primary <?= ($filtro_estado === 'todos') ? 'active' : '' ?>">Todos</a>
                 <a href="admin_pedidos.php?estado=pendiente" class="btn btn-outline-warning <?= ($filtro_estado === 'pendiente') ? 'active' : '' ?>">Pendientes</a>
                 <a href="admin_pedidos.php?estado=confirmado" class="btn btn-outline-success <?= ($filtro_estado === 'confirmado') ? 'active' : '' ?>">Confirmados</a>
@@ -129,8 +243,8 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
             <?php if (mysqli_num_rows($resultado_pedidos) > 0): ?>
                 <?php while ($pedido = mysqli_fetch_assoc($resultado_pedidos)): ?>
                     <div class="col-12 mb-4">
-                        <div class="card shadow-sm rounded-3 border-0 <?= 'estado-' . $pedido['estado'] ?>">
-                            <div class="card-header d-flex justify-content-between align-items-center">
+                        <div class="card shadow-sm card-pedido <?= 'estado-' . $pedido['estado'] ?>">
+                            <div class="card-header d-flex justify-content-between align-items-center card-header-pedido">
                                 <h5 class="mb-0">Pedido #<?php echo htmlspecialchars($pedido['numero_pedido']); ?></h5>
                                 <span class="badge bg-primary fs-6"><?php echo ucfirst(htmlspecialchars($pedido['estado'])); ?></span>
                             </div>
@@ -157,8 +271,8 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                                             $resultado_detalle = $mysql->efectuarConsulta($consulta_detalle);
                                             while ($detalle = mysqli_fetch_assoc($resultado_detalle)):
                                                 ?>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-0">
-                                                    <?php echo htmlspecialchars($detalle['nombre_producto']); ?> (x<?php echo $detalle['cantidad']; ?>)
+                                                <li class="list-group-item producto-item">
+                                                    <span><?php echo htmlspecialchars($detalle['nombre_producto']); ?> (x<?php echo $detalle['cantidad']; ?>)</span>
                                                     <span>$<?php echo number_format($detalle['subtotal_linea'], 2); ?></span>
                                                 </li>
                                             <?php endwhile; ?>
@@ -190,6 +304,7 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                         </div>
                     </div>
 
+                    <!-- Modal Confirmar Pedido -->
                     <div class="modal fade" id="confirmarPedidoModal<?php echo $pedido['id']; ?>" tabindex="-1" aria-labelledby="confirmarPedidoModalLabel<?php echo $pedido['id']; ?>" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -198,7 +313,7 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    ¿Estás seguro de que quieres **confirmar** este pedido? Esto lo hará disponible para los repartidores.
+                                    ¿Estás seguro de que quieres <strong>confirmar</strong> este pedido? Esto lo hará disponible para los repartidores.
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -213,6 +328,7 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                     </div>
 
                     <?php if ($pedido['estado'] === 'confirmado' && !$pedido['id_repartidor']): ?>
+                    <!-- Modal Asignar Repartidor -->
                     <div class="modal fade" id="asignarRepartidorModal<?php echo $pedido['id']; ?>" tabindex="-1" aria-labelledby="asignarRepartidorModalLabel<?php echo $pedido['id']; ?>" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -248,6 +364,7 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                     <?php endif; ?>
 
                     <?php if ($pedido['estado'] === 'enviado'): ?>
+                    <!-- Modal Marcar como Entregado -->
                     <div class="modal fade" id="marcarEntregadoModal<?php echo $pedido['id']; ?>" tabindex="-1" aria-labelledby="marcarEntregadoModalLabel<?php echo $pedido['id']; ?>" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -256,7 +373,7 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    ¿Estás seguro de que quieres marcar este pedido como **entregado**?
+                                    ¿Estás seguro de que quieres marcar este pedido como <strong>entregado</strong>?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -271,6 +388,7 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                     </div>
                     <?php endif; ?>
 
+                    <!-- Modal Cancelar Pedido -->
                     <div class="modal fade" id="cancelarPedidoModal<?php echo $pedido['id']; ?>" tabindex="-1" aria-labelledby="cancelarPedidoModalLabel<?php echo $pedido['id']; ?>" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -279,7 +397,7 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    ¿Estás seguro de que quieres **cancelar** este pedido? Esta acción es irreversible.
+                                    ¿Estás seguro de que quieres <strong>cancelar</strong> este pedido? Esta acción es irreversible.
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -302,205 +420,49 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                 </div>
             <?php endif; ?>
         </div>
-    </main>
-
-    <div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="modalCarritoLabel">
-                        <i class="bi bi-bag"></i> Mi Carrito
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="carrito-vacio" class="text-center">
-                        <p>Tu carrito está vacío.</p>
-                    </div>
-                    <div id="carrito-contenido" style="display: none;">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Producto</th>
-                                    <th>Cantidad</th>
-                                    <th>Precio</th>
-                                    <th>Subtotal</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="carrito-items">
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3" class="text-end fw-bold">Total:</td>
-                                    <td class="text-end fw-bold" id="carrito-total"></td>
-                                    <td></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-danger" id="vaciar-carrito">Vaciar Carrito</button>
-                    <button type="button" class="btn btn-success" id="btn-pagar-modal">Pagar</button>
-                </div>
-            </div>
-        </div>
     </div>
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="toast-agregado" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-success text-white">
-                <strong class="me-auto">Éxito</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Cerrar"></button>
-            </div>
-            <div class="toast-body">
-                Producto agregado al carrito!
-            </div>
-        </div>
-    </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Obtener elementos del DOM
-            const carritoContador = document.getElementById('carrito-contador');
-            const carritoItems = document.getElementById('carrito-items');
-            const carritoTotal = document.getElementById('carrito-total');
-            const carritoVacio = document.getElementById('carrito-vacio');
-            const carritoContenido = document.getElementById('carrito-contenido');
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
 
-            // Cargar carrito desde localStorage
-            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-
-            // Función para actualizar el contador del carrito
-            function actualizarContador() {
-                let totalItems = carrito.reduce((sum, item) => sum + item.cantidad, 0);
-                carritoContador.textContent = totalItems;
-                carritoContador.style.display = totalItems > 0 ? 'inline-block' : 'none';
+    // Desktop toggle
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', function () {
+            sidebar.classList.toggle('collapsed');
+            const icon = this.querySelector('i');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.classList.remove('bi-chevron-left');
+                icon.classList.add('bi-chevron-right');
+            } else {
+                icon.classList.remove('bi-chevron-right');
+                icon.classList.add('bi-chevron-left');
             }
-
-            // Función para eliminar un item del carrito
-            function eliminarItem(index) {
-                carrito.splice(index, 1);
-                localStorage.setItem('carrito', JSON.stringify(carrito));
-                renderizarCarrito();
-                actualizarContador();
-            }
-
-            // Función para vaciar el carrito
-            function vaciarCarrito() {
-                carrito = [];
-                localStorage.removeItem('carrito');
-                renderizarCarrito();
-                actualizarContador();
-            }
-
-            // Asignar evento al botón de vaciar carrito
-            const vaciarCarritoBtn = document.getElementById('vaciar-carrito');
-            if (vaciarCarritoBtn) {
-                vaciarCarritoBtn.addEventListener('click', vaciarCarrito);
-            }
-
-            // Asignar eventos a los botones de eliminar item
-            document.addEventListener('click', function(e) {
-                if (e.target && e.target.classList.contains('eliminar-item')) {
-                    const index = e.target.dataset.index;
-                    eliminarItem(index);
-                }
-            });
-
-            // Función para renderizar los items del carrito en el modal
-            function renderizarCarrito() {
-                if (carrito.length === 0) {
-                    carritoVacio.style.display = 'block';
-                    carritoContenido.style.display = 'none';
-                    document.getElementById('btn-pagar-modal').style.display = 'none';
-                    document.getElementById('vaciar-carrito').style.display = 'none';
-                } else {
-                    carritoVacio.style.display = 'none';
-                    carritoContenido.style.display = 'block';
-                    document.getElementById('btn-pagar-modal').style.display = 'inline-block';
-                    document.getElementById('vaciar-carrito').style.display = 'inline-block';
-                    carritoItems.innerHTML = '';
-                    let total = 0;
-                    carrito.forEach((item, index) => {
-                        const subtotal = item.precio * item.cantidad;
-                        total += subtotal;
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <img src="../${item.imagen}" alt="${item.nombre}" class="me-2" style="width: 60px; height: 60px; object-fit: cover;">
-                                    <span class="text-truncate" style="max-width: 150px;">${item.nombre}</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="input-group" style="min-width: 140px;">
-                                    <button class="btn btn-outline-secondary decrementar-cantidad py-1" type="button" data-index="${index}">-</button>
-                                    <input type="number" class="form-control text-center py-1" value="${item.cantidad}" min="1" max="${item.stock}" data-index="${index}">
-                                    <button class="btn btn-outline-secondary incrementar-cantidad py-1" type="button" data-index="${index}">+</button>
-                                </div>
-                            </td>
-                            <td class="text-end align-middle">$${item.precio.toFixed(2)}</td>
-                            <td class="text-end align-middle">$${subtotal.toFixed(2)}</td>
-                            <td class="text-center align-middle">
-                                <button class="btn btn-sm btn-outline-danger p-1 eliminar-item" data-index="${index}">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        `;
-                        carritoItems.appendChild(tr);
-                    });
-                    carritoTotal.textContent = `$${total.toFixed(2)}`;
-                }
-            }
-
-            // Actualizar cantidad al cambiar el valor del input en el modal del carrito
-            document.addEventListener('change', function(e) {
-                if (e.target && e.target.matches('.input-group input[type="number"]')) {
-                    const input = e.target;
-                    const index = input.closest('.input-group').querySelector('button').dataset.index;
-                    const nuevaCantidad = parseInt(input.value);
-                    if (nuevaCantidad > 0 && nuevaCantidad <= carrito[index].stock) {
-                        carrito[index].cantidad = nuevaCantidad;
-                        localStorage.setItem('carrito', JSON.stringify(carrito));
-                        renderizarCarrito();
-                        actualizarContador();
-                    } else {
-                        alert('La cantidad no puede ser mayor al stock disponible');
-                        input.value = carrito[index].cantidad;
-                    }
-                }
-            });
-
-            // Renderizar carrito cuando se abre el modal
-            document.getElementById('modalCarrito').addEventListener('show.bs.modal', function() {
-                renderizarCarrito();
-            });
-
-            // Inicializar contador al cargar la página
-            actualizarContador();
-
-            // Manejar el botón "Pagar" en el modal del carrito (si se usa en admin_pedidos)
-            document.getElementById('btn-pagar-modal').addEventListener('click', function() {
-                const carritoData = localStorage.getItem('carrito');
-                if (carritoData && JSON.parse(carritoData).length > 0) {
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = '../views/pagar.php'; // Asegúrate que esta ruta sea correcta
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'carrito';
-                    input.value = carritoData;
-                    form.appendChild(input);
-                    document.body.appendChild(form);
-                    form.submit();
-                } else {
-                    alert('Tu carrito está vacío. Agrega productos antes de pagar.');
-                }
-            });
         });
-    </script>
+    }
+
+    // Mobile toggle
+    if (mobileSidebarToggle) {
+        mobileSidebarToggle.addEventListener('click', function () {
+            sidebar.classList.toggle('show');
+        });
+
+        // Close on outside click
+        document.addEventListener('click', function (event) {
+            const isClickInside = sidebar.contains(event.target) || mobileSidebarToggle.contains(event.target);
+            if (!isClickInside && window.innerWidth < 992) {
+                sidebar.classList.remove('show');
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>
+<?php
+$mysql->desconectar();
+?>
