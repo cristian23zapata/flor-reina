@@ -185,8 +185,8 @@ footer {
 
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
-        <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/productos_usuario.php">Productos</a></li>
+                <li class="nav-item"><a class="nav-link" href="../views/blog_usuario.php">Blog</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/user_pedidos.php">Mis Pedidos</a></li>
       </ul>

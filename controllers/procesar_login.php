@@ -31,8 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Redireccionar según el tipo de usuario
             if ($user_data['tipo'] === 'admin') {
                 header('Location: ../views/admin_pedidos.php'); // O a donde vaya tu panel de admin principal
-            } else { // user
-                header('Location: ../views/productos.php'); // Página principal para clientes
+            } 
+            if ($user_data['tipo'] === 'user') { // Si es un usuario normal
+                // Aquí podrías agregar más lógica si es necesario, por ejemplo:
+                header('Location: ../index.php'); // Página principal para clientes
             }
             exit();
         }

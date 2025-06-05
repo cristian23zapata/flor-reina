@@ -75,10 +75,12 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                         <li class="nav-item"><a class="nav-link" href="../views/registrar.php">REGISTRAR</a></li>
                         <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">Repartidores</a></li>
                         <li class="nav-item"><a class="nav-link" href="../views/admin_pedidos.php">Pedidos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
                     <?php } ?>
-                    <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
                     <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+                        <li class="nav-item"><a class="nav-link" href="../views/productos_usuario.php">Productos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../views/blog_usuario.php">Blog</a></li>
                         <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
                         <li class="nav-item"><a class="nav-link active" href="../views/user_pedidos.php">Mis Pedidos</a></li> <?php } ?>
                 </ul>

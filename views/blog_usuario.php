@@ -1,61 +1,42 @@
 <?php
-require_once 'models/MySQL.php';
+require_once '../models/MySQL.php';
 
 session_start();
 
 $mysql = new MySQL;
 $mysql->conectar();
 $resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios;");
+
+$articulos = $mysql->efectuarConsulta("SELECT * FROM articulos;");
+
 $mysql->desconectar();
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Flor Reina</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Blog | Tu Página</title>
+  <link rel="icon" type="image/png" href="../assets/imagenes/icono.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/estilo_nav.css">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/carrusel.css">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/estilo_creacion.css">
-  <style>
-    /* Estilo para el encabezado con degradado */
-    .header-title-bg {
-      background: linear-gradient(to right, #FFD7E0, #FFC0CB); /* Un degradado de rosa claro a rosa pastel */
-      color: #333; /* Color de texto más oscuro para contraste */
-      padding: 6rem 0; /* Más espacio vertical para que el degradado se vea mejor */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil para profundidad */
-    }
-
-    /* Estilo opcional para que el título resalte más dentro del degradado */
-    .header-title-bg h1 {
-        color: #8B0000; /* Un rojo oscuro para el título, por ejemplo */
-        font-weight: 700; /* Asegura que el título sea negrita */
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Sombra de texto suave */
-    }
-
-    .header-title-bg p {
-        color: #555; /* Color para el subtítulo */
-    }
-
-    /* Estilos para el carrusel (asegúrate de que no haya conflicto con tus estilos existentes) */
-    .fullscreen-carousel {
-        height: 80vh; /* Ajusta la altura del carrusel para que sea visible */
-    }
-    .fullscreen-carousel .carousel-item img {
-        height: 100%;
-        object-fit: cover;
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/css/estilo_carrito.css">
+  <link rel="stylesheet" href="../assets/css/estilo_creacion.css">
+  
+  <link rel="stylesheet" href="../assets/css/estilo_nav.css">
+  <link rel="stylesheet" href="../assets/css/estilo_blog.css">
+  <link rel="stylesheet" href="../assets/css/estilo_productos.css">
+  <link rel="stylesheet" href="../assets/css/new.css">
+  
+   
 </head>
+<body>
+<?php include '../views/partials/carrito_modal.php'; ?>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
   <div class="container">
-    <a class="navbar-brand" href="index.php">
-      <img src="assets/imagenes/logo.png" alt="Flor Reina" height="60">
+    <a class="navbar-brand" href="../index.php">
+      <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
       <span class="navbar-toggler-icon"></span>
@@ -63,12 +44,21 @@ $mysql->desconectar();
 
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-        <li class="nav-item"><a class="nav-link" href="views/productos_usuario.php">Productos</a></li>
-                <li class="nav-item"><a class="nav-link" href="views/blog_usuario.php">Blog</a></li>
-        <li class="nav-item"><a class="nav-link" href="views/contacto.php">Contacto</a></li>
-        <li class="nav-item"><a class="nav-link" href="views/user_pedidos.php">Mis Pedidos</a></li>
-         <?php } ?>
+        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
+          <li class="nav-item"><a class="nav-link active" href="../views/admin_pedidos.php">PEDIDOS</a></li>
+        <li class="nav-item"><a class="nav-link active" href="../views/creacion.php">CREAR</a></li>
+        <li class="nav-item"><a class="nav-link active" href="../views/registrar.php">REGISTRAR</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">REPARTIDORES</a></li>
+        
+                        <li class="nav-item"><a class="nav-link" href="../views/gestionar_repartidores.php">Gestion Repartidores</a></li>
+        <?php } elseif (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'repartidor') { ?>
+                         <li class="nav-item"><a class="nav-link active" href="../views/repartidores.php">Mis Entregas</a></li> <?php } ?>
+        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+        <li class="nav-item"><a class="nav-link" href="../views/productos_usuario.php">Productos</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/blog_usuario.php">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
+        <li class="nav-item"><a class="nav-link" href="../views/user_pedidos.php">Mis Pedidos</a></li>
+        <?php } ?>
       </ul>
 
       <div class="d-flex align-items-center gap-2">
@@ -78,146 +68,181 @@ $mysql->desconectar();
         <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
     </button>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-        <li><a class="dropdown-item" href="views/editar_perfil.php">Editar Perfil</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="controllers/logout.php">Cerrar Sesión</a></li>
+        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+                                <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <?php } ?>
+        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
     </ul>
 </div>
         <?php else: ?>
-          <a href="views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
+          <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
         <?php endif; ?>
-        
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-          
+           
         <?php } ?>
       </div>
     </div>
   </div>
+  
 </nav>
 
-<!-- Encabezado -->
-<header class="header-title-bg py-5 text-center">
-  <div class="container">
-    <h1 class="display-5">Productos Lácteos Artesanales</h1>
-    <p class="lead">Disfruta del sabor auténtico de Asturias.</p>
+<div class="container py-5">
+  <h1 class="mb-4 fw-bold text-center">Nuestro Blog</h1>
+  <div class="row g-4">
+
+    <?php foreach ($articulos as $articulo): ?>
+  <div class="col-md-3">
+    <div class="card blog-card h-100">
+      <img src="../<?php echo $articulo['imagen']; ?>" alt="Imagen del artículo" class="blog-img">
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title fw-bold"><?php echo $articulo['titulo']; ?></h5>
+        <p class="card-text text-muted"><?php echo mb_strimwidth($articulo['contenido'], 0, 100, '...'); ?></p>
+        <div class="d-flex gap-2 mt-auto">
+          <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user'): ?>
+            <a href="#" class="btn btn-outline-success w-100 rounded-pill"
+               data-bs-toggle="modal" data-bs-target="#modalVerMas<?php echo $articulo['id']; ?>">
+              Ver Más
+            </a>
+          <?php endif; ?>
+
+          <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
+            <button type="button" class="btn btn-outline-success w-100 rounded-pill"
+                    data-bs-toggle="modal" data-bs-target="#modalEditar<?php echo $articulo['id']; ?>">
+              Editar
+            </button>
+            <button type="button" class="btn btn-outline-danger rounded-pill"
+                    data-bs-toggle="modal" data-bs-target="#confirmarEliminar<?php echo $articulo['id']; ?>">
+              Eliminar
+            </button>
+
+            <!-- Modal Confirmar Eliminación -->
+            <div class="modal fade" id="confirmarEliminar<?php echo $articulo['id']; ?>" tabindex="-1"
+                 aria-labelledby="confirmarEliminarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="confirmarEliminarLabel<?php echo $articulo['id']; ?>">
+                      Confirmar eliminación
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Cerrar"></button>
+                  </div>
+                  <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar el artículo <strong><?php echo htmlspecialchars($articulo['titulo']); ?></strong>?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form action="../controllers/eliminar_articulo.php" method="POST">
+                      <input type="hidden" name="id" value="<?php echo $articulo['id']; ?>">
+                      <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
   </div>
-</header>
 
-<!-- Carrusel Grande de Yogures -->
-<div id="carouselYogures" class="carousel slide fullscreen-carousel" data-bs-ride="carousel">
-  <div class="carousel-inner">
-    
-    
-    <!-- Yogur 1 -->
-    <div class="carousel-item active">
-      <img src="assets/imagenes/carrusel2.jpg" class="d-block w-100" alt="Yogur de Vainilla">
-      <div class="carousel-caption animate-fadeInUp">
-        <h3>Yogur de Vainilla</h3>
-        <p>Vainilla natural de Madagascar para un sabor suave y aromático.</p>
+  <!-- Modal Ver Más -->
+  <div class="modal fade" id="modalVerMas<?php echo $articulo['id']; ?>" tabindex="-1"
+       aria-labelledby="modalVerMasLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-4">
+        <div class="modal-header bg-rodado text-white border-0">
+          <h5 class="modal-title" id="modalVerMasLabel<?php echo $articulo['id']; ?>">
+            <?php echo htmlspecialchars($articulo['titulo']); ?>
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                  aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <?php if (!empty($articulo['imagen'])): ?>
+            <img src="../<?php echo $articulo['imagen']; ?>" class="img-fluid mb-4 rounded-3"
+                 alt="Imagen del artículo">
+          <?php endif; ?>
+          <p><?php echo nl2br(htmlspecialchars($articulo['contenido'])); ?></p>
+        </div>
       </div>
     </div>
-  
-      <!-- Yogur 1 -->
-      <div class="carousel-item active">
-      <img src="assets/imagenes/yogur4.png" class="d-block w-100" alt="Yogur de Vainilla">
-      <div class="carousel-caption animate-fadeInUp">
-        <h3>Yogur de Fresas</h3>
-        <p>Vainilla natural de Madagascar para un sabor suave y aromático.</p>
-      </div>
-    </div>
-
-     <!-- Yogur 1 -->
-    <div class="carousel-item active">
-      <img src="assets/imagenes/carrusel1.jpg" class="d-block w-100" alt="Yogur de Vainilla">
-      <div class="carousel-caption animate-fadeInUp">
-        <h3>Yogur de Fresas3</h3>
-        <p>Vainilla natural de Madagascar para un sabor suave y aromático.</p>
-      </div>
-    </div>
-
   </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselYogures" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Anterior</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselYogures" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Siguiente</span>
-  </button>
+
+  <!-- Modal de edición de artículo -->
+<div class="modal fade" id="modalEditar<?php echo $articulo['id']; ?>" tabindex="-1" aria-labelledby="modalEditarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <form class="modal-content form-container" action="../controllers/actualizar_articulo.php" method="POST" enctype="multipart/form-data">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEditarLabel<?php echo $articulo['id']; ?>">Editar Artículo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body">
+        <input type="hidden" name="id" value="<?php echo $articulo['id']; ?>">
+        <input type="hidden" name="imagenActual" value="<?php echo $articulo['imagen']; ?>">
+
+        <div class="mb-3">
+          <label class="form-label">Título del artículo</label>
+          <input type="text" name="titulo" class="form-control" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" value="<?php echo htmlspecialchars($articulo['titulo']); ?>" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Contenido</label>
+          <textarea name="contenido" rows="6" class="form-control" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" required><?php echo htmlspecialchars($articulo['contenido']); ?></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Imagen de portada (opcional)</label>
+          <input type="file" name="imagen" class="form-control">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-outline-success">Guardar cambios</button>
+      </div>
+    </form>
+  </div>
 </div>
 
-<!-- Quienes Somos? -->
-<section class="quienes-somos-section py-5 bg-white">
-  <div class="container">
-    <div class="row align-items-center">
-      <!-- Imagen -->
-      <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
-        <img src="assets/imagenes/quienessomos" alt="Equipo de Flor Reina" class="img-fluid rounded shadow">
-      </div>
-      <!-- Texto -->
-      <div class="col-lg-6" data-aos="fade-left">
-        <h2 class="fw-bold mb-3">¿Quiénes somos?</h2>
-        <p class="fs-5">En <strong>Flor Reina</strong>, somos una familia apasionada por la tradición y el sabor auténtico. Desde el corazón de Asturias, elaboramos yogures artesanales con ingredientes naturales y procesos que respetan la herencia láctea de nuestra tierra.</p>
-        <p class="fs-5">Cada cucharada de nuestros productos refleja el compromiso con la calidad, la sostenibilidad y el bienestar de nuestros clientes.</p>
-        <a href="views/nuestra-historia.php" class="btn btn-outline-primary mt-3">Conoce nuestra historia</a>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- Sección de Visión y Misión con Animaciones -->
-<section class="vision-mision-section">
-  <div class="container">
-    <div class="text-center mb-5" data-aos="fade-up">
-      <h2 class="display-4 fw-bold">Nuestra Esencia</h2>
-      <p class="lead">Lo que nos define y nos impulsa cada día</p>
-    </div>
-    
-    <div class="row g-4">
-      <!-- Visión -->
-      <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
-        <div class="vision-card p-5 text-center h-100">
-          <i class="bi bi-eye-fill card-icon"></i>
-          <h3 class="fw-bold mb-3">Visión</h3>
-          <p class="fs-5">Ser reconocidos como la marca líder en yogures artesanales, ofreciendo productos de alta calidad que deleiten a nuestros clientes y promuevan un estilo de vida saludable.</p>
-          <div class="mt-4" data-aos="fade-up" data-aos-delay="300">
-            <p class="mb-1"><i class="bi bi-check-circle me-2"></i> Innovación constante</p>
-            <p class="mb-1"><i class="bi bi-check-circle me-2"></i> Calidad certificada</p>
-            <p class="mb-1"><i class="bi bi-check-circle me-2"></i> Sostenibilidad</p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Misión -->
-      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="100">
-        <div class="mision-card p-5 text-center h-100">
-          <i class="bi bi-heart-fill card-icon"></i>
-          <h3 class="fw-bold mb-3">Misión</h3>
-          <p class="fs-5">Elaborar yogures caseros con ingredientes naturales y frescos, brindando a nuestros clientes una experiencia única de sabor y bienestar en cada cucharada.</p>
-          <div class="mt-4" data-aos="fade-up" data-aos-delay="300">
-            <p class="mb-1"><i class="bi bi-check-circle me-2"></i> Ingredientes locales</p>
-            <p class="mb-1"><i class="bi bi-check-circle me-2"></i> Procesos tradicionales</p>
-            <p class="mb-1"><i class="bi bi-check-circle me-2"></i> Satisfacción garantizada</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<?php endforeach; ?>
 
-
-<!-- Sección de Ubicación -->
-<section class="ubicacion-section py-5 bg-light">
-  <div class="container">
-    <h2 class="text-center fw-bold mb-5">¿Dónde estamos?</h2>
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-      </div>
-    </div>
   </div>
-</section>
+</div>
 
-  <!-- Modal del Carrito (se abre desde la derecha) -->
+ <!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<?php if (isset($_GET['estado'])): ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        <?php if ($_GET['estado'] === 'exito'): ?>
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: 'Artículo actualizado correctamente.',
+                confirmButtonText: 'Aceptar'
+            });
+        <?php elseif ($_GET['estado'] === 'error'): ?>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '<?= htmlspecialchars($_GET["mensaje"] ?? "Hubo un error") ?>',
+                confirmButtonText: 'Intentar de nuevo'
+            });
+        <?php endif; ?>
+
+        // ✅ Eliminar los parámetros de la URL sin recargar
+        if (window.history.replaceState) {
+            const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.replaceState({ path: url }, "", url);
+        }
+    </script>
+<?php endif; ?>
+
+ <!-- Modal del Carrito (se abre desde la derecha) -->
 <div class="modal fade" id="modalCarrito" tabindex="-1" aria-labelledby="modalCarritoLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-slideout modal-lg">
     <div class="modal-content h-100 rounded-start-4">
@@ -276,76 +301,15 @@ $mysql->desconectar();
 </div>
 
 <!-- Footer -->
-<footer class="bg-dark text-white py-4 mt-5">
-  <div class="container text-center">
-    <p class="mb-1">&copy; 2025 Flor Reina. Todos los derechos reservados.</p>
-    <small>Contacto: info@florreina.es | Tel: +34 666 999 123</small>
-  </div>
-</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<footer class="bg-dark text-white py-4 mt-auto">
+    <div class="container text-center">
+      <p class="mb-1">&copy; 2025 The Rains. Todos los derechos reservados.</p>
+      <small>Contacto: info@tralemda.com | Tel: +34 666 999 125</small>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  // Inicializar animaciones
-  AOS.init({
-    duration: 1000,
-    once: true
-  });
-  
-  // Pausar carrusel al pasar el mouse
-  const carousel = document.getElementById('carouselYogures');
-  carousel.addEventListener('mouseenter', () => {
-    const carouselInstance = bootstrap.Carousel.getInstance(carousel);
-    carouselInstance.pause();
-  });
-  
-  carousel.addEventListener('mouseleave', () => {
-    const carouselInstance = bootstrap.Carousel.getInstance(carousel);
-    carouselInstance.cycle();
-  });
-</script>
-<script>
-          function agregarCampo() {
-          const contenedor = document.getElementById('contenedor-ingredientes');
-          const columnas = contenedor.getElementsByClassName('col-md-6');
-          let ultimaColumna = columnas[columnas.length - 1];
-          const totalInputs = contenedor.querySelectorAll('input[name="ingredientes[]"]').length;
-
-          if (totalInputs % 5 === 0) {
-            const nuevaColumna = document.createElement('div');
-            nuevaColumna.className = 'col-md-6';
-            nuevaColumna.id = `columna-ingredientes-${columnas.length + 1}`;
-            contenedor.appendChild(nuevaColumna);
-            ultimaColumna = nuevaColumna;
-          }
-
-          const nuevoCampo = document.createElement('div');
-          nuevoCampo.className = 'input-group mb-2';
-          nuevoCampo.innerHTML = `
-            <input type="text" name="ingredientes[]" class="form-control" placeholder="Escribe un ingrediente">
-            <button type="button" class="btn btn-outline-danger" onclick="eliminarCampo(this)">
-            <i class="bi bi-trash"></i>
-            </button>
-          `;
-          ultimaColumna.appendChild(nuevoCampo);
-          }
-
-          function eliminarCampo(boton) {
-          const campo = boton.parentElement;
-          const columna = campo.parentElement;
-          columna.removeChild(campo);
-
-          // Reorganizar columnas si están vacías
-          const contenedor = document.getElementById('contenedor-ingredientes');
-          const columnas = Array.from(contenedor.getElementsByClassName('col-md-6'));
-          columnas.forEach(col => {
-            if (col.children.length === 0) {
-            contenedor.removeChild(col);
-            }
-          });
-          }
-        </script>
-        <script>
   document.addEventListener('DOMContentLoaded', function() {
     // Inicializar carrito desde localStorage
     let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
@@ -558,6 +522,5 @@ tr.innerHTML = `
     // Inicializar contador al cargar la página
     actualizarContador();
   });
-</script>
 </body>
 </html>
