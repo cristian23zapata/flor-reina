@@ -109,8 +109,8 @@ $mysql->desconectar();
                 <?php } elseif (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'repartidor') { ?>
                        <li class="nav-item"><a class="nav-link" href="repartidores.php">Mis Entregas</a></li> 
                 <?php } ?>
-                <li class="nav-item"><a class="nav-link" href="productos.php">Productos</a></li>
-                <li class="nav-item"><a class="nav-link" href="blog.php">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="./productos_usuario.php">Productos</a></li>
+                <li class="nav-item"><a class="nav-link" href="./blog_usuario.php">Blog</a></li>
                  <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
                     <li class="nav-item"><a class="nav-link" href="contacto.php">Contacto</a></li>
                     <li class="nav-item"><a class="nav-link" href="user_pedidos.php">Mis Pedidos</a></li>

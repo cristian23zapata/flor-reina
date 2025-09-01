@@ -4,7 +4,7 @@ session_start();
 $mysql = new MySQL();
 $mysql->conectar();
 // Construcción de consulta dinámica con filtros
-$consulta = "SELECT * FROM productos WHERE 1";
+$consulta = "SELECT * FROM productos WHERE estado = 'activo'";
 // Filtrar por ingredientes seleccionados
 if (isset($_GET['ingredientes']) && is_array($_GET['ingredientes'])) {
 foreach ($_GET['ingredientes'] as $ing) {
@@ -17,8 +17,8 @@ $consulta .= " AND ingredientes LIKE '%$ing%'";
 $resultado = $mysql->efectuarConsulta($consulta);
 
 // Obtener ingredientes únicos para el filtro (tu lógica original)
-$query = "SELECT ingredientes FROM productos";
-$result = $mysql->efectuarConsulta("SELECT ingredientes FROM productos");
+$query = "SELECT ingredientes FROM productos where estado = 'activo'";
+$result = $mysql->efectuarConsulta("SELECT ingredientes FROM productos where estado = 'activo'");
 $ingredientes_unicos = [];
 while ($row = mysqli_fetch_assoc($result)) {
 $ingredientes = explode(',', $row['ingredientes']);

@@ -26,7 +26,7 @@
           </div>
           <div class="mb-3">
             <label for="nombre" class="form-label text-secondary fw-semibold">Direccion </label>
-            <input type="text" class="form-control border-pink" title="Solo letras, espacios y numeros" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" id="direccion" name="direccion" placeholder="Tu direccion" required>
+            <input type="text" class="form-control border-pink" title="Solo letras, espacios y numeros" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s#-]+$" id="direccion" name="direccion" placeholder="Tu direccion" required>
           </div>
           <div class="mb-3">
             <label for="nombre" class="form-label text-secondary fw-semibold">Telefono</label>
