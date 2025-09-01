@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $mysql->desconectar();
 
-    header("Location: ../views/productos.php"); // Redirige
+    header("Location: ../views/productos_usuario.php"); // Redirige
     exit;
 }
 ?>

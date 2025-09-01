@@ -371,7 +371,7 @@ sort($ingredientes_unicos);
                                             </div>
                                             <?php endwhile; ?>
                                             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                                            <form action="../controllers/agregar_comentario.php" method="POST" class="mt-3">
+                                            <form action="../controllers/guardar_comentario.php" method="POST" class="mt-3">
                                                 <input type="hidden" name="producto_id" value="<?php echo $producto['id']; ?>">
                                                 <div class="mb-3">
                                                     <label for="comentario" class="form-label">Tu opinión:</label>
