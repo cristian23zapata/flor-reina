@@ -23,7 +23,7 @@ function mostrarMensaje($mensaje, $tipo = "info") {
                         <div class="alert alert-' . $tipo . ' fw-semibold">
                             ' . $mensaje . '
                         </div>
-                        <a href="../views/index.php" class="btn btn-pink mt-3"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
+                        <a href="../index.php" class="btn btn-pink mt-3"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
                     </div>
                 </div>
             </div>

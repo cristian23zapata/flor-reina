@@ -53,6 +53,12 @@ $mysql->desconectar();
                         <li class="nav-item"><a class="nav-link" href="../views/gestionar_repartidores.php">Gestion Repartidores</a></li>
         <?php } elseif (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'repartidor') { ?>
                          <li class="nav-item"><a class="nav-link active" href="../views/repartidores.php">Mis Entregas</a></li> <?php } ?>
+        
+        <?php if (empty($_SESSION['tipo'])) { ?>
+            <li class="nav-item"><a class="nav-link" href="../views/productos_usuario.php">Productos</a></li>
+            <li class="nav-item"><a class="nav-link" href="../views/blog_usuario.php">Blog</a></li>
+        <?php } ?>
+        
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos_usuario.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/blog_usuario.php">Blog</a></li>
@@ -99,12 +105,12 @@ $mysql->desconectar();
         <h5 class="card-title fw-bold"><?php echo $articulo['titulo']; ?></h5>
         <p class="card-text text-muted"><?php echo mb_strimwidth($articulo['contenido'], 0, 100, '...'); ?></p>
         <div class="d-flex gap-2 mt-auto">
-          <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user'): ?>
+          
             <a href="#" class="btn btn-outline-success w-100 rounded-pill"
                data-bs-toggle="modal" data-bs-target="#modalVerMas<?php echo $articulo['id']; ?>">
               Ver Más
             </a>
-          <?php endif; ?>
+
 
           <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
             <button type="button" class="btn btn-outline-success w-100 rounded-pill"

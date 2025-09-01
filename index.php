@@ -63,12 +63,13 @@ $mysql->desconectar();
 
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
         <li class="nav-item"><a class="nav-link" href="views/productos_usuario.php">Productos</a></li>
-                <li class="nav-item"><a class="nav-link" href="views/blog_usuario.php">Blog</a></li>
-        <li class="nav-item"><a class="nav-link" href="views/contacto.php">Contacto</a></li>
-        <li class="nav-item"><a class="nav-link" href="views/user_pedidos.php">Mis Pedidos</a></li>
-         <?php } ?>
+        <li class="nav-item"><a class="nav-link" href="views/blog_usuario.php">Blog</a></li>
+        
+          <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+          <li class="nav-item"><a class="nav-link" href="views/contacto.php">Contacto</a></li>
+          <li class="nav-item"><a class="nav-link" href="views/user_pedidos.php">Mis Pedidos</a></li>
+          <?php } ?>
       </ul>
 
       <div class="d-flex align-items-center gap-2">

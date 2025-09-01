@@ -119,8 +119,8 @@ if (empty($success_message) && $numero_pedido === 'N/A') {
                     <li class="nav-item"><a class="nav-link active" href="../views/registrar.php">REGISTRAR</a></li>
                     <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">Repartidores</a></li>
                     <?php } ?>
-                    <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../views/productos_usuario.php">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../views/blog_usuario.php">Blog</a></li>
                     <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
                     <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
                     <?php } ?>
@@ -159,7 +159,7 @@ if (empty($success_message) && $numero_pedido === 'N/A') {
             <?php endif; ?>
             <p class="lead">Tu pedido con número <strong><?php echo htmlspecialchars($numero_pedido); ?></strong> ha sido registrado exitosamente.</p>
             <p>Recibirás un correo electrónico con los detalles completos de tu compra en breve.</p>
-            <a href="../views/productos.php" class="btn btn-primary mt-4">
+            <a href="./productos_usuario.php" class="btn btn-primary mt-4">
                 <i class="bi bi-shop"></i> Seguir Comprando
             </a>
         </div>

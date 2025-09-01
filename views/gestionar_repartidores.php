@@ -8,7 +8,7 @@ if (!isset($_SESSION['correo'])) {
 }
 
 if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { 
-    header("Location: ../views/index.php");
+    header("Location: ../index.php");
     exit();
 }
 

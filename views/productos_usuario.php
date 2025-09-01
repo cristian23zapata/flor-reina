@@ -138,8 +138,14 @@ sort($ingredientes_unicos);
 <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
 <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
 <?php } elseif (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'repartidor') { ?>
-                         <li class="nav-item"><a class="nav-link active" href="../views/repartidores.php">Mis Entregas</a></li> <?php } ?>
+                         <li class="nav-item"><a class="nav-link active" href="../views/repartidores.php">Mis Entregas</a></li> 
+                         <?php } ?>
 
+          <?php if (empty($_SESSION['tipo'])) { ?>
+            <li class="nav-item"><a class="nav-link" href="../views/productos_usuario.php">Productos</a></li>
+            <li class="nav-item"><a class="nav-link" href="../views/blog_usuario.php">Blog</a></li>
+        <?php } ?>
+        
          <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
         <li class="nav-item"><a class="nav-link" href="../views/productos_usuario.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="../views/blog_usuario.php">Blog</a></li>

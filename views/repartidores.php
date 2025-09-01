@@ -10,7 +10,7 @@ if (!isset($_SESSION['tipo']) ){
 
 if (isset($_SESSION['tipo']) ){
     if ($_SESSION['tipo'] === 'user') {
-        header("Location: ../views/index.php");
+        header("Location: ../index.php");
         exit();
     } elseif ($_SESSION['tipo'] !== 'repartidor' && $_SESSION['tipo'] !== 'admin') {
         header("Location: ../views/login.php");
