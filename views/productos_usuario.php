@@ -373,6 +373,7 @@ sort($ingredientes_unicos);
                                             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
                                             <form action="../controllers/guardar_comentario.php" method="POST" class="mt-3">
                                                 <input type="hidden" name="producto_id" value="<?php echo $producto['id']; ?>">
+                                                <input type="hidden" name="nombre" value="<?php echo $_SESSION['nombre']; ?>">
                                                 <div class="mb-3">
                                                     <label for="comentario" class="form-label">Tu opinión:</label>
                                                     <textarea class="form-control" id="comentario" name="comentario" rows="3" required></textarea>
