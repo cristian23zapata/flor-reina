@@ -6,9 +6,9 @@ class MySQL {
 
     //Datos de conexion
     private $ipServidor = "localhost";
-    private $usuarioBase = "root";
-    private $contrasena = "";
-    private $nombreBaseDatos = "florreina_bd";
+    private $usuarioBase = "u810917883_florreina_bd";
+    private $contrasena = "DE~0kp~5gO";
+    private $nombreBaseDatos = "u810917883_florreina_bd";
 
     private $conexion; // Ahora $this->conexion será un objeto mysqli
 

@@ -1,5 +1,5 @@
 <?php
-require_once 'models/MySQL.php';
+require_once './models/MySQL.php';
 
 session_start();
 
