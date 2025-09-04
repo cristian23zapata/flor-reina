@@ -460,17 +460,16 @@ $mysql->desconectar();
                                             <?php if ($_SESSION['tipo'] === 'repartidor' && $pedido['estado'] !== 'entregado' && $pedido['estado'] !== 'cancelado'): ?>
                                                 <form action="../controllers/gestionar_asignacion_repartidor.php" method="POST" class="d-flex align-items-center gap-2">
                                                     <input type="hidden" name="id_pedido" value="<?php echo htmlspecialchars($pedido['id']); ?>">
-                                                    <select name="nuevo_estado" class="form-select form-select-sm" required>
-                                                        <option value="">Actualizar estado...</option>
-                                                        <?php if ($pedido['estado'] === 'asignado' || $pedido['estado'] === 'enviado'): ?>
-                                                            <option value="en_camino">En camino</option>
-                                                        <?php endif; ?>
-                                                        <?php if ($pedido['estado'] === 'en_camino' || $pedido['estado'] === 'asignado' || $pedido['estado'] === 'enviado'): ?>
-                                                            <option value="entregado">Entregado</option>
-                                                        <?php endif; ?>
-                                                    </select>
-                                                    <button type="submit" name="actualizar_estado" class="btn btn-sm btn-info">Actualizar</button>
-                                                </form>
+                                                    <?php if ($_SESSION['tipo'] === 'repartidor' && $pedido['estado'] !== 'entregado'): ?>
+    <form action="../controllers/gestionar_asignacion_repartidor.php" method="post" class="d-inline">
+        <input type="hidden" name="id_pedido" value="<?php echo htmlspecialchars($pedido['id']); ?>">
+        <input type="hidden" name="nuevo_estado" value="entregado">
+        <button type="submit" name="actualizar_estado" class="btn btn-success btn-sm">
+            <i class="bi bi-check-circle"></i> Entregado
+        </button>
+    </form>
+                                            <?php endif; ?>
+                                                    
                                                 <form action="../controllers/gestionar_asignacion_repartidor.php" method="POST">
                                                     <input type="hidden" name="id_pedido" value="<?php echo htmlspecialchars($pedido['id']); ?>">
                                                 </form>

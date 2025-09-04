@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     }
 
     // Verificar si el correo ya está registrado
-    $resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios WHERE correo = '$correo'");
+    $resultado = $mysql->efectuarConsulta("SELECT * FROM usuarios WHERE correo = '$correo'");
     if ($resultado->num_rows > 0) {
         header("refresh:1;url=../views/registro.php?estado=correo_existente");
         exit();
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     // Insertar el nuevo usuario en la base de datos
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    $mysql->efectuarConsulta("INSERT INTO Usuarios (nombre, correo, direccion, telefono, password, tipo) VALUES ('$nombre', '$correo', '$direccion', '$telefono', '$hashed_password', 'user')");
+    $mysql->efectuarConsulta("INSERT INTO usuarios (nombre, correo, direccion, telefono, password, tipo) VALUES ('$nombre', '$correo', '$direccion', '$telefono', '$hashed_password', 'user')");
 
     header("refresh:3;url=../views/login.php?estado=exito");
 }

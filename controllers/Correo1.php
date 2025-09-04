@@ -48,7 +48,7 @@ class Correo {
     // Función para manejar la recuperación de contraseña
     public function recuperarContrasena($correo) {
         // Conectar a la base de datos
-        $mysqli = new mysqli('localhost', 'root', '', 'florreina_bd');
+        $mysqli = new mysqli('localhost', 'u810917883_florreina_bd', 'DE~0kp~5gO', 'u810917883_florreina_bd');
 
         // Verificar la conexión
         if ($mysqli->connect_error) {

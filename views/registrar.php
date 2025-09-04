@@ -200,7 +200,7 @@ $mysql->desconectar();
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Teléfono</label>
-                    <input type="tel" class="form-control" name="telefono" title="solo numeros" pattern="^[0-9]+$" required>
+                    <input type="number" class="form-control" name="telefono" title="solo numeros" pattern="^[0-9]+$" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Contraseña</label>

@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_check_repartidor->close();
 
         // Asignar el repartidor y cambiar el estado a 'asignado'
-        $query_assign = "UPDATE pedidos SET id_repartidor = ?, estado = 'asignado' WHERE id = ? AND id_repartidor IS NULL";
+        $query_assign = "UPDATE pedidos SET id_repartidor = ?, estado = 'enviado' WHERE id = ? AND id_repartidor IS NULL";
         $stmt_assign = $conn->prepare($query_assign);
         $stmt_assign->bind_param("ii", $id_repartidor_a_asignar, $id_pedido);
         

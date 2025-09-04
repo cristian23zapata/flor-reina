@@ -54,67 +54,127 @@ sort($ingredientes_unicos);
         --text-color: #5a5a5a;
         --light-bg: #f8f9fa; /* Color de fondo general */
     }
-
-    /* Estilo del contenedor del filtro */
-    .filter-sidebar {
-        background-color: #ffffff; /* Fondo blanco para el filtro */
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra suave */
-        padding: 20px;
-        margin-bottom: 20px; /* Espacio debajo del filtro en pantallas pequeñas */
-    }
-
-    /* Ajustes para el acordeón del filtro */
-    .filter-sidebar .accordion-button {
-        font-size: 1.1em;
-        color: var(--primary-pink); /* Color del texto del botón del acordeón */
-        background-color: var(--light-bg); /* Fondo del botón del acordeón */
-        border-radius: 5px;
-        padding: 10px 15px;
-        margin-bottom: 10px;
-    }
-    /* Estilo cuando el acordeón está expandido */
-    .filter-sidebar .accordion-button:not(.collapsed) {
-        background-color: var(--lighter-pink); /* Fondo más claro cuando está abierto */
-        color: var(--darker-pink); /* Color de texto más oscuro cuando está abierto */
-    }
-    .filter-sidebar .accordion-body {
-        padding-top: 15px;
-        padding-bottom: 0;
-    }
-    .filter-sidebar .form-check-label {
-        font-size: 0.95em;
-        color: var(--text-color);
-    }
-
-    /* Estilo para los botones dentro del filtro */
-    .filter-sidebar .btn-primary {
-        background-color: var(--primary-pink);
-        border-color: var(--primary-pink);
-    }
-    .filter-sidebar .btn-primary:hover {
-        background-color: var(--darker-pink);
-        border-color: var(--darker-pink);
-    }
-    .filter-sidebar .btn-outline-secondary {
-        border-color: #6c757d; /* Color gris de Bootstrap */
-        color: #6c757d;
-    }
-    .filter-sidebar .btn-outline-secondary:hover {
-        background-color: #6c757d;
-        color: white;
-    }
-
-    /* Media queries para que el filtro sea sticky en pantallas grandes */
-    @media (min-width: 768px) {
-        .filter-sidebar {
-            position: sticky; /* Hace que el filtro se quede fijo al hacer scroll */
-            top: 20px; /* Distancia desde la parte superior de la ventana */
-            align-self: flex-start; /* Ayuda al sticky en contenedores flex */
-            max-height: calc(100vh - 40px); /* Para que no ocupe más de la altura de la ventana */
-            overflow-y: auto; /* Permite scroll si el contenido del filtro es muy largo */
+    
+            /* Estilos para botones del mismo tamaño */
+        .btn-mismo-tamano {
+            width: 100%;
+            min-height: 45px; /* Altura mínima para ambos botones */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: normal; /* Permite que el texto se ajuste en varias líneas */
+            word-wrap: break-word;
+            text-align: center;
+            padding: 10px 15px;
         }
-    }
+        
+        /* Para el botón más largo, asegurar que el texto se divida en dos líneas */
+        .btn-texto-largo {
+            line-height: 1.2;
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+
+           /* ESTILOS CORREGIDOS PARA EL FILTRO DE INGREDIENTES */
+        .filter-sidebar {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter-sidebar .accordion-button {
+            font-size: 1.1em;
+            color: var(--primary-pink);
+            background-color: var(--light-bg);
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            white-space: normal; /* Permite que el texto se ajuste */
+            word-wrap: break-word; /* Rompe palabras largas */
+        }
+
+        .filter-sidebar .accordion-button:not(.collapsed) {
+            background-color: var(--lighter-pink);
+            color: var(--darker-pink);
+        }
+
+        .filter-sidebar .accordion-body {
+            padding-top: 15px;
+            padding-bottom: 0;
+            max-height: 400px; /* Limita la altura y añade scroll si es necesario */
+            overflow-y: auto;
+        }
+
+        .filter-sidebar .form-check {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .filter-sidebar .form-check-input {
+            margin-top: 0.25rem; /* Alinea mejor con el texto */
+            flex-shrink: 0; /* Evita que se reduzca el checkbox */
+        }
+
+        .filter-sidebar .form-check-label {
+            font-size: 0.95em;
+            color: var(--text-color);
+            margin-left: 8px;
+            word-wrap: break-word; /* Rompe palabras largas */
+            overflow-wrap: break-word; /* Alternativa para mejor soporte */
+            white-space: normal; /* Permite múltiples líneas */
+            line-height: 1.4; /* Mejor espaciado entre líneas */
+            flex: 1; /* Ocupa el espacio restante */
+        }
+
+        /* Contenedor para las etiquetas de checkbox - IMPORTANTE */
+        .filter-checkbox-container {
+            max-width: 100%;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        /* Botones del filtro */
+        .filter-sidebar .btn-primary {
+            background-color: var(--primary-pink);
+            border-color: var(--primary-pink);
+            white-space: nowrap;
+        }
+
+        .filter-sidebar .btn-outline-secondary {
+            border-color: #6c757d;
+            color: #6c757d;
+            white-space: nowrap;
+        }
+
+        /* Media queries para pantallas grandes */
+        @media (min-width: 768px) {
+            .filter-sidebar {
+                position: sticky;
+                top: 20px;
+                align-self: flex-start;
+                max-height: calc(100vh - 40px);
+                overflow-y: auto;
+            }
+            
+            .filter-sidebar .accordion-body {
+                max-height: 60vh; /* Altura máxima relativa a la ventana */
+            }
+        }
+
+        /* Para pantallas muy pequeñas */
+        @media (max-width: 576px) {
+            .filter-sidebar {
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+            
+            .filter-sidebar .form-check-label {
+                font-size: 0.9em; /* Texto un poco más pequeño en móviles */
+            }
+        }
 </style>
 </head>
 <body>
@@ -193,43 +253,52 @@ sort($ingredientes_unicos);
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-3 col-md-4">
-            <div class="filter-sidebar"> <div class="accordion" id="accordionFiltros">
-                    <div class="accordion-item border-0">
-                        <h2 class="accordion-header" id="headingFiltros">
-                            <button class="accordion-button fw-bold text-uppercase"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#collapseFiltros"
-                                aria-expanded="true" aria-controls="collapseFiltros">
-                                Filtrar por ingredientes
-                            </button>
-                        </h2>
-                        <div id="collapseFiltros" class="accordion-collapse collapse show" aria-labelledby="headingFiltros"
-                            data-bs-parent="#accordionFiltros">
-                            <div class="accordion-body p-0 pt-3">
-                                <form method="GET" action="">
-                                    <div class="d-flex flex-column gap-2 mb-4"> <?php
-                                        // La lógica para obtener ingredientes únicos ya está al inicio del archivo
-                                        foreach ($ingredientes_unicos as $ing): ?>
-                                            <div class="form-check m-0"> <input class="form-check-input" type="checkbox" name="ingredientes[]"
-                                                    id="ing-<?= htmlspecialchars($ing) ?>"
-                                                    value="<?= htmlspecialchars($ing) ?>"
-                                                    <?= (isset($_GET['ingredientes']) && in_array($ing, $_GET['ingredientes'])) ?
-                                                        'checked' : '' ?>>
-                                                <label class="form-check-label small" for="ing-<?= htmlspecialchars($ing) ?>">
-                                                    <?= htmlspecialchars($ing) ?>
-                                                </label>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary w-100 px-4 py-2 fw-bold">Aplicar Filtros</button>
-                                    <?php if (!empty($_GET['ingredientes'])): ?>
-                                        <a href="productos.php" class="btn btn-outline-secondary w-100 mt-2 py-2">Limpiar Filtros</a>
-                                    <?php endif; ?>
-                                </form>
+            <div class="filter-sidebar">
+                    <div class="accordion" id="accordionFiltros">
+                        <div class="accordion-item border-0">
+                            <h2 class="accordion-header" id="headingFiltros">
+                                <button class="accordion-button fw-bold text-uppercase collapsed"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#collapseFiltros"
+                                    aria-expanded="false" 
+                                    aria-controls="collapseFiltros">
+                                    Filtrar por ingredientes
+                                </button>
+                            </h2>
+                            <div id="collapseFiltros" class="accordion-collapse collapse" 
+                                aria-labelledby="headingFiltros"
+                                data-bs-parent="#accordionFiltros">
+                                <div class="accordion-body p-0 pt-3">
+                                    <form method="GET" action="">
+                                        <div class="d-flex flex-column gap-2 mb-4">
+                                            <?php foreach ($ingredientes_unicos as $ing): ?>
+                                                <div class="form-check m-0 filter-checkbox-container">
+                                                    <input class="form-check-input" type="checkbox" 
+                                                        name="ingredientes[]"
+                                                        id="ing-<?= htmlspecialchars($ing) ?>"
+                                                        value="<?= htmlspecialchars($ing) ?>"
+                                                        <?= (isset($_GET['ingredientes']) && in_array($ing, $_GET['ingredientes'])) ?
+                                                            'checked' : '' ?>>
+                                                    <label class="form-check-label small" 
+                                                        for="ing-<?= htmlspecialchars($ing) ?>">
+                                                        <?= htmlspecialchars($ing) ?>
+                                                    </label>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100 px-4 py-2 fw-bold">
+                                            Aplicar Filtros
+                                        </button>
+                                        <?php if (!empty($_GET['ingredientes'])): ?>
+                                            <a href="productos.php" class="btn btn-outline-secondary w-100 mt-2 py-2">
+                                                Limpiar Filtros
+                                            </a>
+                                        <?php endif; ?>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -342,12 +411,12 @@ sort($ingredientes_unicos);
                                             </button>
                                             <?php } ?>
                                             <?php if (isset($_SESSION['tipo']) == NULL) { ?>
-                                            <a href="../views/login.php" class="btn btn-primary w-100 py-2">
+                                            <a href="../views/login.php" class="btn btn-primary btn-mismo-tamano w-100 py-2">
                                                 <i class="bi bi-cart-plus"></i> Agregar al Carrito
                                             </a>
                                             <?php } ?>
                                         </form>
-                                        <button class="btn btn-outline-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#comentariosSection" aria-expanded="false" aria-controls="comentariosSection">
+                                        <button class="btn btn-outline-primary btn-mismo-tamano mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#comentariosSection" aria-expanded="false" aria-controls="comentariosSection">
                                             Ver comentarios y dejar opinión
                                         </button>
                                         <div class="collapse" id="comentariosSection">

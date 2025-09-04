@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once '../models/MySQL.php';
 
 
@@ -12,8 +14,6 @@ if (isset($_GET['success']) && $_GET['success'] == 'true') {
 
 
 
-session_start();
-
     if (!isset($_SESSION['correo'])) {
     header("refresh:1;url=../views/login.php");
 
@@ -23,7 +23,7 @@ session_start();
     $mysql = new MySQL;
     $mysql->conectar();
 
-    $resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios;");
+    $resultado = $mysql->efectuarConsulta("SELECT * FROM usuarios;");
 
     $mysql->desconectar();
 
