@@ -1,11 +1,14 @@
 <?php
-require_once '../models/MySQL.php';
+
 
 session_start();
+require_once '../models/MySQL.php';
+
+
 
 $mysql = new MySQL;
 $mysql->conectar();
-$resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios;");
+$resultado = $mysql->efectuarConsulta("SELECT * FROM usuarios;");
 
 $articulos = $mysql->efectuarConsulta("SELECT * FROM articulos;");
 

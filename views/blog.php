@@ -1,7 +1,7 @@
 <?php
-require_once '../models/MySQL.php';
-
 session_start();
+
+require_once '../models/MySQL.php';
 
 if (!isset($_SESSION['correo'])) {
     header("refresh:1;url=../views/login.php");
@@ -10,7 +10,7 @@ if (!isset($_SESSION['correo'])) {
 
 $mysql = new MySQL;
 $mysql->conectar();
-$resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios;");
+$resultado = $mysql->efectuarConsulta("SELECT * FROM usuarios;");
 $articulos = $mysql->efectuarConsulta("SELECT * FROM articulos;");
 $mysql->desconectar();
 ?>
@@ -158,6 +158,21 @@ $mysql->desconectar();
       .modal.fade.show .modal-dialog.modal-dialog-slideout {
           transform: translate(0, 0);
       }
+      
+      /* Estilo para evitar parpadeo en modales */
+      .modal-backdrop {
+          opacity: 0.5 !important;
+      }
+      
+      /* Estilo para el botón de eliminar */
+      .btn-eliminar {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0;
+      }
     </style>
 </head>
 <body>
@@ -246,37 +261,37 @@ $mysql->desconectar();
                                         data-bs-toggle="modal" data-bs-target="#modalEditar<?php echo $articulo['id']; ?>">
                                     Editar
                                 </button>
-                                <button type="button" class="btn btn-outline-danger rounded-pill"
+                                <button type="button" class="btn btn-outline-danger rounded-pill btn-eliminar eliminar-btn"
                                         data-bs-toggle="modal" data-bs-target="#confirmarEliminar<?php echo $articulo['id']; ?>">
-                                    Eliminar
+                                    <i class="bi bi-trash"></i>
                                 </button>
-
-                                <!-- Modal Confirmar Eliminación -->
-                                <div class="modal fade" id="confirmarEliminar<?php echo $articulo['id']; ?>" tabindex="-1"
-                                     aria-labelledby="confirmarEliminarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-danger text-white">
-                                                <h5 class="modal-title" id="confirmarEliminarLabel<?php echo $articulo['id']; ?>">
-                                                    Confirmar eliminación
-                                                </h5>
-                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                                        aria-label="Cerrar"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                ¿Estás seguro de que deseas eliminar el artículo <strong><?php echo htmlspecialchars($articulo['titulo']); ?></strong>?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                <form action="../controllers/eliminar_articulo.php" method="POST">
-                                                    <input type="hidden" name="id" value="<?php echo $articulo['id']; ?>">
-                                                    <button type="submit" class="btn btn-danger">Eliminar</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Confirmar Eliminación -->
+            <div class="modal fade" id="confirmarEliminar<?php echo $articulo['id']; ?>" tabindex="-1"
+                 aria-labelledby="confirmarEliminarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="confirmarEliminarLabel<?php echo $articulo['id']; ?>">
+                                Confirmar eliminación
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Estás seguro de que deseas eliminar el artículo <strong><?php echo htmlspecialchars($articulo['titulo']); ?></strong>?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <form action="../controllers/eliminar_articulo.php" method="POST">
+                                <input type="hidden" name="id" value="<?php echo $articulo['id']; ?>">
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -417,6 +432,37 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+    
+    // Solución para el problema del backdrop que no se elimina
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        // Cuando se oculta un modal, forzar la eliminación del backdrop
+        modal.addEventListener('hidden.bs.modal', function () {
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => {
+                backdrop.parentNode.removeChild(backdrop);
+            });
+            
+            // También eliminar la clase que bloquea el scroll del body
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        });
+    });
+    
+    // Manejar botones de eliminar
+    const eliminarBtns = document.querySelectorAll('.eliminar-btn');
+    eliminarBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetModal = this.getAttribute('data-bs-target');
+            const modal = document.querySelector(targetModal);
+            if (modal) {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            }
+        });
+    });
 });
 </script>
 </body>

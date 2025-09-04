@@ -21,7 +21,7 @@ $correo_usuario = $_SESSION['correo'];
 
 // 2. Obtener datos del usuario de la base de datos (id_Usuarios, dirección, teléfono)
 // Se necesita id_Usuarios para guardar el pedido
-$query_usuario_datos = "SELECT id_Usuarios, direccion, telefono FROM Usuarios WHERE correo = ?";
+$query_usuario_datos = "SELECT id_Usuarios, direccion, telefono FROM usuarios WHERE correo = ?";
 $stmt_usuario_datos = $mysql->prepare($query_usuario_datos);
 $stmt_usuario_datos->bind_param("s", $correo_usuario);
 $stmt_usuario_datos->execute();

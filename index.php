@@ -1,11 +1,16 @@
 <?php
-require_once './models/MySQL.php';
 
 session_start();
 
+require_once './models/MySQL.php';
 $mysql = new MySQL;
 $mysql->conectar();
-$resultado = $mysql->efectuarConsulta("SELECT * FROM Usuarios;");
+
+
+$resultado = $mysql->efectuarConsulta("SELECT id, nombre, descripcion, precio, stock, imagen, estado
+    FROM productos WHERE Estado = 'ACTIVO'");
+
+
 $mysql->desconectar();
 ?>
 <!DOCTYPE html>

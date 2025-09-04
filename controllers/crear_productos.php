@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
         $mysql->desconectar();
         
-        header("Location: ../views/creacion.php?estado=exito");
+        header("Location: ../views/creacion.php?estado=exito&tipo=producto");
         exit();
     }else {
         header("Location: ../views/creacion.php?estado=error&mensaje=" . urlencode("Faltan campos requeridos"));

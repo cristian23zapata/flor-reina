@@ -1,6 +1,8 @@
 <?php
-require_once '../models/MySQL.php';
 session_start();
+
+require_once '../models/MySQL.php';
+
 
 // Redirigir si no es admin
 if (!isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'admin') {

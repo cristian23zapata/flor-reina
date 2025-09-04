@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mysql->conectar();
 
     // Obtener id_Usuarios, dirección, teléfono y nombre del usuario
-    $query_usuario = "SELECT id_Usuarios, direccion, telefono, nombre FROM Usuarios WHERE correo = ?";
+    $query_usuario = "SELECT id_Usuarios, direccion, telefono, nombre FROM usuarios WHERE correo = ?";
     $stmt_usuario = $mysql->prepare($query_usuario);
     $stmt_usuario->bind_param("s", $correo_usuario);
     $stmt_usuario->execute();
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         // 1. Insertar en la tabla Pedidos
-        $query_pedido = "INSERT INTO Pedidos (numero_pedido, id_usuario, fecha_pedido, total_pedido, direccion_envio, telefono_contacto, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $query_pedido = "INSERT INTO pedidos (numero_pedido, id_usuario, fecha_pedido, total_pedido, direccion_envio, telefono_contacto, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt_pedido = $mysql->prepare($query_pedido);
         $estado_inicial = 'pendiente';
         $stmt_pedido->bind_param("sisdsss", $numero_pedido, $id_usuario, $fecha_pedido, $total_a_pagar, $direccion_envio, $telefono_contacto, $estado_inicial);
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_pedido->close();
 
         // 2. Insertar en la tabla DetallePedidos
-        $query_detalle = "INSERT INTO DetallePedidos (id_pedido, id_producto, nombre_producto, precio_unitario, cantidad, subtotal_linea) VALUES (?, ?, ?, ?, ?, ?)";
+        $query_detalle = "INSERT INTO detallepedidos (id_pedido, id_producto, nombre_producto, precio_unitario, cantidad, subtotal_linea) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt_detalle = $mysql->prepare($query_detalle);
 
         foreach ($carrito_para_pagar as $item) {

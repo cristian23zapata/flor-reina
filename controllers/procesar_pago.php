@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mysql = new MySQL();
     $mysql->conectar();
 
-    $query_usuario_datos = "SELECT id_Usuarios, direccion, telefono FROM Usuarios WHERE correo = ?";
+    $query_usuario_datos = "SELECT id_Usuarios, direccion, telefono FROM usuarios WHERE correo = ?";
     $stmt_usuario_datos = $mysql->prepare($query_usuario_datos);
     $stmt_usuario_datos->bind_param("s", $correo_usuario);
     $stmt_usuario_datos->execute();
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mysql->getConexion()->begin_transaction();
 
     try {
-        $query_insert_pedido = "INSERT INTO Pedidos (numero_pedido, id_usuario, fecha_pedido, total_pedido, direccion_envio, telefono_contacto, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $query_insert_pedido = "INSERT INTO pedidos (numero_pedido, id_Usuario, fecha_pedido, total_pedido, direccion_envio, telefono_contacto, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt_insert_pedido = $mysql->prepare($query_insert_pedido);
         $stmt_insert_pedido->bind_param("sisdsss", $numero_pedido, $id_usuario, $fecha_pedido, $total_a_pagar, $direccion_envio, $telefono_contacto, $estado_pedido);
 
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id_nuevo_pedido = $mysql->getConexion()->insert_id;
         $stmt_insert_pedido->close();
 
-        $query_insert_detalle = "INSERT INTO DetallePedidos (id_pedido, id_producto, nombre_producto, precio_unitario, cantidad, subtotal_linea) VALUES (?, ?, ?, ?, ?, ?)";
+        $query_insert_detalle = "INSERT INTO detallepedidos (id_pedido, id_producto, nombre_producto, precio_unitario, cantidad, subtotal_linea) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt_insert_detalle = $mysql->prepare($query_insert_detalle);
 
         foreach ($carrito_para_pagar as $item) {
