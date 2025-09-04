@@ -28,151 +28,163 @@ $mysql->desconectar();
     <link rel="stylesheet" href="../assets/css/estilo_blog.css">
     <link rel="stylesheet" href="../assets/css/estilo_productos.css">
     <style>
-      /* SIDEBAR BASE */
-      .sidebar {
-          background-color: #ffe6f0;
-          border-right: 1px solid #f8c8dc;
-          min-width: 220px;
-          transition: all 0.3s ease;
-          padding: 1rem 0.5rem;
-      }
+        /* SIDEBAR BASE */
+        .sidebar {
+            background-color: #ffe6f0; /* Fondo rosa claro */
+            border-right: 1px solid #f8c8dc; /* Borde más suave rosado */
+            min-width: 220px;
+            transition: all 0.3s ease;
+            padding: 1rem 0.5rem;
+        }
 
-      /* LOGO */
-      .sidebar .navbar-brand {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding-bottom: 1rem;
-          font-weight: bold;
-          color: #d63384;
-      }
+        /* LOGO */
+        .sidebar .navbar-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 1rem;
+            font-weight: bold;
+            color: #d63384;
+        }
 
-      /* NAV LINKS */
-      .sidebar .nav-link {
-          display: flex;
-          align-items: center;
-          padding: 0.75rem 1rem;
-          color: #444;
-          font-weight: 500;
-          border-radius: 0.375rem;
-          transition: background 0.2s ease;
-      }
+        /* NAV LINKS */
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: #444;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            transition: background 0.2s ease;
+        }
 
-      .sidebar .nav-link i {
-          margin-right: 0.75rem;
-          color: #d63384;
-      }
+        .sidebar .nav-link i {
+            margin-right: 0.75rem;
+            color: #d63384;
+        }
 
-      .sidebar .nav-link span {
-          white-space: nowrap;
-      }
+        .sidebar .nav-link span {
+            white-space: nowrap;
+        }
 
-      .sidebar .nav-link:hover,
-      .sidebar .nav-link:focus {
-          background-color: #fddbe9;
-          color: #d63384;
-      }
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link:focus {
+            background-color: #fddbe9; /* Hover rosado suave */
+            color: #d63384;
+        }
 
-      /* TOGGLE BUTTON */
-      .toggle-btn {
-          border: none;
-          background: none;
-          font-size: 1.25rem;
-          color: #d63384;
-      }
+        /* TOGGLE BUTTON */
+        .toggle-btn {
+            border: none;
+            background: none;
+            font-size: 1.25rem;
+            color: #d63384;
+        }
 
-      /* COLLAPSED SIDEBAR */
-      .sidebar.collapsed {
-          min-width: 60px !important;
-          overflow: hidden;
-          background-color: #ffe6f0;
-      }
+        /* COLLAPSED SIDEBAR */
+        .sidebar.collapsed {
+            min-width: 60px !important;
+            overflow: hidden;
+            background-color: #ffe6f0; /* Mantener fondo cuando colapsa */
+        }
 
-      .sidebar.collapsed .nav-link span,
-      .sidebar.collapsed .navbar-brand span {
-          display: none;
-      }
+        .sidebar.collapsed .nav-link span,
+        .sidebar.collapsed .navbar-brand span {
+            display: none;
+        }
 
-      .sidebar.collapsed .nav-link {
-          text-align: center;
-      }
+        .sidebar.collapsed .nav-link {
+            text-align: center;
+        }
 
-      .sidebar.collapsed .navbar-brand {
-          padding: 0.5rem 0;
-      }
+        .sidebar.collapsed .navbar-brand {
+            padding: 0.5rem 0;
+        }
 
-      .sidebar.collapsed .bi {
-          margin-right: 0;
-          font-size: 1.25rem;
-      }
+        .sidebar.collapsed .bi {
+            margin-right: 0;
+            font-size: 1.25rem;
+        }
 
-      /* MOBILE SIDEBAR */
-      @media (max-width: 991.98px) {
-          .sidebar {
-              position: fixed;
-              top: 0;
-              left: -250px;
-              height: 100vh;
-              width: 220px;
-              z-index: 1050;
-              background-color: #ffe6f0;
-              box-shadow: 0 0 10px rgba(0,0,0,0.1);
-              transition: left 0.3s ease-in-out;
-          }
+        /* MOBILE SIDEBAR */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: -250px;
+                height: 100vh;
+                width: 220px;
+                z-index: 1050;
+                background-color: #ffe6f0; /* Fondo rosa también en móvil */
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                transition: left 0.3s ease-in-out;
+            }
 
-          .sidebar.show {
-              left: 0;
-          }
-      }
-      
-      /* Estilos para las tarjetas de blog */
-      .blog-card {
-          border: none;
-          border-radius: 10px;
-          overflow: hidden;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          height: 100%;
-      }
-      
-      .blog-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      }
-      
-      .blog-img {
-          width: 100%;
-          height: 200px;
-          object-fit: cover;
-      }
-      
-      .modal-dialog-slideout {
-          min-height: 100%;
-          margin: 0 0 0 auto;
-          background: #fff;
-      }
-      
-      .modal.fade .modal-dialog.modal-dialog-slideout {
-          transform: translate(100%, 0);
-      }
-      
-      .modal.fade.show .modal-dialog.modal-dialog-slideout {
-          transform: translate(0, 0);
-      }
-      
-      /* Estilo para evitar parpadeo en modales */
-      .modal-backdrop {
-          opacity: 0.5 !important;
-      }
-      
-      /* Estilo para el botón de eliminar */
-      .btn-eliminar {
-          width: 40px;
-          height: 40px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0;
-      }
+            .sidebar.show {
+                left: 0;
+            }
+        }
+        
+        /* Estilo del contenedor del filtro */
+        .filter-sidebar {
+            background-color: #ffffff; /* Fondo blanco para el filtro */
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra suave */
+            padding: 20px;
+            margin-bottom: 20px; /* Espacio debajo del filtro en pantallas pequeñas */
+        }
+
+        /* Ajustes para el acordeón del filtro */
+        .filter-sidebar .accordion-button {
+            font-size: 1.1em;
+            color: #d63384; /* Color del texto del botón del acordeón */
+            background-color: #f8f9fa; /* Fondo del botón del acordeón */
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+        }
+        /* Estilo cuando el acordeón está expandido */
+        .filter-sidebar .accordion-button:not(.collapsed) {
+            background-color: #f4e6eb; /* Fondo más claro cuando está abierto */
+            color: #ac4563; /* Color de texto más oscuro cuando está abierto */
+        }
+        .filter-sidebar .accordion-body {
+            padding-top: 15px;
+            padding-bottom: 0;
+        }
+        .filter-sidebar .form-check-label {
+            font-size: 0.95em;
+            color: #5a5a5a;
+        }
+
+        /* Estilo para los botones dentro del filtro */
+        .filter-sidebar .btn-primary {
+            background-color: #d1567b;
+            border-color: #d1567b;
+        }
+        .filter-sidebar .btn-primary:hover {
+            background-color: #ac4563;
+            border-color: #ac4563;
+        }
+        .filter-sidebar .btn-outline-secondary {
+            border-color: #6c757d; /* Color gris de Bootstrap */
+            color: #6c757d;
+        }
+        .filter-sidebar .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        /* Media queries para que el filtro sea sticky en pantallas grandes */
+        @media (min-width: 768px) {
+            .filter-sidebar {
+                position: sticky; /* Hace que el filtro se quede fijo al hacer scroll */
+                top: 20px; /* Distancia desde la parte superior de la ventana */
+                align-self: flex-start; /* Ayuda al sticky en contenedores flex */
+                max-height: calc(100vh - 40px); /* Para que no ocupe más de la altura de la ventana */
+                overflow-y: auto; /* Permite scroll si el contenido del filtro es muy largo */
+            }
+        }
     </style>
 </head>
 <body>
@@ -184,7 +196,7 @@ $mysql->desconectar();
 
 <div class="d-flex">
     <!-- Sidebar -->
-    <nav id="sidebar" class="border-end p-3 sidebar" style="min-width: 220px; min-height: 100vh;">
+    <nav id="sidebar" class="border-end p-3 sidebar" style="min-width: 250px; min-height: 100vh;">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <a class="navbar-brand d-block text-center" href="">
                 <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60" class="sidebar-logo">
@@ -239,6 +251,15 @@ $mysql->desconectar();
                 <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
             <?php endif; ?>
         </div>
+
+        <!-- Botón para abrir la modal de creación de artículos -->
+        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
+        <div class="d-flex justify-content-end mb-4">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCrearArticulo">
+                <i class="bi bi-plus-circle"></i> Crear Nuevo Artículo
+            </button>
+        </div>
+        <?php endif; ?>
 
         <div class="row g-4">
             <?php foreach ($articulos as $articulo): ?>
@@ -357,6 +378,44 @@ $mysql->desconectar();
                 </div>
             </div>
             <?php endforeach; ?>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para crear artículo -->
+<div class="modal fade" id="modalCrearArticulo" tabindex="-1" aria-labelledby="modalCrearArticuloLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCrearArticuloLabel">Crear Nuevo Artículo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form action="../controllers/crear_articulos.php" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label">Título del artículo</label>
+                        <input type="text" class="form-control" id="titulo" name="titulo" 
+                               title="Solo letras y espacios" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contenido" class="form-label">Contenido</label>
+                        <textarea class="form-control" id="contenido" name="contenido" 
+                                  title="Solo letras y espacios" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" 
+                                  rows="6" required></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="imagenArticulo" class="form-label">Imagen de portada</label>
+                        <input class="form-control" type="file" id="imagenArticulo" name="imagen" 
+                               accept=".jpg, .jpeg, .png" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-outline-success">Crear artículo</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

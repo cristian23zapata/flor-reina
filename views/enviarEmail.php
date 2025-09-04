@@ -19,7 +19,7 @@
           <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="70" />
           <h4 class="mt-3 text-pink"><i class="bi bi-envelope-arrow-up me-1"></i> Recuperar Contraseña</h4>
         </div>
-        <form action="../controllers/enviarCorreo.php" method="POST">
+        <form action="../controllers/EnviarCorreo1.php" method="POST">
           <div class="mb-3">
             <label for="correo" class="form-label fw-semibold text-secondary">Correo electrónico</label>
             <input type="email" class="form-control border-pink" id="correo" name="correo" placeholder="nombre@ejemplo.com" required />

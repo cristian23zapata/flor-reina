@@ -1,5 +1,5 @@
 <?php
-$mysqli = new mysqli('localhost', 'root', '', 'florreina_bd');
+$mysqli = new mysqli('localhost','u810917883_florreina_bd','DE~0kp~5gO','u810917883_florreina_bd');
 
 if ($mysqli->connect_error) {
     die('Conexión fallida: ' . $mysqli->connect_error);

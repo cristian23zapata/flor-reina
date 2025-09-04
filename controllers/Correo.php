@@ -10,6 +10,9 @@
 // require 'PHPMailer/src/Exception.php';
 // require 'PHPMailer/src/PHPMailer.php';
 // require 'PHPMailer/src/SMTP.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class Correo {
     public function enviarFactura(
@@ -96,53 +99,34 @@ class Correo {
         </html>";
         // --- FIN CONTENIDO DEL CORREO HTML BÁSICO ---
 
-        // Configuración de PHPMailer (ajusta con tus credenciales SMTP)
-        // ESTO ES UN EJEMPLO. DEBES CONFIGURAR TU SERVIDOR SMTP REAL.
-        // EN UN ENTORNO DE PRUEBA, PUEDES USAR SERVICIOS COMO Mailtrap.io
-        // o un servidor SMTP local si lo tienes configurado (ej. Sendmail/Postfix en Linux, hMailServer en Windows).
-        /*
-        $mail = new PHPMailer(true);
-        try {
-            //Server settings
-            $mail->isSMTP();
-            $mail->Host       = 'smtp.example.com'; // Servidor SMTP
-            $mail->SMTPAuth   = true;
-            $mail->Username   = 'user@example.com'; // Usuario SMTP
-            $mail->Password   = 'password';         // Contraseña SMTP
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // o PHPMailer::ENCRYPTION_SMTPS
-            $mail->Port       = 587; // Puerto SMTP (465 para SMTPS, 587 para STARTTLS)
+        
+       
+        
+        
+$mail = new PHPMailer(true);
+try {
+    $this->mail->Host = 'smtp.gmail.com';
+    $this->mail->SMTPAuth = true;
+    $this->mail->Username = 'pborja564@gmail.com';
+    $this->mail->Password = 'jgna xupn ntqf snom'; // App Password
+    $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $this->mail->Port = 587;
 
-            //Recipients
-            $mail->setFrom('no-reply@florreina.es', 'Flor Reina');
-            $mail->addAddress($destinatario_email, $destinatario_nombre);
+    $mail->setFrom('no-reply@tudominio.com', 'Flor Reina');
+    $mail->addAddress($destinatario_email, $destinatario_nombre);
 
-            // Content
-            $mail->isHTML(true);
-            $mail->Subject = 'Confirmacion de Pedido #' . $numero_pedido . ' - Flor Reina';
-            $mail->Body    = $cuerpo_html;
-            $mail->AltBody = strip_tags($cuerpo_html); // Versión de texto plano
+    $mail->isHTML(true);
+    $mail->Subject = 'Confirmación de Pedido #' . $numero_pedido . ' - Flor Reina';
+    $mail->Body    = $cuerpo_html;
+    $mail->AltBody = strip_tags($cuerpo_html);
 
-            $mail->send();
-            return true;
-        } catch (Exception $e) {
-            error_log("Error al enviar el correo: {$mail->ErrorInfo}");
-            return false;
-        }
-        */
+    $mail->send();
+    return true;
+} catch (Exception $e) {
+    error_log("Error al enviar el correo: {$mail->ErrorInfo}");
+    return false;
+}
 
-        // --- Para propósitos de prueba sin SMTP real (descomentar y probar) ---
-        // Simplemente "simula" el envío. En un entorno real, descomentarías PHPMailer.
-        // O podrías guardar el correo en un archivo para verificarlo.
-        $log_file = '../logs/email_log.txt';
-        $log_entry = "--- Correo de Confirmación de Pedido ---\n";
-        $log_entry .= "Para: " . $destinatario_email . " (" . $destinatario_nombre . ")\n";
-        $log_entry .= "Asunto: Confirmacion de Pedido #" . $numero_pedido . " - Flor Reina\n";
-        $log_entry .= "Fecha: " . date('Y-m-d H:i:s') . "\n";
-        $log_entry .= "Contenido HTML:\n" . $cuerpo_html . "\n";
-        $log_entry .= "--------------------------------------\n\n";
-        file_put_contents($log_file, $log_entry, FILE_APPEND);
-        return true; // Simula que el envío fue exitoso
-        // --- FIN de la simulación ---
-    }
+}
 }
 ?>

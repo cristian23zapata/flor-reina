@@ -1,7 +1,7 @@
 <?php
-require_once '../models/MySQL.php';
-
 session_start();
+
+require_once '../models/MySQL.php';
 
 if (!isset($_SESSION['correo'])) {
     header("refresh:1;url=../views/login.php");
@@ -284,49 +284,7 @@ sort($ingredientes_unicos);
 
         <div class="container py-5">
             <div class="row">
-                <div class="col-lg-3 col-md-4">
-                    <div class="filter-sidebar">
-                        <div class="accordion" id="accordionFiltros">
-                            <div class="accordion-item border-0">
-                                <h2 class="accordion-header" id="headingFiltros">
-                                    <button class="accordion-button fw-bold text-uppercase"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#collapseFiltros"
-                                        aria-expanded="true" aria-controls="collapseFiltros">
-                                        Filtrar por ingredientes
-                                    </button>
-                                </h2>
-                                <div id="collapseFiltros" class="accordion-collapse collapse show" aria-labelledby="headingFiltros"
-                                    data-bs-parent="#accordionFiltros">
-                                    <div class="accordion-body p-0 pt-3">
-                                        <form method="GET" action="">
-                                            <div class="d-flex flex-column gap-2 mb-4">
-                                                <?php foreach ($ingredientes_unicos as $ing): ?>
-                                                    <div class="form-check m-0">
-                                                        <input class="form-check-input" type="checkbox" name="ingredientes[]"
-                                                            id="ing-<?= htmlspecialchars($ing) ?>"
-                                                            value="<?= htmlspecialchars($ing) ?>"
-                                                            <?= (isset($_GET['ingredientes']) && in_array($ing, $_GET['ingredientes'])) ?
-                                                                'checked' : '' ?>>
-                                                        <label class="form-check-label small" for="ing-<?= htmlspecialchars($ing) ?>">
-                                                            <?= htmlspecialchars($ing) ?>
-                                                        </label>
-                                                    </div>
-                                                <?php endforeach; ?>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary w-100 px-4 py-2 fw-bold">Aplicar Filtros</button>
-                                            <?php if (!empty($_GET['ingredientes'])): ?>
-                                                <a href="productos.php" class="btn btn-outline-secondary w-100 mt-2 py-2">Limpiar Filtros</a>
-                                            <?php endif; ?>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+          
                 <div class="col-lg-9 col-md-8">
                     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                         <?php while ($producto = mysqli_fetch_assoc($resultado)) : ?>

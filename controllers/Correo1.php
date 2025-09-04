@@ -64,7 +64,7 @@ class Correo {
         $stmt->execute();
 
         // Crear el enlace con el código de recuperación
-        $enlace = "http://localhost/flor-reina/views/recuperar1.php?codigo=" . $codigo . "&correo=" . urlencode($correo);
+        $enlace = "florreina.proyectosadso.com/views/recuperar1.php?codigo=" . $codigo . "&correo=" . urlencode($correo);
 
         // Enviar el correo con el enlace de recuperación
         $asunto = 'Recuperación de Contraseña';
