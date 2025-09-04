@@ -20,8 +20,8 @@ class Correo {
         $destinatario_nombre,
         $numero_pedido,
         $fecha_pedido,
-        $datos_cliente, // Array: ['nombre', 'correo', 'direccion', 'telefono']
-        $productos,     // Array de productos del carrito
+        $datos_cliente,
+        $productos,
         $subtotal,
         $iva_monto,
         $total
@@ -30,7 +30,7 @@ class Correo {
         $cuerpo_html = "
         <html>
         <head>
-            <title>Confirmación de Pedido Flor Reina</title>
+            <title>Confirmacion de Pedido Flor Reina</title>
             <style>
                 body { font-family: sans-serif; line-height: 1.6; color: #333; }
                 .container { width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
@@ -104,28 +104,34 @@ class Correo {
         
         
 $mail = new PHPMailer(true);
-try {
-    $this->mail->Host = 'smtp.gmail.com';
-    $this->mail->SMTPAuth = true;
-    $this->mail->Username = 'pborja564@gmail.com';
-    $this->mail->Password = 'jgna xupn ntqf snom'; // App Password
-    $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $this->mail->Port = 587;
 
-    $mail->setFrom('no-reply@tudominio.com', 'Flor Reina');
-    $mail->addAddress($destinatario_email, $destinatario_nombre);
+        try {
+            // Configuración SMTP
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';      // servidor SMTP real
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'pborja564@gmail.com';    // tu correo/usuario SMTP
+            $mail->Password   = 'jgna xupn ntqf snom';            // la contraseña SMTP
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;                        // o 465 según tu proveedor
 
-    $mail->isHTML(true);
-    $mail->Subject = 'Confirmación de Pedido #' . $numero_pedido . ' - Flor Reina';
-    $mail->Body    = $cuerpo_html;
-    $mail->AltBody = strip_tags($cuerpo_html);
+            // Remitente y destinatario
+            $mail->setFrom('pborja564@gmail.com', 'Flor Reina');
+            $mail->addAddress($destinatario_email, $destinatario_nombre);
 
-    $mail->send();
-    return true;
-} catch (Exception $e) {
-    error_log("Error al enviar el correo: {$mail->ErrorInfo}");
-    return false;
-}
+            // Contenido
+            $mail->isHTML(true);
+            $mail->Subject = 'Confirmación de Pedido #' . $numero_pedido . ' - Flor Reina';
+            $mail->Body    = $cuerpo_html;
+            $mail->AltBody = strip_tags($cuerpo_html);
+
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            // Registra el error en el log
+            error_log("Error al enviar el correo: {$mail->ErrorInfo}");
+            return false;
+        }
 
 }
 }

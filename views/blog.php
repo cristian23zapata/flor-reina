@@ -194,193 +194,193 @@ $mysql->desconectar();
     <i class="bi bi-list"></i>
 </button>
 
-<div class="d-flex">
-    <!-- Sidebar -->
-    <nav id="sidebar" class="border-end p-3 sidebar" style="min-width: 250px; min-height: 100vh;">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <a class="navbar-brand d-block text-center" href="">
-                <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60" class="sidebar-logo">
-                <span class="ms-2">Flor Reina</span>
-            </a>
-            <button class="toggle-btn d-none d-lg-inline" id="sidebarToggle">
-                <i class="bi bi-chevron-left"></i>
-            </button>
-        </div>
-
-        <ul class="nav flex-column">
-            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/admin_pedidos.php"><i class="bi bi-cart"></i><span> PEDIDOS</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/creacion.php"><i class="bi bi-plus-circle"></i><span> CREAR</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/registrar.php"><i class="bi bi-person-plus"></i><span> REGISTRAR</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> REPARTIDORES</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/gestionar_repartidores.php"><i class="bi bi-gear"></i><span> GESTION REPARTIDORES</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/productos.php"><i class="bi bi-flower1"></i><span> Productos</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/blog.php"><i class="bi bi-newspaper"></i><span> Blog</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/estadisticas.php"><i class="bi bi-bar-chart"></i><span> Estadísticas</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/insumos.php"><i class="bi bi-box-seam"></i><span> Insumos</span></a></li>
-            <?php } elseif (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'repartidor') { ?>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> Mis Entregas</span></a></li>
-            <?php } ?>
-            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/productos_usuario.php"><i class="bi bi-flower1"></i><span> Productos</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/blog_usuario.php"><i class="bi bi-newspaper"></i><span> Blog</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/contacto.php"><i class="bi bi-envelope"></i><span> Contacto</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/user_pedidos.php"><i class="bi bi-list-check"></i><span> Mis Pedidos</span></a></li>
-            <?php } ?>
-        </ul>
-    </nav>
-
-    <!-- Contenido principal -->
-    <div class="flex-grow-1 p-4 main-content">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="mb-0 fw-bold text-center">Nuestro Blog</h1>
-            <?php if (isset($_SESSION['correo'])): ?>
-                <div class="dropdown">
-                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <?php if ($_SESSION['tipo'] === 'user') { ?>
-                            <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                        <?php } ?>
-                        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
-                    </ul>
-                </div>
-            <?php else: ?>
-                <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="border-end p-3 sidebar" style="min-width: 250px; min-height: 100vh;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a class="navbar-brand d-block text-center" href="">
+                    <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60" class="sidebar-logo">
+                    <span class="ms-2">Flor Reina</span>
+                </a>
+                <button class="toggle-btn d-none d-lg-inline" id="sidebarToggle">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+            </div>
+    
+            <ul class="nav flex-column">
+                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/admin_pedidos.php"><i class="bi bi-cart"></i><span> PEDIDOS</span></a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/creacion.php"><i class="bi bi-plus-circle"></i><span> CREAR</span></a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/registrar.php"><i class="bi bi-person-plus"></i><span> REGISTRAR</span></a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> REPARTIDORES</span></a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/gestionar_repartidores.php"><i class="bi bi-gear"></i><span> GESTION REPARTIDORES</span></a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/productos.php"><i class="bi bi-flower1"></i><span> Productos</span></a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/blog.php"><i class="bi bi-newspaper"></i><span> Blog</span></a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/estadisticas.php"><i class="bi bi-bar-chart"></i><span> Estadísticas</span></a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/insumos.php"><i class="bi bi-box-seam"></i><span> Insumos</span></a></li>
+                <?php } elseif (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'repartidor') { ?>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> Mis Entregas</span></a></li>
+                <?php } ?>
+                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/productos_usuario.php"><i class="bi bi-flower1"></i><span> Productos</span></a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/blog_usuario.php"><i class="bi bi-newspaper"></i><span> Blog</span></a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/contacto.php"><i class="bi bi-envelope"></i><span> Contacto</span></a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="../views/user_pedidos.php"><i class="bi bi-list-check"></i><span> Mis Pedidos</span></a></li>
+                <?php } ?>
+            </ul>
+        </nav>
+    
+        <!-- Contenido principal -->
+        <div class="flex-grow-1 p-4 main-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0 fw-bold text-center">Nuestro Blog</h1>
+                <?php if (isset($_SESSION['correo'])): ?>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <?php if ($_SESSION['tipo'] === 'user') { ?>
+                                <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                            <?php } ?>
+                            <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+                <?php else: ?>
+                    <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
+                <?php endif; ?>
+            </div>
+    
+            <!-- Botón para abrir la modal de creación de artículos -->
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
+            <div class="d-flex justify-content-end mb-4">
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCrearArticulo">
+                    <i class="bi bi-plus-circle"></i> Crear Nuevo Artículo
+                </button>
+            </div>
             <?php endif; ?>
-        </div>
-
-        <!-- Botón para abrir la modal de creación de artículos -->
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
-        <div class="d-flex justify-content-end mb-4">
-            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCrearArticulo">
-                <i class="bi bi-plus-circle"></i> Crear Nuevo Artículo
-            </button>
-        </div>
-        <?php endif; ?>
-
-        <div class="row g-4">
-            <?php foreach ($articulos as $articulo): ?>
-            <div class="col-md-3">
-                <div class="card blog-card h-100">
-                    <img src="../<?php echo $articulo['imagen']; ?>" alt="Imagen del artículo" class="blog-img">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title fw-bold"><?php echo $articulo['titulo']; ?></h5>
-                        <p class="card-text text-muted"><?php echo mb_strimwidth($articulo['contenido'], 0, 100, '...'); ?></p>
-                        <div class="d-flex gap-2 mt-auto">
-                            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user'): ?>
-                                <a href="#" class="btn btn-outline-success w-100 rounded-pill"
-                                   data-bs-toggle="modal" data-bs-target="#modalVerMas<?php echo $articulo['id']; ?>">
-                                    Ver Más
-                                </a>
-                            <?php endif; ?>
-
-                            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
-                                <button type="button" class="btn btn-outline-success w-100 rounded-pill"
-                                        data-bs-toggle="modal" data-bs-target="#modalEditar<?php echo $articulo['id']; ?>">
-                                    Editar
-                                </button>
-                                <button type="button" class="btn btn-outline-danger rounded-pill btn-eliminar eliminar-btn"
-                                        data-bs-toggle="modal" data-bs-target="#confirmarEliminar<?php echo $articulo['id']; ?>">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            <?php endif; ?>
+    
+            <div class="row g-4">
+                <?php foreach ($articulos as $articulo): ?>
+                <div class="col-md-3">
+                    <div class="card blog-card h-100">
+                        <img src="../<?php echo $articulo['imagen']; ?>" alt="Imagen del artículo" class="blog-img">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold"><?php echo $articulo['titulo']; ?></h5>
+                            <p class="card-text text-muted"><?php echo mb_strimwidth($articulo['contenido'], 0, 100, '...'); ?></p>
+                            <div class="d-flex gap-2 mt-auto">
+                                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user'): ?>
+                                    <a href="#" class="btn btn-outline-success w-100 rounded-pill"
+                                       data-bs-toggle="modal" data-bs-target="#modalVerMas<?php echo $articulo['id']; ?>">
+                                        Ver Más
+                                    </a>
+                                <?php endif; ?>
+    
+                                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
+                                    <button type="button" class="btn btn-outline-success w-100 rounded-pill"
+                                            data-bs-toggle="modal" data-bs-target="#modalEditar<?php echo $articulo['id']; ?>">
+                                        Editar
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger rounded-pill btn-eliminar eliminar-btn"
+                                            data-bs-toggle="modal" data-bs-target="#confirmarEliminar<?php echo $articulo['id']; ?>">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Modal Confirmar Eliminación -->
-            <div class="modal fade" id="confirmarEliminar<?php echo $articulo['id']; ?>" tabindex="-1"
-                 aria-labelledby="confirmarEliminarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header bg-danger text-white">
-                            <h5 class="modal-title" id="confirmarEliminarLabel<?php echo $articulo['id']; ?>">
-                                Confirmar eliminación
-                            </h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                    aria-label="Cerrar"></button>
+    
+                <!-- Modal Confirmar Eliminación -->
+                <div class="modal fade" id="confirmarEliminar<?php echo $articulo['id']; ?>" tabindex="-1"
+                     aria-labelledby="confirmarEliminarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger text-white">
+                                <h5 class="modal-title" id="confirmarEliminarLabel<?php echo $articulo['id']; ?>">
+                                    Confirmar eliminación
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Estás seguro de que deseas eliminar el artículo <strong><?php echo htmlspecialchars($articulo['titulo']); ?></strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <form action="../controllers/eliminar_articulo.php" method="POST">
+                                    <input type="hidden" name="id" value="<?php echo $articulo['id']; ?>">
+                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                </form>
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            ¿Estás seguro de que deseas eliminar el artículo <strong><?php echo htmlspecialchars($articulo['titulo']); ?></strong>?
+                    </div>
+                </div>
+    
+                <!-- Modal Ver Más -->
+                <div class="modal fade" id="modalVerMas<?php echo $articulo['id']; ?>" tabindex="-1"
+                     aria-labelledby="modalVerMasLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content rounded-4">
+                            <div class="modal-header bg-primary text-white border-0">
+                                <h5 class="modal-title" id="modalVerMasLabel<?php echo $articulo['id']; ?>">
+                                    <?php echo htmlspecialchars($articulo['titulo']); ?>
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <?php if (!empty($articulo['imagen'])): ?>
+                                    <img src="../<?php echo $articulo['imagen']; ?>" class="img-fluid mb-4 rounded-3"
+                                         alt="Imagen del artículo">
+                                <?php endif; ?>
+                                <p><?php echo nl2br(htmlspecialchars($articulo['contenido'])); ?></p>
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <form action="../controllers/eliminar_articulo.php" method="POST">
+                    </div>
+                </div>
+    
+                <!-- Modal de edición de artículo -->
+                <div class="modal fade" id="modalEditar<?php echo $articulo['id']; ?>" tabindex="-1" aria-labelledby="modalEditarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <form class="modal-content form-container" action="../controllers/actualizar_articulo.php" method="POST" enctype="multipart/form-data">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalEditarLabel<?php echo $articulo['id']; ?>">Editar Artículo</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+    
+                            <div class="modal-body">
                                 <input type="hidden" name="id" value="<?php echo $articulo['id']; ?>">
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
-                            </form>
-                        </div>
+                                <input type="hidden" name="imagenActual" value="<?php echo $articulo['imagen']; ?>">
+    
+                                <div class="mb-3">
+                                    <label class="form-label">Título del artículo</label>
+                                    <input type="text" name="titulo" class="form-control" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" value="<?php echo htmlspecialchars($articulo['titulo']); ?>" required>
+                                </div>
+    
+                                <div class="mb-3">
+                                    <label class="form-label">Contenido</label>
+                                    <textarea name="contenido" rows="6" class="form-control" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" required><?php echo htmlspecialchars($articulo['contenido']); ?></textarea>
+                                </div>
+    
+                                <div class="mb-3">
+                                    <label class="form-label">Imagen de portada (opcional)</label>
+                                    <input type="file" name="imagen" class="form-control">
+                                </div>
+                            </div>
+    
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-outline-success">Guardar cambios</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
+                <?php endforeach; ?>
             </div>
-
-            <!-- Modal Ver Más -->
-            <div class="modal fade" id="modalVerMas<?php echo $articulo['id']; ?>" tabindex="-1"
-                 aria-labelledby="modalVerMasLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content rounded-4">
-                        <div class="modal-header bg-primary text-white border-0">
-                            <h5 class="modal-title" id="modalVerMasLabel<?php echo $articulo['id']; ?>">
-                                <?php echo htmlspecialchars($articulo['titulo']); ?>
-                            </h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                    aria-label="Cerrar"></button>
-                        </div>
-                        <div class="modal-body">
-                            <?php if (!empty($articulo['imagen'])): ?>
-                                <img src="../<?php echo $articulo['imagen']; ?>" class="img-fluid mb-4 rounded-3"
-                                     alt="Imagen del artículo">
-                            <?php endif; ?>
-                            <p><?php echo nl2br(htmlspecialchars($articulo['contenido'])); ?></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal de edición de artículo -->
-            <div class="modal fade" id="modalEditar<?php echo $articulo['id']; ?>" tabindex="-1" aria-labelledby="modalEditarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <form class="modal-content form-container" action="../controllers/actualizar_articulo.php" method="POST" enctype="multipart/form-data">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalEditarLabel<?php echo $articulo['id']; ?>">Editar Artículo</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <input type="hidden" name="id" value="<?php echo $articulo['id']; ?>">
-                            <input type="hidden" name="imagenActual" value="<?php echo $articulo['imagen']; ?>">
-
-                            <div class="mb-3">
-                                <label class="form-label">Título del artículo</label>
-                                <input type="text" name="titulo" class="form-control" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" value="<?php echo htmlspecialchars($articulo['titulo']); ?>" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Contenido</label>
-                                <textarea name="contenido" rows="6" class="form-control" pattern="^[0-9a-zA-ZÁÉÍÓÚáéíóúÑñ\s.:]+$" required><?php echo htmlspecialchars($articulo['contenido']); ?></textarea>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Imagen de portada (opcional)</label>
-                                <input type="file" name="imagen" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-outline-success">Guardar cambios</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <?php endforeach; ?>
         </div>
     </div>
-</div>
 
 <!-- Modal para crear artículo -->
 <div class="modal fade" id="modalCrearArticulo" tabindex="-1" aria-labelledby="modalCrearArticuloLabel" aria-hidden="true">
@@ -427,6 +427,8 @@ $mysql->desconectar();
         <small>Contacto: info@tralemda.com | Tel: +34 666 999 125</small>
     </div>
 </footer>
+
+</div>
 
 <?php if (isset($_GET['estado'])): ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

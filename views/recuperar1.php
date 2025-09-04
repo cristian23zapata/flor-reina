@@ -1,5 +1,8 @@
 <?php
-$mysqli = new mysqli('localhost','u810917883_florreina_bd','DE~0kp~5gO','u810917883_florreina_bd');
+require_once '../models/MySQL.php';
+$mysql = new MySQL();
+$mysql->conectar();
+$mysqli = $mysql->getConexion();
 
 if ($mysqli->connect_error) {
     die('Conexión fallida: ' . $mysqli->connect_error);
@@ -54,9 +57,15 @@ if (isset($_GET['codigo']) && isset($_GET['correo'])) {
                 $stmt->bind_param("ss", $nueva_contraseña_hash, $correo);
                 $stmt->execute();
 
-                $stmt = $mysqli->prepare("DELETE FROM recuperacion WHERE codigo = ? AND correo = ?");
-                $stmt->bind_param("ss", $codigo, $correo);
-                $stmt->execute();
+                if ($stmt->affected_rows > 0) {
+                 // Eliminamos el código de recuperación
+                 $stmt_del = $mysqli->prepare("DELETE FROM recuperacion WHERE codigo = ? AND correo = ?");
+                    $stmt_del->bind_param("ss", $codigo, $correo);
+                    $stmt_del->execute();
+                    mostrarMensaje("Contraseña cambiada con éxito.", "success");
+                } else {
+                     mostrarMensaje("No se pudo actualizar la contraseña. Verifica el enlace o contacta al soporte.", "danger");
+                }
 
                 mostrarMensaje("Contraseña cambiada con éxito.", "success");
             } else {

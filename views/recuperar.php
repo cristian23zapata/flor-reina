@@ -1,6 +1,9 @@
 <?php
 
-$mysqli = new mysqli('localhost','u810917883_florreina_bd','DE~0kp~5gO','u810917883_florreina_bd');
+require_once '../models/MySQL.php';
+$mysql = new MySQL();
+$mysql->conectar();
+$mysqli = $mysql->getConexion();
 
 if ($mysqli->connect_error) {
     die('Conexión fallida: ' . $mysqli->connect_error);
