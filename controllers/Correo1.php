@@ -29,7 +29,7 @@ class Correo {
             $this->mail->Port = 587;
 
             // Remitente
-            $this->mail->setFrom('pruebaadso2025@gmail.com', 'Prueba de correo');
+            $this->mail->setFrom('pruebaadso2025@gmail.com', 'Flor de Reina');
             // Destinatario
             $this->mail->addAddress($destinatario);
 
@@ -67,9 +67,44 @@ class Correo {
         $enlace = "florreina.proyectosadso.com/views/recuperar1.php?codigo=" . $codigo . "&correo=" . urlencode($correo);
 
         // Enviar el correo con el enlace de recuperación
-        $asunto = 'Recuperación de Contraseña';
-        $mensaje = "Haz clic en el siguiente enlace para recuperar tu contraseña: <a href='" . $enlace . "'>Recuperar Contraseña</a>";
-
+        $asunto = 'Recuperacion de Contrasena';
+       $mensaje = "
+    <div style='
+        max-width: 500px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffe6f2;
+        border: 1px solid #f5c6d6;
+        border-radius: 12px;
+        font-family: Arial, sans-serif;
+        color: #333;
+        text-align: center;
+        '>
+        <h2 style='color:#d63384;'>🌸 Recuperación de Contraseña</h2>
+    <p style='font-size: 15px;'>
+        Hola,<br><br>
+        Hemos recibido una solicitud para restablecer tu contraseña en <b>Flor de Reina</b>.
+    </p>
+    <p style='margin: 20px 0;'>
+        <a href='" . $enlace . "' 
+           style='
+                display: inline-block;
+                padding: 12px 20px;
+                background-color: #d63384;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: bold;
+           '>
+            🔑 Restablecer Contraseña
+        </a>
+    </p>
+    <p style='font-size: 13px; color:#555;'>
+        Si no realizaste esta solicitud, puedes ignorar este mensaje.<br>
+        Tu cuenta seguirá segura 💖
+    </p>
+    </div>
+    ";
         // Llamar a la función de enviarCorreo
         $this->enviarCorreo($correo, $asunto, $mensaje);
 

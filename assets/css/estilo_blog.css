@@ -26,21 +26,10 @@
   height: 300px;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-main {
-  flex: 1;
-  padding-bottom: var(--footer-height);
-}
-
-footer {
-  height: var(--footer-height);
-  margin-top: calc(-1 * var(--footer-height));
-}
+html, body { height: 100%; }
+body { display: flex; flex-direction: column; }
+main { flex: 1 0 auto; }
+footer { flex-shrink: 0; }
 
 .bg-rosado {
     background-color: #f84181; 
