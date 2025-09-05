@@ -66,8 +66,6 @@ if (isset($_GET['codigo']) && isset($_GET['correo'])) {
                 } else {
                      mostrarMensaje("No se pudo actualizar la contraseña. Verifica el enlace o contacta al soporte.", "danger");
                 }
-
-                mostrarMensaje("Contraseña cambiada con éxito.", "success");
             } else {
                 mostrarMensaje("Por favor, ingrese una nueva contraseña.", "danger");
             }
