@@ -45,137 +45,184 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
     <link rel="stylesheet" href="../assets/css/estilo_creacion.css">
     <style>
         /* SIDEBAR BASE */
-        .sidebar {
-            background-color: #ffe6f0; /* Fondo rosa claro */
-            border-right: 1px solid #f8c8dc; /* Borde más suave rosado */
-            min-width: 220px;
-            transition: all 0.3s ease;
-            padding: 1rem 0.5rem;
-        }
-
-        /* LOGO */
-        .sidebar .navbar-brand {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-bottom: 1rem;
-            font-weight: bold;
-            color: #d63384;
-        }
-
-        /* NAV LINKS */
-        .sidebar .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            color: #444;
-            font-weight: 500;
-            border-radius: 0.375rem;
-            transition: background 0.2s ease;
-        }
-
-        .sidebar .nav-link i {
-            margin-right: 0.75rem;
-            color: #d63384;
-        }
-
-        .sidebar .nav-link span {
-            white-space: nowrap;
-        }
-
-        .sidebar .nav-link:hover,
-        .sidebar .nav-link:focus {
-            background-color: #fddbe9; /* Hover rosado suave */
-            color: #d63384;
-        }
-
-        /* TOGGLE BUTTON */
-        .toggle-btn {
-            border: none;
-            background: none;
-            font-size: 1.25rem;
-            color: #d63384;
-        }
-
-        /* COLLAPSED SIDEBAR */
-        .sidebar.collapsed {
-            min-width: 60px !important;
-            overflow: hidden;
-            background-color: #ffe6f0; /* Mantener fondo cuando colapsa */
-        }
-
-        .sidebar.collapsed .nav-link span,
-        .sidebar.collapsed .navbar-brand span {
-            display: none;
-        }
-
-        .sidebar.collapsed .nav-link {
-            text-align: center;
-        }
-
-        .sidebar.collapsed .navbar-brand {
-            padding: 0.5rem 0;
-        }
-
-        .sidebar.collapsed .bi {
-            margin-right: 0;
-            font-size: 1.25rem;
-        }
-
-        /* MOBILE SIDEBAR */
-        @media (max-width: 991.98px) {
             .sidebar {
-                position: fixed;
-                top: 0;
-                left: -250px;
-                height: 100vh;
-                width: 220px;
-                z-index: 1050;
-                background-color: #ffe6f0; /* Fondo rosa también en móvil */
-                box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                transition: left 0.3s ease-in-out;
+                background-color: #ffe6f0; /* Fondo rosa claro */
+                border-right: 1px solid #f8c8dc; /* Borde más suave rosado */
+                min-width: 220px;
+                transition: all 0.3s ease;
+                padding: 1rem 0.5rem;
             }
 
-            .sidebar.show {
-                left: 0;
+            /* LOGO */
+            .sidebar .navbar-brand {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding-bottom: 1rem;
+                font-weight: bold;
+                color: #d63384;
             }
-        }
 
-        /* ESTILOS PARA PEDIDOS */
-        .estado-pendiente { background-color: #fff3cd; color: #664d03; } /* light yellow */
-        .estado-confirmado { background-color: #d1e7dd; color: #0f5132; } /* light green */
-        .estado-enviado { background-color: #cff4fc; color: #055160; } /* light blue */
-        .estado-entregado { background-color: #d4edda; color: #155724; } /* medium green */
-        .estado-cancelado { background-color: #f8d7da; color: #842029; } /* light red */
-        
-        .main-content {
-            padding: 20px;
-            width: 100%;
-        }
-        
-        .filter-buttons .btn {
-            margin-right: 5px;
-            margin-bottom: 5px;
-        }
-        
-        .card-pedido {
-            margin-bottom: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .card-header-pedido {
-            font-weight: bold;
-            padding: 15px;
-        }
-        
-        .producto-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
+            /* NAV LINKS */
+            .sidebar .nav-link {
+                display: flex;
+                align-items: center;
+                padding: 0.75rem 1rem;
+                color: #444;
+                font-weight: 500;
+                border-radius: 0.375rem;
+                transition: background 0.2s ease;
+            }
+
+            .sidebar .nav-link i {
+                margin-right: 0.75rem;
+                color: #d63384;
+            }
+
+            .sidebar .nav-link span {
+                white-space: nowrap;
+            }
+
+            .sidebar .nav-link:hover,
+            .sidebar .nav-link:focus {
+                background-color: #fddbe9; /* Hover rosado suave */
+                color: #d63384;
+            }
+
+            /* TOGGLE BUTTON */
+            .toggle-btn {
+                border: none;
+                background: none;
+                font-size: 1.25rem;
+                color: #d63384;
+            }
+
+            /* COLLAPSED SIDEBAR */
+            .sidebar.collapsed {
+                min-width: 60px !important;
+                overflow: hidden;
+                background-color: #ffe6f0; /* Mantener fondo cuando colapsa */
+            }
+
+            .sidebar.collapsed .nav-link span,
+            .sidebar.collapsed .navbar-brand span {
+                display: none;
+            }
+
+            .sidebar.collapsed .nav-link {
+                text-align: center;
+            }
+
+            .sidebar.collapsed .navbar-brand {
+                padding: 0.5rem 0;
+            }
+
+            .sidebar.collapsed .bi {
+                margin-right: 0;
+                font-size: 1.25rem;
+            }
+
+            /* MOBILE SIDEBAR */
+            @media (max-width: 991.98px) {
+                .sidebar {
+                    position: fixed;
+                    top: 0;
+                    left: -250px;
+                    height: 100vh;
+                    width: 220px;
+                    z-index: 1050;
+                    background-color: #ffe6f0; /* Fondo rosa también en móvil */
+                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                    transition: left 0.3s ease-in-out;
+                }
+
+                .sidebar.show {
+                    left: 0;
+                }
+            }
+
+            /* ESTILOS PARA PEDIDOS */
+            .estado-pendiente { background-color: #fff3cd; color: #664d03; } /* light yellow */
+            .estado-confirmado { background-color: #d1e7dd; color: #0f5132; } /* light green */
+            .estado-enviado { background-color: #cff4fc; color: #055160; } /* light blue */
+            .estado-entregado { background-color: #d4edda; color: #155724; } /* medium green */
+            .estado-cancelado { background-color: #f8d7da; color: #842029; } /* light red */
+            
+            .main-content {
+                padding: 20px;
+                width: 100%;
+            }
+            
+            .filter-buttons .btn {
+                margin-right: 5px;
+                margin-bottom: 5px;
+            }
+            
+            .card-pedido {
+                margin-bottom: 20px;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+            
+            .card-header-pedido {
+                font-weight: bold;
+                padding: 15px;
+            }
+            
+            .producto-item {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px 0;
+                /*
+                 * Los ítems dentro de la lista de productos se heredan del mismo
+                 * color de fondo que la tarjeta del pedido. Bootstrap aplica un
+                 * fondo blanco a las clases `list-group-item` por defecto,
+                 * generando que cada producto aparezca con un recuadro blanco
+                 * sobre la tarjeta coloreada según su estado (pendiente,
+                 * confirmado, etc.). Para evitar ese contraste se fuerza la
+                 * herencia del color y se elimina el fondo.
+                 */
+                background-color: inherit;
+                color: inherit;
+                border-bottom: 1px solid #eee;
+            }
+
+            /*
+             * También aplicamos la misma herencia a todos los elementos
+             * `.list-group-item` dentro de una tarjeta de pedido por si en el
+             * futuro se añaden otros elementos de lista. Esto asegura que
+             * cualquier ítem dentro de `.card-pedido` adopte el color de
+             * fondo y texto de la tarjeta principal.
+             */
+            .card-pedido .list-group-item {
+                background-color: inherit;
+                color: inherit;
+            }
+
+            /*
+             * Al navegar por los enlaces de la barra lateral (sidebar) se
+             * aprecia un contorno/pseudoborde negro que sobresale del
+             * recuadro rosa cuando el enlace obtiene el foco por teclado o
+             * mouse. Bootstrap añade este resalte mediante la propiedad
+             * `outline` y la sombra de foco (`box-shadow`). A continuación se
+             * eliminan estos estilos para que el estado activo mantenga el
+             * aspecto uniforme dentro del contenedor rosa.
+             */
+            .sidebar .nav-link:focus,
+            .sidebar .nav-link:active {
+                outline: none;
+                box-shadow: none;
+            }
+
+            /* Algunos navegadores aplican el estilo `:focus-visible` cuando se
+             * navega con el teclado. Se deshabilita aquí para mantener la
+             * consistencia visual en los enlaces de la sidebar.
+             */
+            .sidebar .nav-link:focus-visible {
+                outline: none;
+                box-shadow: none;
+            }
     </style>
 </head>
 <body>
@@ -187,22 +234,19 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
 
 <div class="d-flex">
     <!-- Sidebar -->
-    <nav id="sidebar" class="border-end p-3 sidebar" style="min-width: 220px; min-height: 100vh;">
+    <nav id="sidebar" class="border-end p-3 sidebar" style="min-width: 300px; min-height: 100vh;">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <a class="navbar-brand d-block text-center" href="">
                 <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60" class="sidebar-logo">
                 <span class="ms-2">Flor Reina</span>
             </a>
-            <button class="toggle-btn d-none d-lg-inline" id="sidebarToggle">
-                <i class="bi bi-chevron-left"></i>
-            </button>
+            
         </div>
 
         <ul class="nav flex-column">
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/admin_pedidos.php"><i class="bi bi-cart"></i><span> PEDIDOS</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/creacion.php"><i class="bi bi-plus-circle"></i><span> CREAR</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/registrar.php"><i class="bi bi-person-plus"></i><span> REGISTRAR</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> REPARTIDORES</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/gestionar_repartidores.php"><i class="bi bi-gear"></i><span> GESTION REPARTIDORES</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/productos.php"><i class="bi bi-flower1"></i><span> PRODUCTOS</span></a></li>

@@ -72,7 +72,6 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
                         <li class="nav-item"><a class="nav-link" href="../views/creacion.php">CREAR</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/registrar.php">REGISTRAR</a></li>
                         <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">Repartidores</a></li>
                         <li class="nav-item"><a class="nav-link" href="../views/admin_pedidos.php">Pedidos</a></li>
                         <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>

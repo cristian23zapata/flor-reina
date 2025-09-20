@@ -150,12 +150,61 @@ $mysql->desconectar();
       }
       
       .table th {
-          background-color: #ff6b9d;
+          background-color: #ff6b9d; /* Cambiado a rosa */
           color: white;
       }
       
       .modal-content {
           border-radius: 10px;
+      }
+      
+      /* Estilos para el botón de registrar nuevo repartidor */
+      .btn-registrar {
+          background-color: #ff6b9d; /* Cambiado a rosa */
+          border-color: #ff6b9d; /* Cambiado a rosa */
+          color: white;
+      }
+      
+      .btn-registrar:hover {
+          background-color: #e55a8a; /* Rosa más oscuro */
+          border-color: #e55a8a; /* Rosa más oscuro */
+          color: white;
+      }
+      
+      .border-pink {
+          border-color: #ff6b9d !important; /* Rosa */
+      }
+      
+      /* Estilos para botones primarios (cambiados a rosa) */
+      .btn-primary {
+          background-color: #ff6b9d; /* Rosa */
+          border-color: #ff6b9d; /* Rosa */
+      }
+      
+      .btn-primary:hover {
+          background-color: #e55a8a; /* Rosa más oscuro */
+          border-color: #e55a8a; /* Rosa más oscuro */
+      }
+      
+      .btn-outline-primary {
+          color: #ff6b9d; /* Rosa */
+          border-color: #ff6b9d; /* Rosa */
+      }
+      
+      .btn-outline-primary:hover {
+          background-color: #ff6b9d; /* Rosa */
+          border-color: #ff6b9d; /* Rosa */
+          color: white;
+      }
+      
+      /* Estilos para encabezados de modales */
+      .modal-header {
+          background-color: #ff6b9d; /* Rosa */
+          color: white;
+      }
+      
+      .modal-header .btn-close {
+          filter: invert(1); /* Hace que la X sea blanca */
       }
     </style>
 </head>
@@ -183,7 +232,6 @@ $mysql->desconectar();
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/admin_pedidos.php"><i class="bi bi-cart"></i><span> PEDIDOS</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/creacion.php"><i class="bi bi-plus-circle"></i><span> CREAR</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/registrar.php"><i class="bi bi-person-plus"></i><span> REGISTRAR</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> REPARTIDORES</span></a></li>
                 <li class="nav-item"><a class="nav-link active text-dark" href="../views/gestionar_repartidores.php"><i class="bi bi-gear"></i><span> GESTION REPARTIDORES</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/productos.php"><i class="bi bi-flower1"></i><span> PRODUCTOS</span></a></li>
@@ -214,6 +262,13 @@ $mysql->desconectar();
             <?php else: ?>
                 <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
             <?php endif; ?>
+        </div>
+
+        <!-- Botón para abrir el modal de registro -->
+        <div class="d-flex justify-content-end mb-4">
+            <button type="button" class="btn btn-registrar" data-bs-toggle="modal" data-bs-target="#modalRegistrarRepartidor">
+                <i class="bi bi-person-plus"></i> Registrar nuevo repartidor
+            </button>
         </div>
 
         <!-- Lista de repartidores -->
@@ -292,6 +347,76 @@ $mysql->desconectar();
                     No se encontraron repartidores registrados.
                 </div>
             <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para registrar nuevo repartidor -->
+<div class="modal fade" id="modalRegistrarRepartidor" tabindex="-1" aria-labelledby="modalRegistrarRepartidorLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalRegistrarRepartidorLabel">
+                    <i class="bi bi-person-plus me-2"></i> Registrar nuevo repartidor
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="../controllers/registrar_repartidor.php" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Nombre completo</label>
+                                <input type="text" class="form-control" name="nombre" title="Solo letras y espacios" pattern="^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Correo electrónico</label>
+                                <input type="email" class="form-control" name="correo" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Teléfono</label>
+                                <input type="number" class="form-control" name="telefono" title="solo numeros" pattern="^[0-9]+$" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="password" class="form-label fw-bold">Contraseña</label>
+                                <input type="password" class="form-control border-pink" id="password" name="password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmar_password" class="form-label fw-bold">Confirmar contraseña</label>
+                                <input type="password" class="form-control border-pink" id="confirmar_password" name="confirmar_password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Tipo de transporte</label>
+                                <select class="form-control" name="transporte" required>
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="bicicleta">Bicicleta</option>
+                                    <option value="moto">Motocicleta</option>
+                                    <option value="auto">Automóvil</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Foto de identificación</label>
+                                <input type="file" class="form-control" id="foto" name="foto" accept=".jpg, .jpeg, .png" required>
+                                <small class="text-muted">Formatos: JPG, PNG (Máx. 2MB)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-1"></i> Registrar repartidor
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -391,6 +516,13 @@ while($repartidor = $resultado->fetch_assoc()):
             Swal.fire({
                 icon: 'success',
                 title: '¡Éxito!',
+                text: 'Repartidor registrado con éxito',
+                confirmButtonText: 'Aceptar'
+            });
+            <?php elseif ($_GET['estado'] === 'actualizado'): ?>
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
                 text: 'Repartidor actualizado con éxito',
                 confirmButtonText: 'Aceptar'
             });
@@ -405,7 +537,7 @@ while($repartidor = $resultado->fetch_assoc()):
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: '<?= htmlspecialchars($_GET["mensaje"] ?? "Hubo un error") ?>',
+                text: '<?= htmlspecialchars($_GET["mensaje"] ?? "Hubo un error. Las contraseñas no coinciden o el correo ya está registrado") ?>',
                 confirmButtonText: 'Intentar de nuevo'
             });
         <?php endif; ?>
@@ -424,7 +556,7 @@ while($repartidor = $resultado->fetch_assoc()):
 document.addEventListener('DOMContentLoaded', function () {
     const sidebar = document.getElementById('sidebar');
     const sidebarToggle = document.getElementById('sidebarToggle');
-    const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
+    const mobileSidebarToggle = document.getElementById('mobileSidebarToggle");
 
     // Desktop toggle
     if (sidebarToggle) {

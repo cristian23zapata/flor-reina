@@ -103,7 +103,6 @@ $mysql->desconectar();
                 <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
                     <li class="nav-item"><a class="nav-link" href="admin_pedidos.php">PEDIDOS</a></li>
                     <li class="nav-item"><a class="nav-link" href="creacion.php">CREAR</a></li>
-                    <li class="nav-item"><a class="nav-link" href="registrar.php">REGISTRAR</a></li>
                     <li class="nav-item"><a class="nav-link" href="repartidores.php">REPARTIDORES</a></li> 
                     <li class="nav-item"><a class="nav-link" href="gestionar_repartidores.php">Gestion Repartidores</a></li>
                 <?php } elseif (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'repartidor') { ?>

@@ -164,12 +164,12 @@ $mysql->desconectar();
 
         /* Estilo para los botones dentro del filtro */
         .filter-sidebar .btn-primary {
-            background-color: #d1567b;
-            border-color: #d1567b;
+            background-color: #ff6b9d; /* Rosa */
+            border-color: #ff6b9d; /* Rosa */
         }
         .filter-sidebar .btn-primary:hover {
-            background-color: #ac4563;
-            border-color: #ac4563;
+            background-color: #e55a8a; /* Rosa más oscuro */
+            border-color: #e55a8a; /* Rosa más oscuro */
         }
         .filter-sidebar .btn-outline-secondary {
             border-color: #6c757d; /* Color gris de Bootstrap */
@@ -189,6 +189,112 @@ $mysql->desconectar();
                 max-height: calc(100vh - 40px); /* Para que no ocupe más de la altura de la ventana */
                 overflow-y: auto; /* Permite scroll si el contenido del filtro es muy largo */
             }
+        }
+        
+        /* ESTILOS ROSADOS PARA BOTONES */
+        .btn-primary {
+            background-color: #ff6b9d; /* Rosa */
+            border-color: #ff6b9d; /* Rosa */
+        }
+        
+        .btn-primary:hover {
+            background-color: #e55a8a; /* Rosa más oscuro */
+            border-color: #e55a8a; /* Rosa más oscuro */
+        }
+        
+        .btn-outline-primary {
+            color: #ff6b9d; /* Rosa */
+            border-color: #ff6b9d; /* Rosa */
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: #ff6b9d; /* Rosa */
+            border-color: #ff6b9d; /* Rosa */
+            color: white;
+        }
+        
+        .btn-outline-success {
+            color: #ff6b9d; /* Rosa */
+            border-color: #ff6b9d; /* Rosa */
+        }
+        
+        .btn-outline-success:hover {
+            background-color: #ff6b9d; /* Rosa */
+            border-color: #ff6b9d; /* Rosa */
+            color: white;
+        }
+        
+        .btn-outline-danger {
+            color: #ff6b9d; /* Rosa */
+            border-color: #ff6b9d; /* Rosa */
+        }
+        
+        .btn-outline-danger:hover {
+            background-color: #ff6b9d; /* Rosa */
+            border-color: #ff6b9d; /* Rosa */
+            color: white;
+        }
+        
+        .btn-outline-secondary {
+            color: #ff6b9d; /* Rosa */
+            border-color: #ff6b9d; /* Rosa */
+        }
+        
+        .btn-outline-secondary:hover {
+            background-color: #ff6b9d; /* Rosa */
+            border-color: #ff6b9d; /* Rosa */
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: #ff6b9d; /* Rosa */
+            border-color: #ff6b9d; /* Rosa */
+        }
+        
+        .btn-danger:hover {
+            background-color: #e55a8a; /* Rosa más oscuro */
+            border-color: #e55a8a; /* Rosa más oscuro */
+        }
+        
+        .btn-success {
+            background-color: #ff6b9d; /* Rosa */
+            border-color: #ff6b9d; /* Rosa */
+        }
+        
+        .btn-success:hover {
+            background-color: #e55a8a; /* Rosa más oscuro */
+            border-color: #e55a8a; /* Rosa más oscuro */
+        }
+        
+        /* Estilos para encabezados de modales */
+        .modal-header {
+            background-color: #ff6b9d; /* Rosa */
+            color: white;
+        }
+        
+        .modal-header .btn-close {
+            filter: invert(1); /* Hace que la X sea blanca */
+        }
+        
+        .bg-primary {
+            background-color: #ff6b9d !important; /* Rosa */
+        }
+        
+        .bg-danger {
+            background-color: #e55a8a !important; /* Rosa más oscuro */
+        }
+        
+        /* Estilo para el botón de crear artículo */
+        .btn-crear-articulo {
+            background-color: #ff6b9d; /* Rosa */
+            border-color: #ff6b9d; /* Rosa */
+            color: white;
+        }
+        
+        .btn-crear-articulo:hover {
+            background-color: #e55a8a; /* Rosa más oscuro */
+            border-color: #e55a8a; /* Rosa más oscuro */
+            color: white;
         }
     </style>
 </head>
@@ -216,13 +322,20 @@ $mysql->desconectar();
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/admin_pedidos.php"><i class="bi bi-cart"></i><span> PEDIDOS</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/creacion.php"><i class="bi bi-plus-circle"></i><span> CREAR</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/registrar.php"><i class="bi bi-person-plus"></i><span> REGISTRAR</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> REPARTIDORES</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/gestionar_repartidores.php"><i class="bi bi-gear"></i><span> GESTION REPARTIDORES</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/productos.php"><i class="bi bi-flower1"></i><span> PRODUCTOS</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/blog.php"><i class="bi bi-newspaper"></i><span> BLOG</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/estadisticas.php"><i class="bi bi-bar-chart"></i><span> ESTADISTICAS</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/insumos.php"><i class="bi bi-box-seam"></i><span> INSUMOS</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/productos.php"><i class="bi bi-flower1"></i><span> Productos</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/blog.php"><i class="bi bi-newspaper"></i><span> Blog</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/estadisticas.php"><i class="bi bi-bar-chart"></i><span> Estadísticas</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/insumos.php"><i class="bi bi-box-seam"></i><span> Insumos</span></a></li>
+            <?php } elseif (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'repartidor') { ?>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> MIS ENTREGAS</span></a></li>
+            <?php } ?>
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/productos_usuario.php"><i class="bi bi-flower1"></i><span> Productos</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/blog_usuario.php"><i class="bi bi-newspaper"></i><span> Blog</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/contacto.php"><i class="bi bi-envelope"></i><span> Contacto</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/user_pedidos.php"><i class="bi bi-box-seam"></i><span> Mis Pedidos</span></a></li>
             <?php } ?>
         </ul>
     </nav>
@@ -252,7 +365,7 @@ $mysql->desconectar();
         <!-- Botón para abrir la modal de creación de artículos -->
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
         <div class="d-flex justify-content-end mb-4">
-            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCrearArticulo">
+            <button type="button" class="btn btn-crear-articulo" data-bs-toggle="modal" data-bs-target="#modalCrearArticulo">
                 <i class="bi bi-plus-circle"></i> Crear Nuevo Artículo
             </button>
         </div>

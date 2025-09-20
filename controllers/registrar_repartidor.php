@@ -35,14 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     }
 
     if ($password !== $confirmar_password) {
-        header("refresh:3;url=../views/registrar.php?estado=error");
+        header("refresh:3;url=../views/gestionar_repartidores.php?estado=error");
         exit();
     }
 
     // Verificar si el correo ya está registrado
     $resultado = $mysql->efectuarConsulta("SELECT * FROM repartidores WHERE correo = '$correo'");
     if ($resultado->num_rows > 0) {
-        header("refresh:3;url=../views/registrar.php?estado=error");
+        header("refresh:3;url=../views/gestionar_repartidores.php?estado=error");
         exit();
     }
 
@@ -50,5 +50,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     $mysql->efectuarConsulta("INSERT INTO repartidores (nombre, correo, telefono, password, tipo_transporte, foto_identificacion) VALUES ('$nombre', '$correo', '$telefono', '$hashed_password', '$tipo_transporte', '$ruta')");
 
-    header("refresh:3;url=../views/registrar.php?estado=exito");
+    header("refresh:3;url=../views/gestionar_repartidores.php?estado=exito");
 }
