@@ -141,12 +141,11 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                 }
             }
 
-            /* ESTILOS PARA PEDIDOS */
-            .estado-pendiente { background-color: #fff3cd; color: #664d03; } /* light yellow */
-            .estado-confirmado { background-color: #d1e7dd; color: #0f5132; } /* light green */
-            .estado-enviado { background-color: #cff4fc; color: #055160; } /* light blue */
-            .estado-entregado { background-color: #d4edda; color: #155724; } /* medium green */
-            .estado-cancelado { background-color: #f8d7da; color: #842029; } /* light red */
+            .estado-pendiente { background-color: #fff3cd; color: #664d03; } 
+            .estado-confirmado { background-color: #d1e7dd; color: #0f5132; } 
+            .estado-enviado { background-color: #cff4fc; color: #055160; } 
+            .estado-entregado { background-color: #d4edda; color: #155724; } 
+            .estado-cancelado { background-color: #f8d7da; color: #842029; } 
             
             .main-content {
                 padding: 20px;
@@ -174,55 +173,35 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
                 display: flex;
                 justify-content: space-between;
                 padding: 8px 0;
-                /*
-                 * Los ítems dentro de la lista de productos se heredan del mismo
-                 * color de fondo que la tarjeta del pedido. Bootstrap aplica un
-                 * fondo blanco a las clases `list-group-item` por defecto,
-                 * generando que cada producto aparezca con un recuadro blanco
-                 * sobre la tarjeta coloreada según su estado (pendiente,
-                 * confirmado, etc.). Para evitar ese contraste se fuerza la
-                 * herencia del color y se elimina el fondo.
-                 */
                 background-color: inherit;
                 color: inherit;
                 border-bottom: 1px solid #eee;
             }
-
-            /*
-             * También aplicamos la misma herencia a todos los elementos
-             * `.list-group-item` dentro de una tarjeta de pedido por si en el
-             * futuro se añaden otros elementos de lista. Esto asegura que
-             * cualquier ítem dentro de `.card-pedido` adopte el color de
-             * fondo y texto de la tarjeta principal.
-             */
-            .card-pedido .list-group-item {
+           .card-pedido .list-group-item {
                 background-color: inherit;
                 color: inherit;
             }
-
-            /*
-             * Al navegar por los enlaces de la barra lateral (sidebar) se
-             * aprecia un contorno/pseudoborde negro que sobresale del
-             * recuadro rosa cuando el enlace obtiene el foco por teclado o
-             * mouse. Bootstrap añade este resalte mediante la propiedad
-             * `outline` y la sombra de foco (`box-shadow`). A continuación se
-             * eliminan estos estilos para que el estado activo mantenga el
-             * aspecto uniforme dentro del contenedor rosa.
-             */
             .sidebar .nav-link:focus,
             .sidebar .nav-link:active {
                 outline: none;
                 box-shadow: none;
             }
 
-            /* Algunos navegadores aplican el estilo `:focus-visible` cuando se
-             * navega con el teclado. Se deshabilita aquí para mantener la
-             * consistencia visual en los enlaces de la sidebar.
-             */
             .sidebar .nav-link:focus-visible {
                 outline: none;
                 box-shadow: none;
             }
+            #userDropdown.btn-outline-primary {
+                color: #ff6b9d;         
+                border-color: #ff6b9d;
+                border-radius: 25rem;
+            }
+            #userDropdown.btn-outline-primary:hover,
+            #userDropdown.btn-outline-primary:focus {
+                background-color: #ff6b9d;
+                color: white;
+                border-color: #ff6b9d;
+            }            
     </style>
 </head>
 <body>
@@ -246,10 +225,8 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
         <ul class="nav flex-column">
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/admin_pedidos.php"><i class="bi bi-cart"></i><span> PEDIDOS</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/creacion.php"><i class="bi bi-plus-circle"></i><span> CREAR</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> REPARTIDORES</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/gestionar_repartidores.php"><i class="bi bi-gear"></i><span> GESTION REPARTIDORES</span></a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="../views/productos.php"><i class="bi bi-flower1"></i><span> PRODUCTOS</span></a></li>
                 
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/blog.php"><i class="bi bi-newspaper"></i><span> BLOG</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/estadisticas.php"><i class="bi bi-bar-chart"></i><span> ESTADISTICAS</span></a></li>

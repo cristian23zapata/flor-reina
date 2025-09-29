@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
         $mysql->desconectar();
         
-        header("Location: ../views/productos.php?estado=exito");
+        header("Location: ../views/insumos.php?estado=exito");
         exit();
     }
 }

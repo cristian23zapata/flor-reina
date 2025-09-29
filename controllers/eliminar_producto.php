@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Desconectar de la base de datos
     $mysql->desconectar();
     
-    header("Location: ../views/productos.php");
+    header("Location: ../views/insumos.php");
     exit();
 } else {
     echo "Método no permitido.";
