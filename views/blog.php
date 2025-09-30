@@ -296,6 +296,40 @@ $mysql->desconectar();
             border-color: #e55a8a; /* Rosa más oscuro */
             color: white;
         }
+        
+        
+        .add-card {
+  border: 2px dashed #d63384;
+  background-color: #ffe6f0;
+  color: #d63384;
+  transition: background .2s ease;
+}
+.add-card:hover { background-color: #fddbe9; text-decoration: none; }
+
+/* Centrado perfecto del contenido de la card-botón */
+.add-card .card-body {
+  height: 200px;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+}
+
+/* Modal rosado coherente con la web */
+.modal-header {
+  background-color: #ffe6f0; color: #d63384;
+  border-top-left-radius: calc(0.3rem - 1px);
+  border-top-right-radius: calc(0.3rem - 1px);
+}
+.modal-header .btn-close { filter: invert(0.6); }
+.btn-primary { background-color: #d63384; border-color: #d63384; }
+.btn-primary:hover { background-color: #c1206e; border-color: #c1206e; }
+
+/* Estilo unificado del botón de usuario (dropdown), igual que en Blog */
+#userDropdown.btn-outline-primary { color:#ff6b9d; border-color:#ff6b9d; }
+#userDropdown.btn-outline-primary:hover,
+#userDropdown.btn-outline-primary:focus {
+  background-color:#ff6b9d; color:#fff; border-color:#ff6b9d;
+}
+        
     </style>
 </head>
 <body>
@@ -362,17 +396,26 @@ $mysql->desconectar();
 
         <!-- Botón para abrir la modal de creación de artículos -->
         <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
-        <div class="d-flex justify-content-end mb-4">
-            <button type="button" class="btn btn-crear-articulo" data-bs-toggle="modal" data-bs-target="#modalCrearArticulo">
-                <i class="bi bi-plus-circle"></i> Crear Nuevo Artículo
-            </button>
-        </div>
+        
         <?php endif; ?>
 
         <div class="container py-5">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        
+                        
+                    <div class="col">
+                        <div class="card add-card h-100 shadow-sm rounded-4 border-0"
+                          data-bs-toggle="modal" data-bs-target="#modalCrearArticulo">
+                            <div class="card-body">
+                                <i class="bi bi-plus-circle" style="font-size:3rem;"></i>
+                                <p class="mt-2 fw-bold mb-0">Agregar artículo</p>
+                            </div>
+                        </div>
+                    </div>
+                         
+                        
                         <?php foreach ($articulos as $articulo): ?>
                         <div class="col">
                             <div class="card blog-card h-100 shadow-sm rounded-4 border-0">
@@ -403,6 +446,8 @@ $mysql->desconectar();
                             </div>
                         </div>
 
+
+                        
                         <!-- Modal Confirmar Eliminación -->
                         <div class="modal fade" id="confirmarEliminar<?php echo $articulo['id']; ?>" tabindex="-1"
                              aria-labelledby="confirmarEliminarLabel<?php echo $articulo['id']; ?>" aria-hidden="true">

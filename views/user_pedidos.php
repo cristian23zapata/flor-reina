@@ -60,53 +60,83 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
 </head>
 <body>
     <?php include '../views/partials/carrito_modal.php'; ?>
-    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="../index.php">
-                <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60">
-            </a>
+<nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+    <div class="container">
+        <a class="navbar-brand" href="../index.php">
+            <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60">
+        </a>
+
+        <!-- Contenedor para botón de usuario y hamburguesa en móvil -->
+        <div class="d-flex d-lg-none align-items-center gap-2">
+            <!-- Botón de usuario en móvil -->
+            <?php if (isset($_SESSION['correo'])): ?>
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuMobile" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuMobile">
+                        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+                            <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                        <?php } ?>
+                        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            <?php else: ?>
+                <a href="../views/login.php" class="btn btn-outline-primary">
+                    <i class="bi bi-person-circle"></i>
+                </a>
+            <?php endif; ?>
+
+            <!-- Botón hamburguesa -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="menuNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-                        <li class="nav-item"><a class="nav-link" href="../views/creacion.php">CREAR</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">Repartidores</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/admin_pedidos.php">Pedidos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
-                    <?php } ?>
-                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                        <li class="nav-item"><a class="nav-link" href="../views/productos_usuario.php">Productos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/blog_usuario.php">Blog</a></li>
-                        <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="../views/user_pedidos.php">Mis Pedidos</a></li> <?php } ?>
-                </ul>
-                <div class="d-flex align-items-center gap-2">
-                    <?php if (isset($_SESSION['correo'])): ?>
-                        <div class="dropdown">
-    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+        </div>
+
+        <div class="collapse navbar-collapse" id="menuNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
+                    <li class="nav-item"><a class="nav-link" href="../views/creacion.php">CREAR</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../views/repartidores.php">Repartidores</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../views/admin_pedidos.php">Pedidos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../views/productos.php">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../views/blog.php">Blog</a></li>
+                <?php } ?>
+                <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+                    <li class="nav-item"><a class="nav-link" href="../views/productos_usuario.php">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../views/blog_usuario.php">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../views/contacto.php">Contacto</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="../views/user_pedidos.php">Mis Pedidos</a></li> 
+                <?php } ?>
+            </ul>
+
+            <!-- Botón de usuario visible en desktop -->
+            <div class="d-none d-lg-flex align-items-center gap-2 ms-auto">
+                <?php if (isset($_SESSION['correo'])): ?>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center" type="button" id="dropdownMenuDesktop" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle me-1"></i>
+                            <span><?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuDesktop">
+                            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
                                 <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <?php } ?>
-        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
-    </ul>
-</div>
-                    <?php else: ?>
-                        <a href="../views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
-                    <?php endif; ?>
-                    <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-                       
-                    <?php } ?>
-                </div>
+                            <?php } ?>
+                            <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
+                        </ul>
+                    </div>
+                <?php else: ?>
+                    <a href="../views/login.php" class="btn btn-outline-primary d-flex align-items-center">
+                        <i class="bi bi-person-circle me-1"></i>
+                        <span>Login</span>
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <header class="bg-light py-4 text-center">
         <div class="container">

@@ -19,6 +19,7 @@ $mysql->desconectar();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Flor Reina</title>
+  <link rel="icon" type="image/png" href="./assets/imagenes/icono.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/estilo_nav.css">
@@ -46,6 +47,9 @@ $mysql->desconectar();
         color: #555; /* Color para el subtítulo */
     }
 
+    .navbar-custom .ms-auto {
+        margin-left: auto !important;
+    }
     /* Estilos para el carrusel (asegúrate de que no haya conflicto con tus estilos existentes) */
     .fullscreen-carousel {
         height: 80vh; /* Ajusta la altura del carrusel para que sea visible */
@@ -62,40 +66,64 @@ $mysql->desconectar();
     <a class="navbar-brand" href="index.php">
       <img src="assets/imagenes/logo.png" alt="Flor Reina" height="60">
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+
+    <!-- Contenedor para botón de usuario y hamburguesa en móvil -->
+    <div class="d-flex d-lg-none align-items-center gap-2">
+      <!-- Botón de usuario en móvil -->
+      <?php if (isset($_SESSION['correo'])): ?>
+        <div class="dropdown">
+          <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuMobile" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuMobile">
+            <li><a class="dropdown-item" href="views/editar_perfil.php"><i class="bi bi-person-gear me-2"></i>Editar Perfil</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="controllers/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión</a></li>
+          </ul>
+        </div>
+      <?php else: ?>
+        <a href="views/login.php" class="btn btn-outline-primary">
+          <i class="bi bi-person-circle"></i>
+        </a>
+      <?php endif; ?>
+
+      <!-- Botón hamburguesa -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
 
     <div class="collapse navbar-collapse" id="menuNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link" href="views/productos_usuario.php">Productos</a></li>
         <li class="nav-item"><a class="nav-link" href="views/blog_usuario.php">Blog</a></li>
         
-          <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
+        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
           <li class="nav-item"><a class="nav-link" href="views/contacto.php">Contacto</a></li>
           <li class="nav-item"><a class="nav-link" href="views/user_pedidos.php">Mis Pedidos</a></li>
-          <?php } ?>
+        <?php } ?>
       </ul>
 
-      <div class="d-flex align-items-center gap-2">
+      <!-- Botón de usuario visible en desktop -->
+      <div class="d-none d-lg-flex align-items-center gap-3 ms-auto">
         <?php if (isset($_SESSION['correo'])): ?>
           <div class="dropdown">
-    <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-        <li><a class="dropdown-item" href="views/editar_perfil.php">Editar Perfil</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="controllers/logout.php">Cerrar Sesión</a></li>
-    </ul>
-</div>
+            <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center" type="button" id="dropdownMenuDesktop" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle me-1"></i>
+              <span><?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuDesktop">
+              <li><a class="dropdown-item" href="views/editar_perfil.php"><i class="bi bi-person-gear me-2"></i>Editar Perfil</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="controllers/logout.php"><i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión</a></li>
+            </ul>
+          </div>
         <?php else: ?>
-          <a href="views/login.php"><button class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</button></a>
+          <a href="views/login.php" class="btn btn-outline-primary d-flex align-items-center">
+            <i class="bi bi-person-circle me-1"></i>
+            <span>Login</span>
+          </a>
         <?php endif; ?>
-        
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'user') { ?>
-          
-        <?php } ?>
       </div>
     </div>
   </div>
@@ -163,8 +191,8 @@ $mysql->desconectar();
       <!-- Texto -->
       <div class="col-lg-6" data-aos="fade-left">
         <h2 class="fw-bold mb-3">¿Quiénes somos?</h2>
-        <p class="fs-5">En <strong>Flor Reina</strong>, somos una familia apasionada por la tradición y el sabor auténtico. Desde el corazón de Asturias, elaboramos yogures artesanales con ingredientes naturales y procesos que respetan la herencia láctea de nuestra tierra.</p>
-        <p class="fs-5">Cada cucharada de nuestros productos refleja el compromiso con la calidad, la sostenibilidad y el bienestar de nuestros clientes.</p>
+        <p class="fs-5">En <strong>Flor Reina</strong>, Somos una empresa dedicada a la producción de yogurt artesanal, elaborando productos saludables y deliciosos con ingredientes frescos locales. </p>
+        <p class="fs-5">Nuestro compromiso no es solo ofrecer un yogurt que sea nutritivo sino también incluyendo las propiedades medicinales de la bugambilia a través de burbujas explosivas con toppings de frutos ancestrales a tu elección. Respetando el medio ambiente y apoyando a los productores de la región.</p>
         <a href="views/nuestra-historia.php" class="btn btn-outline-primary mt-3">Conoce nuestra historia</a>
       </div>
     </div>
@@ -285,7 +313,7 @@ $mysql->desconectar();
 <footer class="bg-dark text-white py-4 mt-5">
   <div class="container text-center">
     <p class="mb-1">&copy; 2025 Flor Reina. Todos los derechos reservados.</p>
-    <small>Contacto: info@florreina.es | Tel: +34 666 999 123</small>
+    <small>Contacto: info@florreina.es | Tel: +57 666 999 123</small>
   </div>
 </footer>
 
