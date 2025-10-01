@@ -56,6 +56,38 @@ $resultado_pedidos = $mysql->efectuarConsulta($consulta_pedidos);
         .estado-enviado { background-color: #cff4fc; color: #055160; }
         .estado-entregado { background-color: #d4edda; color: #155724; }
         .estado-cancelado { background-color: #f8d7da; color: #842029; }
+        
+        
+        .estado-pendiente .card-header,
+        .estado-pendiente .card-body,
+        .estado-pendiente .list-group-item {
+         background-color: #fff3cd !important;
+         color: #664d03;
+            }
+        .estado-confirmado .card-header,
+        .estado-confirmado .card-body,
+        .estado-confirmado .list-group-item {
+        background-color: #d1e7dd !important;
+         color: #0f5132;
+        }
+        .estado-enviado .card-header,
+        .estado-enviado .card-body,
+        .estado-enviado .list-group-item {
+          background-color: #cff4fc !important;
+          color: #055160;
+        }
+        .estado-entregado .card-header,
+        .estado-entregado .card-body,
+        .estado-entregado .list-group-item {
+            background-color: #d4edda !important;
+            color: #155724;
+        }
+    .estado-cancelado .card-header,
+.estado-cancelado .card-body,
+.estado-cancelado .list-group-item {
+    background-color: #f8d7da !important;
+    color: #842029;
+}
     </style>
 </head>
 <body>

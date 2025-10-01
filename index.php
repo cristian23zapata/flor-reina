@@ -5,7 +5,10 @@ session_start();
 require_once './models/MySQL.php';
 $mysql = new MySQL;
 $mysql->conectar();
-
+if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') {
+    header('Location: ../views/admin_pedidos.php'); // ajustar ruta si ya está en raíz
+    exit();
+}
 
 $resultado = $mysql->efectuarConsulta("SELECT id, nombre, descripcion, precio, stock, imagen, estado
     FROM productos WHERE Estado = 'ACTIVO'");
@@ -144,28 +147,28 @@ $mysql->desconectar();
     
     <!-- Yogur 1 -->
     <div class="carousel-item active">
-      <img src="assets/imagenes/carrusel2.jpg" class="d-block w-100" alt="Yogur de Vainilla">
+      <img src="assets/imagenes/bugaboom_carousel.jpg" class="d-block w-100" alt="bugaboom">
       <div class="carousel-caption animate-fadeInUp">
-        <h3>Yogur de Vainilla</h3>
-        <p>Vainilla natural de Madagascar para un sabor suave y aromático.</p>
+        <h3>Bugaboom</h3>
+        <p>Una creación innovadora que combina capas de mermelada artesanal, chía hidratada en kéfir y yogurt natural. Sin azucares añadidos</p>
       </div>
     </div>
   
       <!-- Yogur 1 -->
       <div class="carousel-item active">
-      <img src="assets/imagenes/yogur4.png" class="d-block w-100" alt="Yogur de Vainilla">
+      <img src="assets/imagenes/encantofresa_carousel.jpg" class="d-block w-100" alt="Yogur de Vainilla">
       <div class="carousel-caption animate-fadeInUp">
-        <h3>Yogur de Fresas</h3>
-        <p>Vainilla natural de Madagascar para un sabor suave y aromático.</p>
+        <h3>Encanto de fresa</h3>
+        <p>Un postre fresco, natural y lleno de sabor. Deliciosas fresas seleccionadas, combinadas con cremoso yogur artesanal, sin conservantes y enriquecido con probióticos que cuidan tu bienestar. </p>
       </div>
     </div>
 
      <!-- Yogur 1 -->
     <div class="carousel-item active">
-      <img src="assets/imagenes/carrusel1.jpg" class="d-block w-100" alt="Yogur de Vainilla">
+      <img src="assets/imagenes/blackboom_carousel.jpg" class="d-block w-100" alt="Yogur de Vainilla">
       <div class="carousel-caption animate-fadeInUp">
-        <h3>Yogur de Fresas3</h3>
-        <p>Vainilla natural de Madagascar para un sabor suave y aromático.</p>
+        <h3>Black-Boom</h3>
+        <p>Black – Boom es un irresistible postre en vaso elaborado con capas de galletas Oreo trituradas, cremoso yogur natural y deliciosa salsa de chocolate. </p>
       </div>
     </div>
 
@@ -191,9 +194,8 @@ $mysql->desconectar();
       <!-- Texto -->
       <div class="col-lg-6" data-aos="fade-left">
         <h2 class="fw-bold mb-3">¿Quiénes somos?</h2>
-        <p class="fs-5">En <strong>Flor Reina</strong>, Somos una empresa dedicada a la producción de yogurt artesanal, elaborando productos saludables y deliciosos con ingredientes frescos locales. </p>
+        <p class="fs-5">En <strong>Flor De Reina</strong>, Somos una empresa dedicada a la producción de yogurt artesanal, elaborando productos saludables y deliciosos con ingredientes frescos locales. </p>
         <p class="fs-5">Nuestro compromiso no es solo ofrecer un yogurt que sea nutritivo sino también incluyendo las propiedades medicinales de la bugambilia a través de burbujas explosivas con toppings de frutos ancestrales a tu elección. Respetando el medio ambiente y apoyando a los productores de la región.</p>
-        <a href="views/nuestra-historia.php" class="btn btn-outline-primary mt-3">Conoce nuestra historia</a>
       </div>
     </div>
   </div>
