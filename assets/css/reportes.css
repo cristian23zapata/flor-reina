@@ -1,0 +1,6 @@
+body { font-family: 'Montserrat', sans-serif; background: #fffaf3; color: #333; }
+.titulo-reporte { text-align: center; margin: 20px 0; color: #d63384; font-family: 'Pacifico', cursive; }
+.tabla-reporte { margin: auto; border-collapse: collapse; width: 90%; }
+.tabla-reporte th, .tabla-reporte td { border: 1px solid #f3c6dd; padding: 8px; text-align: center; }
+.tabla-reporte thead { background: #f8d7e5; }
+.tabla-reporte tbody tr:nth-child(even) { background: #fdf2f8; }

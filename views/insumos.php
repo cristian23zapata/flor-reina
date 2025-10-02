@@ -196,22 +196,21 @@ $res = $mysql->efectuarConsulta($query);
 </button>
 <div class="d-flex">
     <!-- Barra lateral -->
-    <nav id="sidebar" class="border-end sidebar">
+    <nav id="sidebar" class="border-end p-3 sidebar" style="min-width: 300px; min-height: 100vh;">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <a class="navbar-brand d-block text-center" href="#">
+            <a class="navbar-brand d-block text-center" href="">
                 <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60" class="sidebar-logo">
                 <span class="ms-2">Flor Reina</span>
             </a>
-            <button class="toggle-btn d-none d-lg-inline" id="sidebarToggle">
-                <i class="bi bi-chevron-left"></i>
-            </button>
+            
         </div>
+
         <ul class="nav flex-column">
-            <!-- Menú solo para administrador -->
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-           <li class="nav-item"><a class="nav-link text-dark" href="../views/admin_pedidos.php"><i class="bi bi-cart"></i><span> PEDIDOS</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/admin_pedidos.php"><i class="bi bi-cart"></i><span> PEDIDOS</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> REPARTIDORES</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/gestionar_repartidores.php"><i class="bi bi-gear"></i><span> GESTION REPARTIDORES</span></a></li>
+                
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/blog.php"><i class="bi bi-newspaper"></i><span> BLOG</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/estadisticas.php"><i class="bi bi-bar-chart"></i><span> ESTADISTICAS</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/insumos.php"><i class="bi bi-box-seam"></i><span> INSUMOS</span></a></li>

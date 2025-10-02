@@ -109,129 +109,167 @@ $estado_data   = array_map('intval', array_column($por_estado, 'c'));
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/estilo_nav.css">
+  <link rel="stylesheet" href="../assets/css/estilo_creacion.css">
   <style>
-  /* --- Barra lateral (sidebar) --- */
   .sidebar {
-    background-color: #ffe6f0;
-    border-right: 1px solid #f8c8dc;
-    min-width: 220px;
-    transition: all .3s ease;
-    padding: 1rem .5rem;
-  }
-  .sidebar .navbar-brand {
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding-bottom:1rem;
-    font-weight:bold;
-    color:#d63384;
-  }
-  .sidebar .nav-link {
-    display:flex;
-    align-items:center;
-    gap:.75rem;
-    padding:.75rem 1rem;
-    color:#444;
-    font-weight:500;
-    border-radius:.375rem;
-    transition: background .2s ease;
-  }
-  .sidebar .nav-link i { color:#d63384; }
-  .sidebar .nav-link:hover { background:#fddbe9; color:#d63384; }
-  .sidebar.collapsed { min-width:60px !important; overflow:hidden; }
-  .sidebar.collapsed .nav-link span,
-  .sidebar.collapsed .navbar-brand span { display:none; }
-  .sidebar.collapsed .nav-link { justify-content:center; }
-  .sidebar.collapsed .bi { margin:0; font-size:1.25rem; }
-  @media (max-width: 991.98px) {
-    .sidebar {
-      position:fixed;
-      top:0;
-      left:-250px;
-      height:100vh;
-      width:220px;
-      z-index:1050;
-      background:#ffe6f0;
-      box-shadow:0 0 10px rgba(0,0,0,.1);
-      transition:left .3s ease-in-out;
-    }
-    .sidebar.show { left:0; }
-  }
+                background-color: #ffe6f0; /* Fondo rosa claro */
+                border-right: 1px solid #f8c8dc; /* Borde más suave rosado */
+                min-width: 220px;
+                transition: all 0.3s ease;
+                padding: 1rem 0.5rem;
+            }
 
-  /* --- Header Sticky --- */
-  .headerbar {
-    position: sticky;
-    top: 0;
-    z-index: 3;
-    background: #fff;
-    border-bottom: 1px solid rgba(0,0,0,.05);
-  }
+            /* LOGO */
+            .sidebar .navbar-brand {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding-bottom: 1rem;
+                font-weight: bold;
+                color: #d63384;
+            }
 
-  /* --- KPI Cards --- */
-  .kpi-card {
-    border: 1px solid #f8c8dc;
-    border-radius: 1rem;
-    background: #fff;
-  }
-  .kpi-card .icon-wrap {
-    width:44px;
-    height:44px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:50%;
-    background:#ffe6f0;
-    color:#d63384;
-  }
+            /* NAV LINKS */
+            .sidebar .nav-link {
+                display: flex;
+                align-items: center;
+                padding: 0.75rem 1rem;
+                color: #444;
+                font-weight: 500;
+                border-radius: 0.375rem;
+                transition: background 0.2s ease;
+            }
 
-  /* --- Botón de usuario (dropdown) --- */
-  #userDropdown.btn-outline-primary {
-    color:#ff6b9d;
-    border-color:#ff6b9d;
-  }
-  #userDropdown.btn-outline-primary:hover,
-  #userDropdown.btn-outline-primary:focus {
-    background:#ff6b9d;
-    color:#fff;
-    border-color:#ff6b9d;
-  }
+            .sidebar .nav-link i {
+                margin-right: 0.75rem;
+                color: #d63384;
+            }
 
-  /* --- Gráficas: paleta de colores custom --- */
-  :root {
-    --fr-pink: #d63384;
-    --fr-pink2: #f06292;
-    --fr-pink3: #ff80ab;
-    --fr-lilac: #a78bfa;
-    --fr-mint:  #34d399;
-    --fr-gold:  #f59e0b;
-  }
+            .sidebar .nav-link span {
+                white-space: nowrap;
+            }
 
-  main { padding: 1.25rem; }
-  .rounded-4 { border-radius: 1rem !important; }
-  .shadow-soft { box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+            .sidebar .nav-link:hover,
+            .sidebar .nav-link:focus {
+                background-color: #fddbe9; /* Hover rosado suave */
+                color: #d63384;
+            }
 
-  /* --- Sección de reportes --- */
-  .report-card {
-    border: 1px solid #f8c8dc;
-    border-radius: 1rem;
-    background: #fff;
-    transition: transform .2s ease, box-shadow .2s ease;
-  }
-  .report-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,.1);
-  }
-  .report-card .icon-wrapper {
-    width:48px;
-    height:48px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#ffe6f0;
-    color:#d63384;
-    margin-bottom:0.75rem;
-  }
+            /* TOGGLE BUTTON */
+            .toggle-btn {
+                border: none;
+                background: none;
+                font-size: 1.25rem;
+                color: #d63384;
+            }
+
+            /* COLLAPSED SIDEBAR */
+            .sidebar.collapsed {
+                min-width: 60px !important;
+                overflow: hidden;
+                background-color: #ffe6f0; /* Mantener fondo cuando colapsa */
+            }
+
+            .sidebar.collapsed .nav-link span,
+            .sidebar.collapsed .navbar-brand span {
+                display: none;
+            }
+
+            .sidebar.collapsed .nav-link {
+                text-align: center;
+            }
+
+            .sidebar.collapsed .navbar-brand {
+                padding: 0.5rem 0;
+            }
+
+            .sidebar.collapsed .bi {
+                margin-right: 0;
+                font-size: 1.25rem;
+            }
+
+            /* MOBILE SIDEBAR */
+            @media (max-width: 991.98px) {
+                .sidebar {
+                    position: fixed;
+                    top: 0;
+                    left: -250px;
+                    height: 100vh;
+                    width: 220px;
+                    z-index: 1050;
+                    background-color: #ffe6f0; /* Fondo rosa también en móvil */
+                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                    transition: left 0.3s ease-in-out;
+                }
+
+                .sidebar.show {
+                    left: 0;
+                }
+            }
+
+            .estado-pendiente { background-color: #fff3cd; color: #664d03; } 
+            .estado-confirmado { background-color: #d1e7dd; color: #0f5132; } 
+            .estado-enviado { background-color: #cff4fc; color: #055160; } 
+            .estado-entregado { background-color: #d4edda; color: #155724; } 
+            .estado-cancelado { background-color: #f8d7da; color: #842029; } 
+            
+            .main-content {
+                padding: 20px;
+                width: 100%;
+            }
+            
+            .filter-buttons .btn {
+                margin-right: 5px;
+                margin-bottom: 5px;
+            }
+            
+            .card-pedido {
+                margin-bottom: 20px;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+            
+            .card-header-pedido {
+                font-weight: bold;
+                padding: 15px;
+            }
+            
+            .producto-item {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px 0;
+                background-color: inherit;
+                color: inherit;
+                border-bottom: 1px solid #eee;
+            }
+           .card-pedido .list-group-item {
+                background-color: inherit;
+                color: inherit;
+            }
+            .sidebar .nav-link:focus,
+            .sidebar .nav-link:active {
+                outline: none;
+                box-shadow: none;
+            }
+
+            .sidebar .nav-link:focus-visible {
+                outline: none;
+                box-shadow: none;
+            }
+            #userDropdown.btn-outline-primary {
+                color: #ff6b9d;         
+                border-color: #ff6b9d;
+                border-radius: 25rem;
+            }
+            #userDropdown.btn-outline-primary:hover,
+            #userDropdown.btn-outline-primary:focus {
+                background-color: #ff6b9d;
+                color: white;
+                border-color: #ff6b9d;
+            }            
+}
   </style>
 </head>
 <body class="bg-light">
@@ -239,58 +277,60 @@ $estado_data   = array_map('intval', array_column($por_estado, 'c'));
   <button class="btn btn-outline-secondary d-lg-none m-3" id="mobileSidebarToggle"><i class="bi bi-list"></i></button>
   <div class="d-flex">
     <!-- SIDEBAR -->
-    <nav id="sidebar" class="border-end sidebar">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <a class="navbar-brand d-block text-center" href="#">
-          <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60" class="sidebar-logo">
-          <span class="ms-2">Flor Reina</span>
-        </a>
-        <button class="btn p-0 d-none d-lg-inline" id="sidebarToggle" aria-label="Toggle sidebar">
-          <i class="bi bi-chevron-left text-danger"></i>
-        </button>
-      </div>
-      <ul class="nav flex-column">
-        <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
-          <li class="nav-item"><a class="nav-link text-dark" href="../views/admin_pedidos.php"><i class="bi bi-cart"></i><span> PEDIDOS</span></a></li>
-          <li class="nav-item"><a class="nav-link text-dark" href="../views/creacion.php"><i class="bi bi-plus-circle"></i><span> CREAR</span></a></li>
-          <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> REPARTIDORES</span></a></li>
-          <li class="nav-item"><a class="nav-link text-dark" href="../views/gestionar_repartidores.php"><i class="bi bi-gear"></i><span> GESTIÓN&nbsp;REPARTIDORES</span></a></li>
-          <li class="nav-item"><a class="nav-link text-dark" href="../views/blog.php"><i class="bi bi-newspaper"></i><span> BLOG</span></a></li>
-          <li class="nav-item"><a class="nav-link text-dark" href="../views/estadisticas.php"><i class="bi bi-bar-chart"></i><span> ESTADÍSTICAS</span></a></li>
-          <li class="nav-item"><a class="nav-link text-dark" href="../views/insumos.php"><i class="bi bi-box-seam"></i><span> INVENTARIO</span></a></li>
-        <?php } ?>
-      </ul>
+    <nav id="sidebar" class="border-end p-3 sidebar" style="min-width: 300px; min-height: 100vh;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a class="navbar-brand d-block text-center" href="">
+                <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60" class="sidebar-logo">
+                <span class="ms-2">Flor Reina</span>
+            </a>
+            
+        </div>
+
+        <ul class="nav flex-column">
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/admin_pedidos.php"><i class="bi bi-cart"></i><span> PEDIDOS</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> REPARTIDORES</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/gestionar_repartidores.php"><i class="bi bi-gear"></i><span> GESTION REPARTIDORES</span></a></li>
+                
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/blog.php"><i class="bi bi-newspaper"></i><span> BLOG</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/estadisticas.php"><i class="bi bi-bar-chart"></i><span> ESTADISTICAS</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/insumos.php"><i class="bi bi-box-seam"></i><span> INSUMOS</span></a></li>
+            <?php } ?>
+        </ul>
     </nav>
     <!-- CONTENIDO PRINCIPAL -->
     <div class="flex-grow-1">
-      <!-- Header con botón de usuario -->
-      <div class="headerbar">
-        <div class="container-fluid py-3">
-          <div class="d-flex justify-content-end align-items-center">
-            <?php if (isset($_SESSION['correo'])): ?>
-              <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle" id="userDropdown" type="button"
-                        data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-                  <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                  <?php if ($_SESSION['tipo'] === 'user') { ?>
-                    <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                  <?php } ?>
-                  <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar sesión</a></li>
-                </ul>
-              </div>
-            <?php else: ?>
-              <a href="../views/login.php" class="btn btn-outline-primary"><i class="bi bi-person-circle"></i> Login</a>
-            <?php endif; ?>
-          </div>
-        </div>
-      </div>
+     
+          
+        
       <!-- Contenido -->
       <main>
         <div class="container-fluid">
-          <h1 class="fw-bold mb-4"><i class="bi bi-bar-chart"></i> Estadísticas</h1>
+             
+             <div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="fw-bold mb-0"><i class="bi bi-bar-chart"></i> Estadísticas</h1>
+
+  <?php if (isset($_SESSION['correo'])): ?>
+    <div class="dropdown">
+      <button class="btn btn-outline-primary dropdown-toggle" id="userDropdown" type="button"
+              data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+        <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+        <?php if ($_SESSION['tipo'] === 'user') { ?>
+          <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
+          <li><hr class="dropdown-divider"></li>
+        <?php } ?>
+        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar sesión</a></li>
+      </ul>
+    </div>
+  <?php else: ?>
+    <a href="../views/login.php" class="btn btn-outline-primary">
+      <i class="bi bi-person-circle"></i> Login
+    </a>
+  <?php endif; ?>
+</div>
+             
           <!-- KPIs -->
           <div class="row g-3 mb-4">
             <div class="col-12 col-sm-6 col-xl-3">
@@ -381,7 +421,7 @@ $estado_data   = array_map('intval', array_column($por_estado, 'c'));
                 </div>
                 <h6 class="fw-bold">Reporte semanal</h6>
                 <p class="small text-muted mb-3">Resumen de ventas y pedidos de la última semana.</p>
-                <a href="#" class="btn btn-outline-primary w-100">Generar</a>
+                <a href="../controllers/generar_reporte.php?tipo=semanal" class="btn btn-outline-primary w-100">Generar</a>
               </div>
             </div>
             <div class="col-12 col-md-6 col-xl-3">
@@ -391,7 +431,7 @@ $estado_data   = array_map('intval', array_column($por_estado, 'c'));
                 </div>
                 <h6 class="fw-bold">Reporte mensual</h6>
                 <p class="small text-muted mb-3">Informe detallado de ingresos y productos del mes.</p>
-                <a href="#" class="btn btn-outline-primary w-100">Generar</a>
+                <a href="../controllers/generar_reporte.php?tipo=mensual" class="btn btn-outline-primary w-100">Generar</a>
               </div>
             </div>
             <div class="col-12 col-md-6 col-xl-3">
@@ -401,7 +441,7 @@ $estado_data   = array_map('intval', array_column($por_estado, 'c'));
                 </div>
                 <h6 class="fw-bold">Reporte por producto</h6>
                 <p class="small text-muted mb-3">Comparativa de ventas por producto.</p>
-                <a href="#" class="btn btn-outline-primary w-100">Generar</a>
+                <a href="../controllers/generar_reporte.php?tipo=producto" class="btn btn-outline-primary w-100">Generar</a>
               </div>
             </div>
             <div class="col-12 col-md-6 col-xl-3">
@@ -411,7 +451,7 @@ $estado_data   = array_map('intval', array_column($por_estado, 'c'));
                 </div>
                 <h6 class="fw-bold">Reporte de clientes</h6>
                 <p class="small text-muted mb-3">Actividad y recurrencia de clientes.</p>
-                <a href="#" class="btn btn-outline-primary w-100">Generar</a>
+                <a href="../controllers/generar_reporte.php?tipo=cliente" class="btn btn-outline-primary w-100">Generar</a>
               </div>
             </div>
           </div>

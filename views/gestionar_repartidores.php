@@ -206,6 +206,18 @@ $mysql->desconectar();
       .modal-header .btn-close {
           filter: invert(1); /* Hace que la X sea blanca */
       }
+       #userDropdown.btn-outline-primary {
+        color: #ff6b9d;         
+        border-color: #ff6b9d;
+        border-radius: 25rem;
+    }
+    #userDropdown.btn-outline-primary:hover,
+    #userDropdown.btn-outline-primary:focus {
+        background-color: #ff6b9d;
+        color: white;
+        border-color: #ff6b9d;
+    }
+    
     </style>
 </head>
 <body>
@@ -217,22 +229,21 @@ $mysql->desconectar();
 
 <div class="d-flex">
     <!-- Sidebar -->
-    <nav id="sidebar" class="border-end p-3 sidebar" style="min-width: 220px; min-height: 100vh;">
+    <nav id="sidebar" class="border-end p-3 sidebar" style="min-width: 300px; min-height: 100vh;">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <a class="navbar-brand d-block text-center" href="">
                 <img src="../assets/imagenes/logo.png" alt="Flor Reina" height="60" class="sidebar-logo">
                 <span class="ms-2">Flor Reina</span>
             </a>
-            <button class="toggle-btn d-none d-lg-inline" id="sidebarToggle">
-                <i class="bi bi-chevron-left"></i>
-            </button>
+            
         </div>
 
         <ul class="nav flex-column">
             <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin') { ?>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/admin_pedidos.php"><i class="bi bi-cart"></i><span> PEDIDOS</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/repartidores.php"><i class="bi bi-truck"></i><span> REPARTIDORES</span></a></li>
-                <li class="nav-item"><a class="nav-link active text-dark" href="../views/gestionar_repartidores.php"><i class="bi bi-gear"></i><span> GESTION REPARTIDORES</span></a></li>
+                <li class="nav-item"><a class="nav-link text-dark" href="../views/gestionar_repartidores.php"><i class="bi bi-gear"></i><span> GESTION REPARTIDORES</span></a></li>
+                
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/blog.php"><i class="bi bi-newspaper"></i><span> BLOG</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/estadisticas.php"><i class="bi bi-bar-chart"></i><span> ESTADISTICAS</span></a></li>
                 <li class="nav-item"><a class="nav-link text-dark" href="../views/insumos.php"><i class="bi bi-box-seam"></i><span> INSUMOS</span></a></li>
@@ -243,8 +254,8 @@ $mysql->desconectar();
     <!-- Contenido principal -->
     <div class="flex-grow-1 p-4 main-content">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="mb-0">Gestión de Repartidores</h1>
-            <?php if (isset($_SESSION['correo'])): ?>
+            <h1 class="mb-0"><i class="bi bi-gear"></i>Gestión de Repartidores</h1>
+           <?php if (isset($_SESSION['correo'])): ?>
                 <div class="dropdown">
                     <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($_SESSION['nombre']); ?>
@@ -254,7 +265,7 @@ $mysql->desconectar();
                             <li><a class="dropdown-item" href="../views/editar_perfil.php">Editar Perfil</a></li>
                             <li><hr class="dropdown-divider"></li>
                         <?php } ?>
-                        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar Sesión</a></li>
+                        <li><a class="dropdown-item" href="../controllers/logout.php">Cerrar sesión</a></li>
                     </ul>
                 </div>
             <?php else: ?>
